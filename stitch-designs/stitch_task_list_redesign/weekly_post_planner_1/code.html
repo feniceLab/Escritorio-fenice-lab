@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "outline-variant": "#c4c5d7",
+                        "secondary-fixed": "#e1e0ff",
+                        "tertiary-container": "#8a4cfc",
+                        "surface-container-highest": "#e0e3e6",
+                        "secondary": "#4648d4",
+                        "surface-container-low": "#f2f4f7",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fc",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary-fixed": "#07006c",
+                        "on-surface-variant": "#444654",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "tertiary": "#712ae2",
+                        "surface-tint": "#2d50d9",
+                        "secondary-container": "#6063ee",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eceef1",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fc",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b9c3ff",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary-container": "#4868f1",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e6e8eb",
+                        "on-surface": "#191c1e",
+                        "primary": "#2a4dd7",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed": "#25005a",
+                        "outline": "#747686",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-primary-fixed": "#001257",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed": "#eaddff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e6"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-[#191b23] flex flex-col py-6 z-50">
+<a class="px-6 mb-8 block" href="{{DATA:SCREEN:SCREEN_9}}">
+<h1 class="text-lg font-bold text-white tracking-tight">Starken OS</h1>
+<p class="text-[11px] text-white/40 uppercase tracking-[0.8px]">Management Platform</p>
+</a>
+<button class="mx-6 mb-8 bg-primary-container text-white py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all hover:opacity-90 active:scale-95 shadow-lg shadow-primary-container/20" onclick="window.location.href='{{DATA:SCREEN:SCREEN_7}}'">
+<span class="material-symbols-outlined text-[20px]">add</span>
+<span class="text-[13px] font-semibold">Novo Post</span>
+</button>
+<nav class="flex-1 space-y-1 overflow-y-auto scrollbar-hide">
+<!-- Conteudo -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3">article</span>
+<span class="text-[13px]">Conteudo</span>
+</a>
+<!-- Calendario (ACTIVE) -->
+<a class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_11}}">
+<span class="material-symbols-outlined mr-3">calendar_month</span>
+<span class="text-[13px]">Calendario</span>
+</a>
+<!-- Infos -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3">info</span>
+<span class="text-[13px]">Infos</span>
+</a>
+<!-- Feed -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="{{DATA:SCREEN:SCREEN_9}}">
+<span class="material-symbols-outlined mr-3">grid_view</span>
+<span class="text-[13px]">Feed</span>
+</a>
+<!-- Interacoes -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3">forum</span>
+<span class="text-[13px]">Interacoes</span>
+</a>
+<!-- Relatorios -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="text-[13px]">Relatorios</span>
+</a>
+<!-- Equipe -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="text-[13px]">Equipe</span>
+</a>
+<!-- Configuracoes -->
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="text-[13px]">Configuracoes</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 border-t border-white/5 space-y-1">
+<div class="px-6 flex items-center gap-3 mb-4">
+<div class="w-8 h-8 rounded-full bg-slate-700 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="close-up portrait of a professional man with modern haircut against a neutral architectural background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCExGgkx-PBmKjqx6X60lOVZ78PGv6V6StFC5hmkY1ckNzTtAudw5AtVo9tcn9x3Kyd-gid6jkwhpk4GxAzUm0MNQCrBKcYjLt0itPo-_OMTOFjwvoLe9f82ABwEZhb5OiBmaDR2Sb__WKBy9UFc5ljdHyghosWy-EUSVTsgpEIM96VkCzPuKBEpSU78u9vbUoPjgApkuysHh9-YojYADHOrB9wKQPFB6UtrDJ5Fq7JtiNSrzS7xXio98B0IcvOpvrtFm1B2D04ZN2Z"/>
+</div>
+<div>
+<p class="text-[13px] text-white font-medium">JU Juan</p>
+<p class="text-[11px] text-white/40 uppercase tracking-[0.8px]">Pro Admin</p>
+</div>
+</div>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3">palette</span>
+<span class="text-[13px]">Theme</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="h-[52px] w-[calc(100%-240px)] ml-[240px] fixed top-0 flex items-center justify-between px-8 z-40 bg-[#eceef1] dark:bg-slate-800">
+<div class="flex items-center gap-8">
+<nav class="flex items-center h-[52px]">
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] font-medium transition-all" href="{{DATA:SCREEN:SCREEN_10}}">Conteudo</a>
+<a class="text-[#2a4dd7] border-b-2 border-[#2a4dd7] font-bold px-4 h-full flex items-center text-[13px] transition-all" href="{{DATA:SCREEN:SCREEN_11}}">Calendario</a>
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] font-medium transition-all" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-white border-none text-[13px] rounded-lg w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search content..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="p-2 text-slate-500 hover:bg-white/50 rounded-lg transition-all"><span class="material-symbols-outlined">notifications</span></button>
+<button class="p-2 text-slate-500 hover:bg-white/50 rounded-lg transition-all"><span class="material-symbols-outlined">help_outline</span></button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-[52px] min-h-screen bg-[#eceef1]">
+<!-- Planner Toolbar -->
+<div class="px-8 py-6 flex flex-col gap-6">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-6">
+<h2 class="text-xl font-bold tracking-tight text-slate-900">Planner</h2>
+<div class="flex items-center p-1 bg-white rounded-lg shadow-sm border border-outline-variant/10">
+<button class="px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider rounded bg-primary text-white shadow-sm">Semana</button>
+<button class="px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-slate-500 hover:text-slate-900 transition-colors">Mes</button>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<button class="px-4 py-1.5 bg-white text-[13px] font-medium text-slate-700 rounded-lg border border-outline-variant/10 hover:bg-slate-50 transition-all">Hoje</button>
+<div class="flex items-center gap-1">
+<button class="p-1.5 hover:bg-white rounded-lg transition-all"><span class="material-symbols-outlined text-[18px]">chevron_left</span></button>
+<span class="text-[13px] font-bold text-slate-900 mx-2">mar 22 - 28, 2026</span>
+<button class="p-1.5 hover:bg-white rounded-lg transition-all"><span class="material-symbols-outlined text-[18px]">chevron_right</span></button>
+</div>
+</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-px bg-outline-variant/20 rounded-xl overflow-hidden shadow-sm">
+<!-- Day Column (Dom 22) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-400 tracking-widest">Dom</span>
+<span class="text-xl font-bold text-slate-400">22</span>
+</div>
+<!-- Empty Day State -->
+</div>
+<!-- Day Column (Seg 23) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-500 tracking-widest">Seg</span>
+<span class="text-xl font-bold text-slate-900">23</span>
+</div>
+<!-- Card 1: Video Card -->
+<a class="bg-slate-900 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer group block" href="{{DATA:SCREEN:SCREEN_7}}">
+<div class="aspect-square relative flex items-center justify-center">
+<img class="absolute inset-0 w-full h-full object-cover opacity-60" data-alt="top-down artistic view of a steaming pepperoni pizza with melting cheese and fresh basil leaves on a rustic wood background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBccZoZVvjn5LkDHcQCd1DlhOIOpqSHaBWB01Yp3Ks7ApvyrRkvtpzinJdhCQYqGbD_RspZDISM5FVh1sKNWLm6s4dbIcuZNE0tILN0unykMSeEhxRREbk9t7CHjgrf-xzM5wMwS9wWHGd1nhGcUEdVNAlywFUksXQgYq2ZerM-feBRZ4mTKCFyddqA7EwrGuxldmUkKsQ0y2IvsYoNftIve6EUG8QVHoTMDaAsrrdjpxjVD1tNbEWhSrH_oQx_f-Ee-XhNe61Ttf8T"/>
+<span class="material-symbols-outlined text-white text-4xl relative z-10 group-hover:scale-110 transition-transform">play_circle</span>
+<div class="absolute bottom-2 right-2 bg-black/40 px-2 py-0.5 rounded text-[10px] text-white font-mono">0:15</div>
+</div>
+<div class="p-3 bg-slate-800">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-white/50">17:05</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-[#0288d1]"></span>
+<span class="material-symbols-outlined text-[14px] text-white/50">movie</span>
+</div>
+</div>
+<h4 class="text-[12px] font-bold text-white mb-1">Dilokas Pizzaria</h4>
+<p class="text-[11px] text-white/60 line-clamp-2 leading-relaxed">Confira os bastidores da nossa massa artesanal feita com amor...</p>
+</div>
+</a>
+</div>
+<!-- Day Column (Ter 24) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-500 tracking-widest">Ter</span>
+<span class="text-xl font-bold text-slate-900">24</span>
+</div>
+<!-- Card 2: No-image Card -->
+<a class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border-t-[3px] border-purple-500 block" href="{{DATA:SCREEN:SCREEN_7}}">
+<div class="p-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-slate-400">10:00</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-400">campaign</span>
+</div>
+</div>
+<h4 class="text-[12px] font-bold text-slate-900 mb-1">Creative Sync</h4>
+<p class="text-[11px] text-slate-500 line-clamp-3 leading-relaxed">Lembrete de postagem textual para o Twitter e LinkedIn sobre inovação...</p>
+</div>
+</a>
+</div>
+<!-- Day Column (Qua 25) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-500 tracking-widest">Qua</span>
+<span class="text-xl font-bold text-slate-900">25</span>
+</div>
+<!-- Card 3: Standard Image Card -->
+<a class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border border-outline-variant/5 block" href="{{DATA:SCREEN:SCREEN_7}}">
+<img class="w-full aspect-square object-cover" data-alt="clean overhead shot of a gourmet beef burger with crispy fries on a minimalist white plate" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCe5eIIy-BTl94Zh5ceef8KpZOYB3f6qyX_PdHZbLkdv5CfDc63J9H-MlFpVXjqsPca1GsgN0JM9IeDL_2vOQzsl2WJzyIPnMHNfwlWV9U0Y0KNkA1wsLIv25Af4hRQez3VhyISSkXBX9lfSPAixlLNni8TWt4WPLUoXNoUxcdb5UVJQHcYves1OSAhZHOgAm6iwGznM2UPtHpYK0vu0IdisJmuoRh4jugdNacNEh6Io2_h_jC5QzDwRldBGx_Kr-3Xe47xMP8rsy4m"/>
+<div class="p-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-slate-400">12:30</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-400" style="font-variation-settings: 'FILL' 1;">image</span>
+</div>
+</div>
+<h4 class="text-[12px] font-bold text-slate-900 mb-1">Dilokas Pizzaria</h4>
+<p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">Promoção especial de quarta: Compre uma e leve outra!</p>
+</div>
+</a>
+</div>
+<!-- Day Column (Qui 26 - TODAY) -->
+<div class="min-h-[calc(100vh-220px)] bg-white/50 p-2 flex flex-col gap-3 relative">
+<div class="flex flex-col items-center py-2 mb-2 relative">
+<span class="text-[11px] font-bold uppercase text-primary tracking-widest">Qui</span>
+<span class="w-8 h-8 flex items-center justify-center bg-primary text-white text-[16px] font-bold rounded-full mt-1">26</span>
+</div>
+<!-- Placeholder/Action Area -->
+<div class="border-2 border-dashed border-primary/20 rounded-xl h-24 flex items-center justify-center group hover:bg-primary/5 transition-all cursor-pointer">
+<span class="material-symbols-outlined text-primary/40 group-hover:text-primary transition-all">add_circle</span>
+</div>
+</div>
+<!-- Day Column (Sex 27) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-500 tracking-widest">Sex</span>
+<span class="text-xl font-bold text-slate-900">27</span>
+</div>
+<!-- Card 4: Standard Image Card -->
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border border-outline-variant/5">
+<img class="w-full aspect-square object-cover" data-alt="professional photo of an artisan pepperoni pizza coming out of a traditional brick oven with embers glowing" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB6_DwwO5B0Z2Ys8Sxpi2iJ0h_EpCIdf8BqOsuZlqI0FRIuKVpDmyBozpwf4Wt4OU3cZCqJxjQcYhdI3Z2vrXTnNGM-Mv1xqJeWONcDIW0dpB7oi28swkfa9KNS2fb_2cBseBCzpdwGU1-Z3m8h_23l-Go_Bz98gAuCerBX_bdIu61ScAlNrGdQo0ykOwDogU9eGWX7Kas3nLpeV2-KOe2UmGwlqwVqhltZhgYlYJAquMOUihd6qR093a-m82lvN9pOoTje-9y9liFQ"/>
+<div class="p-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-slate-400">19:45</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-400">photo_library</span>
+</div>
+</div>
+<h4 class="text-[12px] font-bold text-slate-900 mb-1">Dilokas Pizzaria</h4>
+<p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">Final de semana chegou! Reserve sua mesa antecipadamente.</p>
+</div>
+</div>
+</div>
+<!-- Day Column (Sab 28) -->
+<div class="min-h-[calc(100vh-220px)] bg-surface-container-low/30 p-2 flex flex-col gap-3">
+<div class="flex flex-col items-center py-2 mb-2">
+<span class="text-[11px] font-bold uppercase text-slate-500 tracking-widest">Sab</span>
+<span class="text-xl font-bold text-slate-900">28</span>
+</div>
+<div class="bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer border-t-[3px] border-blue-400">
+<div class="p-3">
+<div class="flex items-center justify-between mb-2">
+<span class="text-[10px] font-bold text-slate-400">21:00</span>
+<div class="flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span>
+<span class="material-symbols-outlined text-[14px] text-slate-400">star</span>
+</div>
+</div>
+<h4 class="text-[12px] font-bold text-slate-900 mb-1">Highlights Semanal</h4>
+<p class="text-[11px] text-slate-500 line-clamp-2 leading-relaxed">Review dos melhores momentos da semana dos nossos clientes.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FAB Suppression: On Detail screens we hide it, but since this is a Dashboard/Planner, it's allowed -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-xl shadow-2xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-50" onclick="window.location.href='{{DATA:SCREEN:SCREEN_7}}'">
+<span class="material-symbols-outlined text-[28px]" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

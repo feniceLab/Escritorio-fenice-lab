@@ -1,0 +1,1179 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starken OS - Gestão & Performance</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<style>
+:root {
+  --primary: #3b82f6;
+  --primary-dark: #1e40af;
+  --green: #10b981;
+  --purple: #8b5cf6;
+  --pink: #ec4899;
+  --yellow: #f59e0b;
+  --cyan: #06b6d4;
+  --red: #ef4444;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+  --sidebar-w: 240px;
+  --header-h: 56px;
+  --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900); font-size:14px; }
+
+/* ---- LOGIN ---- */
+.login-wrap { display:flex; align-items:center; justify-content:center; min-height:100vh; background:linear-gradient(135deg,#1e40af,#3b82f6); }
+.login-card { background:#fff; padding:40px; border-radius:12px; width:380px; box-shadow:0 20px 40px rgba(0,0,0,.2); }
+.login-logo { text-align:center; margin-bottom:32px; }
+.login-logo h1 { font-size:26px; color:var(--primary); margin-top:8px; }
+.login-logo p { color:var(--gray-500); font-size:13px; margin-top:4px; }
+.form-group { margin-bottom:18px; }
+.form-group label { display:block; font-weight:500; margin-bottom:6px; color:var(--gray-700); font-size:13px; }
+.form-group select, .form-group input { width:100%; padding:10px 12px; border:1px solid var(--gray-300); border-radius:8px; font-size:14px; transition:.2s; }
+.form-group select:focus, .form-group input:focus { outline:none; border-color:var(--primary); box-shadow:0 0 0 3px rgba(59,130,246,.1); }
+
+.btn { padding:10px 16px; border:none; border-radius:8px; font-weight:500; cursor:pointer; font-size:14px; display:inline-flex; align-items:center; gap:6px; transition:.2s; }
+.btn-primary { background:var(--primary); color:#fff; width:100%; justify-content:center; }
+.btn-primary:hover { background:var(--primary-dark); }
+.login-error { color:var(--red); font-size:12px; margin-top:8px; display:none; }
+.login-error.show { display:block; }
+.login-wrap.hidden { display:none; }
+
+/* ---- APP LAYOUT ---- */
+.app { display:flex; height:100vh; overflow:hidden; }
+.app.hidden { display:none; }
+
+/* ---- SIDEBAR ---- */
+.sidebar { width:var(--sidebar-w); background:var(--gray-800); color:#fff; display:flex; flex-direction:column; overflow-y:auto; flex-shrink:0; }
+.sb-logo { padding:16px 16px 12px; border-bottom:1px solid var(--gray-700); display:flex; align-items:center; gap:10px; }
+.sb-logo-icon { width:32px; height:32px; background:var(--primary); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:13px; }
+.sb-logo-text { font-weight:600; font-size:15px; }
+.sb-space { padding:12px 16px; border-bottom:1px solid var(--gray-700); }
+.sb-space label { font-size:10px; text-transform:uppercase; color:var(--gray-400); letter-spacing:.05em; display:block; margin-bottom:6px; }
+.sb-space select { width:100%; background:var(--gray-700); color:#fff; border:1px solid var(--gray-600); border-radius:6px; padding:7px 10px; font-size:13px; }
+.sb-nav { flex:1; padding:8px 0; }
+.sb-section-title { font-size:10px; text-transform:uppercase; color:var(--gray-400); letter-spacing:.05em; padding:8px 16px 4px; }
+.sb-item { display:flex; align-items:center; gap:8px; padding:8px 16px; color:var(--gray-300); cursor:pointer; font-size:13px; border-left:3px solid transparent; transition:.15s; }
+.sb-item:hover { background:var(--gray-700); color:#fff; }
+.sb-item.active { background:rgba(59,130,246,.2); color:#fff; border-left-color:var(--primary); }
+.sb-item .icon { width:18px; text-align:center; flex-shrink:0; }
+.sb-user { padding:12px 16px; border-top:1px solid var(--gray-700); display:flex; align-items:center; gap:10px; }
+.sb-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:11px; color:#fff; flex-shrink:0; }
+.sb-user-name { flex:1; font-size:13px; color:var(--gray-300); }
+.sb-logout { background:none; border:none; color:var(--gray-400); cursor:pointer; padding:4px; border-radius:4px; font-size:16px; }
+.sb-logout:hover { color:#fff; background:var(--gray-700); }
+
+/* ---- MAIN CONTENT ---- */
+.main { flex:1; display:flex; flex-direction:column; overflow:hidden; }
+
+/* ---- TOP HEADER ---- */
+.topbar { height:var(--header-h); background:#fff; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; padding:0 24px; gap:12px; flex-shrink:0; }
+.topbar-breadcrumb { display:flex; align-items:center; gap:6px; color:var(--gray-500); font-size:13px; }
+.topbar-breadcrumb span { color:var(--gray-900); font-weight:600; }
+.topbar-sep { color:var(--gray-300); }
+.topbar-actions { margin-left:auto; display:flex; align-items:center; gap:10px; }
+.search-input { padding:7px 12px 7px 32px; border:1px solid var(--gray-200); border-radius:8px; font-size:13px; width:220px; background:var(--gray-50); position:relative; }
+.search-wrap { position:relative; }
+.search-wrap::before { content:'🔍'; position:absolute; left:8px; top:50%; transform:translateY(-50%); font-size:12px; }
+.btn-new { background:var(--primary); color:#fff; padding:7px 14px; border-radius:8px; border:none; font-weight:500; cursor:pointer; font-size:13px; display:flex; align-items:center; gap:6px; }
+.btn-new:hover { background:var(--primary-dark); }
+
+/* ---- VIEW HEADER ---- */
+.view-header { background:#fff; border-bottom:1px solid var(--gray-200); padding:0 24px; display:flex; align-items:center; gap:0; flex-shrink:0; }
+.view-tab { padding:12px 16px; font-size:13px; font-weight:500; color:var(--gray-500); cursor:pointer; border-bottom:3px solid transparent; display:flex; align-items:center; gap:6px; transition:.15s; }
+.view-tab:hover { color:var(--gray-900); }
+.view-tab.active { color:var(--primary); border-bottom-color:var(--primary); }
+.view-filters { margin-left:auto; display:flex; align-items:center; gap:8px; padding:8px 0; }
+.filter-btn { padding:5px 10px; border:1px solid var(--gray-200); border-radius:6px; font-size:12px; background:#fff; cursor:pointer; color:var(--gray-600); display:flex; align-items:center; gap:4px; }
+.filter-btn:hover { background:var(--gray-50); }
+.filter-select { padding:5px 8px; border:1px solid var(--gray-200); border-radius:6px; font-size:12px; background:#fff; color:var(--gray-700); cursor:pointer; }
+
+/* ---- CONTENT AREA ---- */
+.content-area { flex:1; overflow-y:auto; }
+.view-pane { display:none; }
+.view-pane.active { display:block; }
+.page { display:none; }
+.page.active { display:flex; flex-direction:column; }
+
+/* ---- LIST VIEW ---- */
+.list-view { padding:0; }
+.list-header { display:grid; grid-template-columns:1fr 90px 120px 120px 130px 130px 30px; gap:0; padding:8px 16px 8px 48px; border-bottom:1px solid var(--gray-200); background:#fff; position:sticky; top:0; z-index:10; }
+.list-header-col { font-size:11px; font-weight:600; text-transform:uppercase; color:var(--gray-400); letter-spacing:.05em; }
+
+/* STATUS GROUP */
+.status-group { border-bottom:1px solid var(--gray-100); }
+.status-group-header { display:flex; align-items:center; gap:10px; padding:10px 16px; cursor:pointer; user-select:none; background:#fff; position:sticky; top:37px; z-index:9; border-bottom:1px solid var(--gray-200); }
+.status-group-header:hover { background:var(--gray-50); }
+.status-toggle { width:16px; height:16px; display:flex; align-items:center; justify-content:center; color:var(--gray-400); font-size:10px; transition:.2s; }
+.status-toggle.open { transform:rotate(90deg); }
+.status-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.status-badge { display:inline-flex; align-items:center; gap:6px; padding:3px 10px; border-radius:20px; font-size:12px; font-weight:600; }
+.status-count { font-size:11px; color:var(--gray-400); background:var(--gray-100); padding:1px 7px; border-radius:10px; }
+.status-group-body { }
+.status-group-body.hidden { display:none; }
+
+/* TASK ROW */
+.task-row { display:grid; grid-template-columns:1fr 90px 120px 120px 130px 130px 30px; gap:0; padding:0 16px; border-bottom:1px solid var(--gray-100); align-items:stretch; }
+.task-row:hover { background:var(--gray-50); }
+.task-row:hover .task-actions { opacity:1; }
+.task-cell { padding:9px 8px; display:flex; align-items:center; font-size:13px; color:var(--gray-700); }
+.task-name-cell { padding-left:0; gap:8px; }
+.task-expand { width:20px; height:20px; display:flex; align-items:center; justify-content:center; color:var(--gray-400); cursor:pointer; font-size:10px; flex-shrink:0; border-radius:4px; }
+.task-expand:hover { background:var(--gray-200); }
+.task-expand.open { transform:rotate(90deg); }
+.task-checkbox { width:16px; height:16px; border:1.5px solid var(--gray-300); border-radius:50%; flex-shrink:0; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+.task-checkbox:hover { border-color:var(--primary); }
+.task-title { flex:1; cursor:pointer; line-height:1.3; }
+.task-title:hover { color:var(--primary); }
+.subtask-count { font-size:11px; color:var(--gray-400); background:var(--gray-100); padding:1px 6px; border-radius:8px; display:flex; align-items:center; gap:3px; flex-shrink:0; }
+.priority-badge { padding:2px 8px; border-radius:4px; font-size:11px; font-weight:600; }
+.priority-normal { background:#f0fdf4; color:#16a34a; }
+.priority-alta { background:#fef3c7; color:#d97706; }
+.priority-urgente { background:#fef2f2; color:#dc2626; }
+.priority-baixa { background:var(--gray-100); color:var(--gray-500); }
+.user-avatar { width:26px; height:26px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:700; color:#fff; cursor:default; flex-shrink:0; }
+.date-cell { font-size:12px; color:var(--gray-500); }
+.date-cell.overdue { color:var(--red); }
+.task-actions { opacity:0; display:flex; gap:4px; }
+.task-action-btn { background:none; border:none; color:var(--gray-400); cursor:pointer; padding:2px 4px; border-radius:4px; font-size:12px; }
+.task-action-btn:hover { background:var(--gray-200); color:var(--gray-700); }
+
+/* SUBTASK ROW */
+.subtask-rows { display:none; }
+.subtask-rows.open { display:block; }
+.subtask-row { display:grid; grid-template-columns:1fr 90px 120px 120px 130px 130px 30px; gap:0; padding:0 16px; border-bottom:1px solid var(--gray-100); align-items:stretch; background:#fafbfc; }
+.subtask-row:hover { background:#f0f4f8; }
+.subtask-cell { padding:7px 8px; display:flex; align-items:center; font-size:12px; color:var(--gray-600); }
+.subtask-name-cell { padding-left:44px; gap:8px; }
+.subtask-dot { width:6px; height:6px; border-radius:50%; background:var(--gray-300); flex-shrink:0; }
+
+/* ADD TASK ROW */
+.add-task-row { display:flex; align-items:center; gap:8px; padding:8px 16px 8px 56px; color:var(--gray-400); cursor:pointer; border-bottom:1px solid var(--gray-100); font-size:13px; }
+.add-task-row:hover { background:var(--gray-50); color:var(--primary); }
+
+/* ---- KANBAN VIEW ---- */
+.kanban-view { display:flex; gap:14px; padding:20px; overflow-x:auto; height:100%; }
+.kanban-col { min-width:260px; max-width:260px; background:var(--gray-100); border-radius:10px; display:flex; flex-direction:column; max-height:100%; }
+.kanban-col-header { padding:12px 14px; display:flex; align-items:center; gap:8px; }
+.kanban-col-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
+.kanban-col-title { font-weight:600; font-size:13px; flex:1; }
+.kanban-col-count { font-size:11px; color:var(--gray-500); background:#fff; padding:1px 7px; border-radius:10px; }
+.kanban-cards { flex:1; overflow-y:auto; padding:0 10px 10px; display:flex; flex-direction:column; gap:8px; }
+.kanban-card { background:#fff; border-radius:8px; padding:12px; box-shadow:0 1px 3px rgba(0,0,0,.08); cursor:pointer; border:1px solid var(--gray-200); transition:.15s; }
+.kanban-card:hover { box-shadow:0 4px 12px rgba(0,0,0,.12); border-color:var(--primary); }
+.kanban-card-type { font-size:10px; font-weight:600; color:var(--gray-500); text-transform:uppercase; margin-bottom:6px; }
+.kanban-card-title { font-size:13px; font-weight:500; line-height:1.4; margin-bottom:8px; }
+.kanban-card-client { font-size:11px; background:var(--gray-100); color:var(--gray-600); padding:2px 7px; border-radius:4px; display:inline-block; margin-bottom:8px; }
+.kanban-card-footer { display:flex; align-items:center; gap:6px; }
+.kanban-card-date { font-size:11px; color:var(--gray-400); margin-left:auto; }
+.kanban-add { padding:8px 10px; text-align:center; color:var(--gray-400); cursor:pointer; border:2px dashed var(--gray-300); border-radius:8px; margin:0 10px 10px; font-size:13px; }
+.kanban-add:hover { border-color:var(--primary); color:var(--primary); }
+
+/* ---- CALENDAR VIEW ---- */
+.calendar-view { padding:20px; }
+.cal-header { display:flex; align-items:center; gap:16px; margin-bottom:20px; }
+.cal-nav { background:none; border:1px solid var(--gray-200); border-radius:6px; padding:6px 12px; cursor:pointer; font-size:13px; }
+.cal-month { font-size:20px; font-weight:600; }
+.cal-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:1px; background:var(--gray-200); border-radius:10px; overflow:hidden; }
+.cal-day-name { background:var(--gray-100); padding:8px; text-align:center; font-size:12px; font-weight:600; color:var(--gray-500); text-transform:uppercase; }
+.cal-day { background:#fff; min-height:110px; padding:8px; }
+.cal-day-num { font-size:13px; font-weight:600; color:var(--gray-700); margin-bottom:4px; }
+.cal-day.other-month .cal-day-num { color:var(--gray-300); }
+.cal-day.today .cal-day-num { background:var(--primary); color:#fff; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.cal-event { font-size:11px; background:var(--primary); color:#fff; padding:2px 6px; border-radius:4px; margin-bottom:2px; cursor:pointer; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+
+/* ---- MODAL ---- */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:1000; align-items:center; justify-content:center; }
+.modal-overlay.show { display:flex; }
+.modal { background:#fff; border-radius:12px; width:680px; max-width:95vw; max-height:90vh; overflow-y:auto; box-shadow:0 24px 48px rgba(0,0,0,.2); }
+.modal-header { padding:20px 24px 16px; border-bottom:1px solid var(--gray-200); display:flex; align-items:center; justify-content:space-between; }
+.modal-title { font-size:18px; font-weight:600; }
+.modal-close { background:none; border:none; font-size:22px; color:var(--gray-400); cursor:pointer; border-radius:6px; padding:2px 6px; }
+.modal-close:hover { background:var(--gray-100); color:var(--gray-700); }
+.modal-body { padding:20px 24px; }
+.modal-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+.modal-grid.full { grid-template-columns:1fr; }
+.modal-footer { padding:16px 24px; border-top:1px solid var(--gray-200); display:flex; gap:10px; justify-content:flex-end; }
+.btn-secondary { background:var(--gray-100); color:var(--gray-700); }
+.btn-secondary:hover { background:var(--gray-200); }
+.btn-danger { background:#fef2f2; color:var(--red); }
+.btn-danger:hover { background:#fee2e2; }
+
+/* ---- STATUS COLORS ---- */
+.s-a-fazer       { background:#f3f4f6; color:#374151; }
+.s-criacao       { background:#ede9fe; color:#5b21b6; }
+.s-copy          { background:#e0f2fe; color:#0369a1; }
+.s-design        { background:#ddd6fe; color:#4c1d95; }
+.s-aprov-design  { background:#fce7f3; color:#9d174d; }
+.s-alter-design  { background:#fef3c7; color:#92400e; }
+.s-aprov-cliente { background:#d1fae5; color:#065f46; }
+.s-alteracao     { background:#ffedd5; color:#9a3412; }
+.s-revisao       { background:#fef9c3; color:#854d0e; }
+.s-agendar       { background:#cffafe; color:#155e75; }
+.s-agendado      { background:#e0f2fe; color:#1e40af; }
+.s-postado       { background:#dcfce7; color:#166534; }
+.s-plano-midia   { background:#f0fdf4; color:#15803d; }
+.s-aguardando    { background:#f1f5f9; color:#475569; }
+.s-standby       { background:#f8fafc; color:#64748b; }
+.s-finalizado    { background:#f0fdf4; color:#15803d; }
+
+/* ---- SCROLLBAR ---- */
+::-webkit-scrollbar { width:6px; height:6px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--gray-300); border-radius:3px; }
+::-webkit-scrollbar-thumb:hover { background:var(--gray-400); }
+
+/* ===== PERFORMANCE & RELATORIOS / CRONOGRAMA SPECIFIC ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+.stat-card {
+  background: var(--card); border-radius: var(--radius); padding: 16px;
+  border: 1px solid var(--border); box-shadow: var(--shadow); position: relative; overflow: hidden;
+}
+.stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+.stat-card.starken::before { background: var(--starken); }
+.stat-card.alpha::before { background: var(--alpha); }
+.stat-card.warning::before { background: var(--warning); }
+.stat-card.success::before { background: var(--success); }
+
+.stat-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; margin-bottom: 10px;
+}
+.stat-card.starken .stat-icon { background: var(--starken-bg); }
+.stat-card.alpha .stat-icon { background: var(--alpha-bg); }
+.stat-card.warning .stat-icon { background: var(--warning-bg); }
+.stat-card.success .stat-icon { background: var(--success-bg); }
+
+.stat-label { font-size: 0.7rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 3px; }
+.stat-value { font-size: 1.5rem; font-weight: 800; }
+
+.two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.company-column { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); border: 1px solid var(--border); overflow: hidden; }
+.column-header { padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; font-weight: 700; font-size: 0.9rem; }
+.column-header.starken { background: linear-gradient(135deg, var(--starken), var(--starken-dark)); color: white; }
+.column-header.alpha { background: linear-gradient(135deg, var(--alpha), var(--alpha-dark)); color: white; }
+.column-header .count { font-size: 0.75rem; font-weight: 500; opacity: 0.85; }
+.col-seg-filter { font-size: 0.72rem; font-family: inherit; font-weight: 500; padding: 4px 8px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.35); background: rgba(255,255,255,0.2); color: white; cursor: pointer; }
+.col-seg-filter option { background: #1e293b; color: white; }
+.column-body { padding: 12px; }
+
+.client-row { padding: 12px 14px; border: 1px solid var(--border); border-radius: var(--radius-sm); margin-bottom: 6px; background: white; transition: all 0.15s; }
+.client-row:hover { border-color: var(--text-muted); box-shadow: var(--shadow); }
+.client-row.status-2 { background: #f0fdf4; border-color: var(--alpha-border); }
+.client-row.status-1 { background: #eef2ff; border-color: #c7d2fe; }
+
+.client-row-top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.client-avatar { width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.72rem; color: white; flex-shrink: 0; }
+.client-avatar.starken { background: linear-gradient(135deg, var(--starken), var(--starken-dark)); }
+.client-avatar.alpha { background: linear-gradient(135deg, var(--alpha), var(--alpha-dark)); }
+.client-name { font-weight: 600; font-size: 0.85rem; flex: 1; }
+
+.status-select {
+  padding: 5px 28px 5px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; border: 2px solid transparent; cursor: pointer; font-family: inherit; appearance: none; -webkit-appearance: none;
+  background-repeat: no-repeat; background-position: right 9px center; background-size: 10px; transition: all 0.2s; box-shadow: 0 1px 3px rgba(0,0,0,0.08); letter-spacing: 0.2px;
+}
+.status-select.s0 { background-color: #fef9c3; color: #854d0e; border-color: #fde047; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23854d0e'/%3E%3C/svg%3E"); }
+.status-select.s1 { background-color: #ede9fe; color: #4c1d95; border-color: #a78bfa; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%234c1d95'/%3E%3C/svg%3E"); }
+.status-select.s2 { background-color: #dcfce7; color: #14532d; border-color: #4ade80; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%2314532d'/%3E%3C/svg%3E"); }
+
+.status-badge .dot { width: 6px; height: 6px; border-radius: 50%; }
+.status-pending { background: #fef3c7; color: #92400e; }
+.status-pending .dot { background: #f59e0b; }
+.status-generated { background: #e0e7ff; color: #3730a3; }
+.status-generated .dot { background: #6366f1; }
+.status-sent { background: #dcfce7; color: #166534; }
+.status-sent .dot { background: #22c55e; }
+
+.period-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 12px 16px; background: var(--bg-subtle); border-radius: var(--radius-sm); border: 1px solid var(--border); }
+.period-bar label { font-size: 0.75rem; font-weight: 600; color: var(--text-secondary); }
+.period-bar select, .period-bar input { padding: 6px 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.82rem; font-family: inherit; color: var(--text); background: white; }
+
+.ca-dashboard { display:grid; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); gap:16px; }
+.ca-sched-card { background:white; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); cursor:pointer; transition:box-shadow 0.2s, transform 0.2s; overflow:hidden; display:flex; flex-direction:column; }
+.ca-sched-card:hover { box-shadow:var(--shadow-lg); transform:translateY(-2px); }
+.ca-status { display:inline-flex; align-items:center; gap:4px; padding:4px 12px; border-radius:20px; font-size:0.72rem; font-weight:700; letter-spacing:0.3px; }
+.ca-status-rascunho { background:#dbeafe; color:#1d4ed8; }
+.ca-status-pronto { background:#f5f3ff; color:#7c3aed; }
+.ca-status-enviado { background:#fef3c7; color:#b45309; }
+.ca-status-aprovado { background:#d1fae5; color:#065f46; }
+.ca-status-revisao { background:#ffedd5; color:#c2410c; }
+
+.ca-modal-overlay { position:fixed; inset:0; background:rgba(15,23,42,0.7); backdrop-filter:blur(4px); z-index:1100; display:none; flex-direction:column; }
+.ca-modal-overlay.active { display:flex; }
+.ca-modal { background:var(--bg); width:100%; height:100%; overflow-y:auto; display:flex; flex-direction:column; }
+.ca-modal-header { position:sticky; top:0; z-index:10; background:white; border-bottom:1px solid var(--border); padding:14px 24px; display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; }
+
+.ca-post-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.ca-post-card-v2 { background:white; border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; display:flex; flex-direction:column; transition:box-shadow 0.15s; }
+
+/* ===== ASANA TASKS ===== */
+.asana-columns { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.asana-column { background:var(--card); border-radius:var(--radius); box-shadow:var(--shadow); border:1px solid var(--border); overflow:hidden; }
+.asana-col-header { padding:12px 16px; font-weight:700; font-size:0.85rem; display:flex; justify-content:space-between; align-items:center; }
+.asana-col-header.overdue { background:linear-gradient(135deg,#fef2f2,#fee2e2); color:#991b1b; }
+.asana-col-header.thisweek { background:linear-gradient(135deg,#eff6ff,#dbeafe); color:#1e40af; }
+.asana-col-header.done { background:linear-gradient(135deg,#ecfdf5,#d1fae5); color:#065f46; }
+.asana-col-body { padding:10px; max-height:500px; overflow-y:auto; }
+.asana-task-card { padding:12px 14px; border:1px solid var(--border); border-radius:var(--radius-sm); margin-bottom:8px; background:white; transition:all 0.15s; }
+</style>
+</head>
+<body>
+
+<div id="loginPage" class="login-wrap">
+  <div class="login-card">
+    <div class="login-logo"><h1>Starken OS</h1><p>Gestão & Performance</p></div>
+    <form id="loginForm">
+      <div class="form-group"><label>Usuário</label><select id="loginUser" required><option value="">Selecione</option><option value="Juan">Juan</option></select></div>
+      <div class="form-group"><label>PIN</label><input type="password" id="loginPin" maxlength="6" required></div>
+      <button type="submit" class="btn btn-primary">Entrar</button>
+      <div class="login-error" id="loginError">Inválido</div>
+    </form>
+  </div>
+</div>
+
+<div class="app hidden" id="app">
+  <aside class="sidebar">
+    <div class="sb-logo"><div class="sb-logo-icon">ST</div><div class="sb-logo-text">Starken OS</div></div>
+    <div class="sb-space"><select id="spaceSelector"><option value="starken">Starken</option><option value="alpha">Alpha</option></select></div>
+    <nav class="sb-nav">
+      <div class="sb-section-title">Negócio</div>
+      <div class="sb-item active" data-page="gestao"><span class="icon">💼</span> Gestão de Projetos</div>
+      <div class="sb-item" data-page="relatorios"><span class="icon">📈</span> Performance & Relatórios</div>
+      <div class="sb-section-title">Operacional</div>
+      <div class="sb-item" data-page="cronogramas"><span class="icon">📅</span> Cronogramas</div>
+      <div class="sb-item" data-page="hub"><span class="icon">🤝</span> Hub de Clientes</div>
+      <div class="sb-section-title">Agents</div>
+      <div class="sb-item" data-page="squads"><span class="icon">🤖</span> AI Squads</div>
+    </nav>
+    <div class="sb-user"><div class="sb-avatar" id="sbAvatar">JU</div><div class="sb-user-name" id="sbName">Juan</div><button class="sb-logout" id="logoutBtn">🚪</button></div>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div id="breadcrumb">Starken / <span id="curPage">Gestão de Projetos</span></div>
+    </header>
+    
+    <div class="content-area">
+      <!-- Section: Gestão de Projetos -->
+      <section id="page-gestao" class="page active">
+        <!-- TOPBAR -->
+        <div class="topbar">
+          <div class="topbar-breadcrumb">
+            <span id="breadSpace">Starken</span>
+            <span class="topbar-sep">/</span>
+            <span id="curPage">Gestão de Projetos</span>
+          </div>
+          <div class="topbar-actions">
+            <div class="search-wrap">
+              <input class="search-input" id="searchInput" placeholder="Buscar tarefas...">
+            </div>
+            <button class="btn-new" id="newTaskBtn">+ Nova Tarefa</button>
+          </div>
+        </div>
+
+        <!-- PAGE: CONTEUDO & DESIGN -->
+        <div id="pageConteudo" style="display:flex;flex-direction:column;flex:1;overflow:hidden;">
+          <!-- TABS -->
+          <div class="view-header">
+            <div class="view-tab active" data-view="lista">📋 Lista</div>
+            <div class="view-tab" data-view="kanban">📌 Quadro</div>
+            <div class="view-tab" data-view="calendario">📅 Calendário</div>
+            <div class="view-filters">
+              <select class="filter-select" id="filterCliente">
+                <option value="">Todos os Clientes</option>
+              </select>
+              <select class="filter-select" id="filterResponsavel">
+                <option value="">Todos Responsáveis</option>
+                <option value="Juan">Juan</option>
+                <option value="Henrique">Henrique</option>
+                <option value="Emilly">Emilly</option>
+              </select>
+              <select class="filter-select" id="filterSemana">
+                <option value="">Todas as Semanas</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- LISTA VIEW -->
+          <div id="viewLista" class="content-area view-pane active">
+            <div class="list-view">
+              <div class="list-header">
+                <div class="list-header-col">Nome</div>
+                <div class="list-header-col">Prioridade</div>
+                <div class="list-header-col">Responsável</div>
+                <div class="list-header-col">Data Postagem</div>
+                <div class="list-header-col">Data Vencimento</div>
+                <div class="list-header-col">Resp. Revisão</div>
+                <div class="list-header-col"></div>
+              </div>
+              <div id="listBody"></div>
+            </div>
+          </div>
+
+          <!-- KANBAN VIEW -->
+          <div id="viewKanban" class="content-area view-pane">
+            <div class="kanban-view" id="kanbanBoard"></div>
+          </div>
+
+          <!-- CALENDAR VIEW -->
+          <div id="viewCalendario" class="content-area view-pane">
+            <div class="calendar-view">
+              <div class="cal-header">
+                <button class="cal-nav" id="calPrev">←</button>
+                <div class="cal-month" id="calMonth"></div>
+                <button class="cal-nav" id="calNext">→</button>
+              </div>
+              <div class="cal-grid" id="calGrid"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+      <!-- Section: Performance & Relatórios -->
+      <section id="page-relatorios" class="page">
+        <div class="topbar">
+          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Performance & Relatórios</span></div>
+          <div class="topbar-actions">
+            <button class="btn-new" onclick="Relatorios.openSyncModal()">🔄 Sincronizar PDFs</button>
+          </div>
+        </div>
+        <div class="view-header">
+          <div class="view-tab active" data-rel-tab="dashboard">📊 Dashboard</div>
+          <div class="view-tab" data-rel-tab="weekly">📅 Semanal</div>
+          <div class="view-tab" data-rel-tab="monthly">📂 Mensal</div>
+          <div class="view-tab" data-rel-tab="history">📜 Histórico</div>
+        </div>
+        <div class="content-area" style="padding:20px 24px;">
+          <div id="rel-tab-dashboard" class="tab-content active">
+            <div class="stats-grid" id="dashboardStats"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+              <div class="card"><div class="card-title">Progresso Semanal</div><div id="weeklyProgress"></div></div>
+              <div class="card"><div class="card-title">Progresso Mensal</div><div id="monthlyProgress"></div></div>
+            </div>
+          </div>
+          <div id="rel-tab-weekly" class="tab-content">
+            <div class="period-bar">
+              <label>Mês:</label><select id="weekMonth"></select>
+              <label>Semana:</label><select id="weekNumber"><option value="1">Semana 1</option><option value="2">Semana 2</option><option value="3">Semana 3</option><option value="4">Semana 4</option><option value="5">Semana 5</option></select>
+            </div>
+            <div class="two-columns" id="weeklyColumns"></div>
+          </div>
+          <div id="rel-tab-monthly" class="tab-content">
+            <div class="period-bar"><label>Mês:</label><select id="monthSelect"></select></div>
+            <div class="two-columns" id="monthlyColumns"></div>
+          </div>
+          <div id="rel-tab-history" class="tab-content">
+            <div class="table-container">
+              <table>
+                <thead><tr><th>Cliente</th><th>Empresa</th><th>Tipo</th><th>Período</th><th>Status</th><th>Data</th><th>Obs</th></tr></thead>
+                <tbody id="historyTable"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Cronogramas -->
+      <section id="page-cronogramas" class="page">
+        <div class="topbar">
+          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Cronogramas</span></div>
+          <div class="topbar-actions">
+            <button class="btn-new" onclick="Cronograma.openNewModal()">+ Novo Cronograma</button>
+          </div>
+        </div>
+        <div class="content-area" style="padding:20px 24px;">
+          <div class="ca-filters">
+            <select id="caFilterClient"><option value="all">Todos clientes</option></select>
+            <select id="caFilterStatus">
+              <option value="all">Todos status</option>
+              <option value="rascunho">Rascunho</option>
+              <option value="pronto">Pronto</option>
+              <option value="enviado">Enviado</option>
+              <option value="aprovado">Aprovado</option>
+              <option value="revisao">Revisão</option>
+            </select>
+          </div>
+          <div id="caDashboard" class="ca-dashboard"></div>
+        </div>
+      </section>
+
+      <!-- Section: Hub de Clientes -->
+      <section id="page-hub" class="page">
+        <div class="topbar">
+          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Hub de Clientes</span></div>
+          <div class="topbar-actions">
+            <button class="btn-new" onclick="Hub.openModal()">+ Novo Cliente</button>
+          </div>
+        </div>
+        <div class="content-area" style="padding:20px 24px;">
+           <div class="filter-bar" style="margin-bottom:14px">
+            <select id="hubCompanyFilter"><option value="all">Todas empresas</option><option value="Starken">Starken</option><option value="Alpha">Alpha</option></select>
+            <select id="hubStatusFilter"><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="all">Todos</option></select>
+          </div>
+          <div class="two-columns" id="hubColumns"></div>
+        </div>
+      </section>
+
+      <!-- Section: AI Squads -->
+      <section id="page-squads" class="page">
+        <div class="topbar">
+          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>AI Squads</span></div>
+        </div>
+        <div class="content-area" style="padding:20px 24px;">
+           <div class="asana-columns" id="asanaColumns">
+            <div class="asana-column">
+              <div class="asana-col-header overdue">🔴 Atrasadas <span class="count" id="asanaOverdueCount">0</span></div>
+              <div class="asana-col-body" id="asanaOverdueCol"></div>
+            </div>
+            <div class="asana-column">
+              <div class="asana-col-header thisweek">📌 Pendentes <span class="count" id="asanaPendingCount">0</span></div>
+              <div class="asana-col-body" id="asanaPendingCol"></div>
+            </div>
+            <div class="asana-column">
+              <div class="asana-col-header done">✅ Concluídas <span class="count" id="asanaDoneCount">0</span></div>
+              <div class="asana-col-body" id="asanaDoneCol"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<!-- EXTRA MODALS (From Performance/Relatorios) -->
+<div class="modal-overlay" id="sentDateModal">
+  <div class="modal" style="max-width:380px">
+    <h3>✉️ Data de Envio</h3>
+    <div id="sentDateModalClient" style="font-size:13px; margin-bottom:12px;"></div>
+    <div class="form-group"><label>Data</label><input type="date" id="sentDateDate"></div>
+    <div class="form-group"><label>Hora</label><input type="time" id="sentDateTime" value="09:00"></div>
+    <div class="modal-actions"><button class="btn btn-secondary" onclick="Relatorios.closeSentDateModal()">Cancelar</button><button class="btn btn-primary" onclick="Relatorios.saveSentDate()">Confirmar</button></div>
+  </div>
+</div>
+
+<div class="ca-modal-overlay" id="caEditorModal">
+  <div class="ca-modal">
+    <div class="ca-modal-header">
+      <div class="ca-modal-header-left">
+        <button class="btn btn-secondary" onclick="Cronograma.closeEditor()">← Voltar</button>
+        <div><div class="ca-modal-header-title" id="caEditorTitle"></div><div class="ca-modal-header-sub" id="caEditorSubtitle"></div></div>
+      </div>
+      <div id="caEditorActions"></div>
+    </div>
+    <div class="ca-modal-body"><div id="caEditorPostGrid" class="ca-post-grid"></div><div style="text-align:center;margin-top:20px"><button class="btn btn-primary" onclick="Cronograma.addPost()">+ Adicionar Post</button></div></div>
+  </div>
+</div>
+
+<!-- MODAL NOVA TAREFA -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Nova Tarefa</div>
+      <button class="modal-close" id="modalClose">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-grid">
+        <div class="form-group" style="grid-column:1/-1">
+          <label>Título</label>
+          <input type="text" id="ftTitle" placeholder="Ex: Feed 1 - Mortadella - Marco S3">
+        </div>
+        <div class="form-group">
+          <label>Cliente</label>
+          <select id="ftCliente"></select>
+        </div>
+        <div class="form-group">
+          <label>Tipo</label>
+          <select id="ftTipo">
+            <option value="feed">Feed</option>
+            <option value="story">Story</option>
+            <option value="reels">Reels</option>
+            <option value="carrossel">Carrossel</option>
+            <option value="video">Vídeo</option>
+            <option value="trafego">Tráfego</option>
+            <option value="design">Design</option>
+            <option value="outro">Outro</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="ftStatus">
+            <option value="a_fazer">A FAZER</option>
+            <option value="criacao">CRIAÇÃO DE CONTEÚDO</option>
+            <option value="copy">COPY</option>
+            <option value="design">DESIGN</option>
+            <option value="aprov_design">APROVAÇÃO DESIGN</option>
+            <option value="alter_design">ALTERAÇÃO DESIGN</option>
+            <option value="aprov_cliente">APROVAÇÃO CLIENTE</option>
+            <option value="alteracao">ALTERAÇÃO</option>
+            <option value="revisao">REVISÃO</option>
+            <option value="agendar">AGENDAR</option>
+            <option value="agendado">AGENDADO</option>
+            <option value="postado">POSTADO</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Responsável</label>
+          <select id="ftResponsavel">
+            <option value="Juan">Juan</option>
+            <option value="Henrique">Henrique</option>
+            <option value="Emilly">Emilly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Responsável Revisão</label>
+          <select id="ftRevisao">
+            <option value="">Nenhum</option>
+            <option value="Juan">Juan</option>
+            <option value="Henrique">Henrique</option>
+            <option value="Emilly">Emilly</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Prioridade</label>
+          <select id="ftPrioridade">
+            <option value="normal">Normal</option>
+            <option value="alta">Alta</option>
+            <option value="urgente">Urgente</option>
+            <option value="baixa">Baixa</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Semana</label>
+          <input type="text" id="ftSemana" placeholder="Ex: S3 Marco">
+        </div>
+        <div class="form-group">
+          <label>Data de Postagem</label>
+          <input type="date" id="ftDataPostagem">
+        </div>
+        <div class="form-group">
+          <label>Data de Vencimento</label>
+          <input type="date" id="ftDataVencimento">
+        </div>
+      </div>
+      <div class="modal-grid full" style="margin-top:4px">
+        <div class="form-group">
+          <label>Legenda / Copy</label>
+          <textarea id="ftCaption" rows="4" placeholder="Digite o texto do post..." style="width:100%;padding:10px;border:1px solid var(--gray-300);border-radius:8px;font-family:var(--font);font-size:13px;resize:vertical;"></textarea>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modalCancel">Cancelar</button>
+      <button class="btn btn-primary" id="modalSave">Salvar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// CORE STATE & SUPABASE
+// ============================================================
+const SUPABASE_URL = 'https://cpwpxckmuecejtkcobre.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_z-uy5pBapfR74IIQyag5vA_i6IKJLHB';
+let db = null;
+
+const USERS = [
+  { name:'Juan',     pin:'1234', role:'admin',    color:'#3b82f6' },
+  { name:'Henrique', pin:'5678', role:'executor', color:'#8b5cf6' },
+  { name:'Emilly',   pin:'2222', role:'editor',   color:'#f59e0b' }
+];
+
+const STATUSES = [
+  { id:'a_fazer',       label:'A FAZER',              color:'#6b7280', dotColor:'#9ca3af',  cls:'s-a-fazer',      group:'active' },
+  { id:'criacao',       label:'CRIAÇÃO DE CONTEÚDO',  color:'#5b21b6', dotColor:'#8b5cf6',  cls:'s-criacao',      group:'active' },
+  { id:'copy',          label:'COPY',                  color:'#0369a1', dotColor:'#0ea5e9',  cls:'s-copy',         group:'active' },
+  { id:'design',        label:'DESIGN',                color:'#4c1d95', dotColor:'#7c3aed',  cls:'s-design',       group:'active' },
+  { id:'aprov_design',  label:'APROVAÇÃO DESIGN',      color:'#9d174d', dotColor:'#ec4899',  cls:'s-aprov-design', group:'active' },
+  { id:'alter_design',  label:'ALTERAÇÃO DESIGN',      color:'#92400e', dotColor:'#f59e0b',  cls:'s-alter-design', group:'active' },
+  { id:'aprov_cliente', label:'APROVAÇÃO CLIENTE',     color:'#065f46', dotColor:'#10b981',  cls:'s-aprov-cliente',group:'active' },
+  { id:'alteracao',     label:'ALTERAÇÃO',             color:'#9a3412', dotColor:'#f97316',  cls:'s-alteracao',    group:'active' },
+  { id:'revisao',       label:'REVISÃO',               color:'#854d0e', dotColor:'#eab308',  cls:'s-revisao',      group:'active' },
+  { id:'agendar',       label:'AGENDAR',               color:'#155e75', dotColor:'#06b6d4',  cls:'s-agendar',      group:'active' },
+  { id:'agendado',      label:'AGENDADO',              color:'#1e40af', dotColor:'#60a5fa',  cls:'s-agendado',     group:'active' },
+  { id:'postado',       label:'POSTADO',               color:'#166534', dotColor:'#22c55e',  cls:'s-postado',      group:'active' },
+  { id:'plano_midia',   label:'PLANO DE MÍDIA',        color:'#15803d', dotColor:'#4ade80',  cls:'s-plano-midia',  group:'done'   },
+  { id:'aguardando',    label:'AGUARDANDO INFORMAÇÕES',color:'#475569', dotColor:'#94a3b8',  cls:'s-aguardando',   group:'done'   },
+  { id:'standby',       label:'STAND-BY',              color:'#64748b', dotColor:'#cbd5e1',  cls:'s-standby',      group:'done'   },
+  { id:'finalizado',    label:'FINALIZADO',            color:'#15803d', dotColor:'#86efac',  cls:'s-finalizado',   group:'closed' }
+];
+
+const STARKEN_CLIENTS = [
+  { name:'Mortadella Blumenau',    segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Hamburgueria Feio',      segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Rosa Mexicano Blumenau', segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Rosa Mexicano Brusque',  segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Suprema Pizza',          segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Arena Gourmet',          segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Super X - Garuva',       segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Super X - Guaratuba',    segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Super X - Itapoa',       segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Madrugao - Centro',      segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Madrugao - Garcia',      segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Madrugao - Fortaleza',   segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Restaurante Oca',        segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Aseyori Restaurante',    segment:'Gastronomia', package:'2feed',        responsible:'Juan'     },
+  { name:'Oklahoma Burger',        segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Pizzaria Super X',       segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Sr Salsicha',            segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'     },
+  { name:'The Garrison',           segment:'Eventos',     package:'2feed',        responsible:'Juan'     },
+  { name:'Estilo Tulipa',          segment:'Tenis',       package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Academia Sao Pedro',     segment:'Academia',    package:'2feed',        responsible:'Emilly'   },
+  { name:'New Service',            segment:'Industria',   package:'1feed_trafego',responsible:'Juan'     },
+  { name:'Melhor Visao',           segment:'Otica',       package:'1feed_trafego',responsible:'Juan'     },
+  { name:'JPR Moveis Rusticos',    segment:'Festas',      package:'2feed',        responsible:'Juan'     }
+];
+
+const ALPHA_CLIENTS = [
+  { name:'Mestre do Frango',   segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'   },
+  { name:'Patricia Salgados',  segment:'Gastronomia', package:'1feed_trafego',responsible:'Emilly' },
+  { name:'Pizzaria do Nei',    segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'   },
+  { name:'Super Duper',        segment:'Gastronomia', package:'2feed',        responsible:'Juan'   },
+  { name:'Sorveteria Maciel',  segment:'Gastronomia', package:'1feed_trafego',responsible:'Juan'   },
+  { name:'WorldBurguer',       segment:'Gastronomia', package:'2feed',        responsible:'Juan'   },
+  { name:'Salfest',            segment:'Gastronomia', package:'1feed_trafego',responsible:'Emilly' },
+  { name:'Saporito Pizzaria',  segment:'Gastronomia', package:'2feed',        responsible:'Juan'   },
+  { name:"D' Britos",          segment:'Gastronomia', package:'1feed_trafego',responsible:'Emilly' },
+  { name:'Fratellis Pizzaria', segment:'Gastronomia', package:'2feed',        responsible:'Juan'   }
+];
+
+let state = {
+  user: null,
+  space: 'starken',
+  view: 'lista',
+  tasks: JSON.parse(localStorage.getItem('gp_tasks') || '[]'),
+  expandedGroups: {},
+  expandedTasks: {},
+  calDate: new Date()
+};
+
+function initSupabase() {
+  try {
+    db = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('Supabase initialized');
+    return true;
+  } catch(e) { console.error('Supabase fail', e); return false; }
+}
+
+function saveTasks() { localStorage.setItem('gp_tasks', JSON.stringify(state.tasks)); }
+function getClients() { return state.space === 'starken' ? STARKEN_CLIENTS : ALPHA_CLIENTS; }
+function getStatusById(id) { return STATUSES.find(s => s.id === id) || STATUSES[0]; }
+function getUserColor(name) { const u = USERS.find(u => u.name === name); return u ? u.color : '#9ca3af'; }
+function fmtDate(d) {
+  if (!d) return '';
+  const dt = new Date(d + 'T00:00:00');
+  return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'short' });
+}
+function capitalize(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
+
+// ============================================================
+// NAVIGATION & MODULES
+// ============================================================
+const Nav = {
+  init() {
+    document.querySelectorAll('.sb-item').forEach(el => {
+      el.addEventListener('click', () => {
+        document.querySelectorAll('.sb-item').forEach(x => x.classList.remove('active'));
+        el.classList.add('active');
+        this.showPage(el.dataset.page);
+      });
+    });
+
+    // Space selector
+    document.getElementById('spaceSelector').addEventListener('change', e => {
+      state.space = e.target.value;
+      const bread = document.getElementById('breadSpace');
+      if (bread) bread.textContent = state.space === 'starken' ? 'Starken' : 'Alpha';
+      Gestao.populateClientFilter();
+      Gestao.renderCurrentView();
+    });
+  },
+  showPage(pageId) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    const page = document.getElementById('page-' + pageId);
+    if (page) page.classList.add('active');
+    document.getElementById('curPage').innerText = pageId.charAt(0).toUpperCase() + pageId.slice(1);
+    
+    if (pageId === 'gestao') Gestao.renderCurrentView();
+    if (pageId === 'relatorios') Relatorios.init();
+    if (pageId === 'cronogramas') Cronograma.init();
+    if (pageId === 'hub') Hub.init();
+  }
+};
+
+// ============================================================
+// GESTÃO DE PROJETOS MODULE
+// ============================================================
+const Gestao = {
+  init() {
+    // View tabs
+    document.querySelectorAll('.view-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        state.view = tab.dataset.view;
+        document.querySelectorAll('.view-pane').forEach(p => p.classList.remove('active'));
+        document.getElementById('view' + capitalize(state.view)).classList.add('active');
+        this.renderCurrentView();
+      });
+    });
+
+    // Filters
+    document.getElementById('filterCliente').addEventListener('change', () => this.renderCurrentView());
+    document.getElementById('filterResponsavel').addEventListener('change', () => this.renderCurrentView());
+    document.getElementById('filterSemana').addEventListener('change', () => this.renderCurrentView());
+    document.getElementById('searchInput').addEventListener('input', () => this.renderCurrentView());
+
+    // New task modal
+    document.getElementById('newTaskBtn').addEventListener('click', () => this.openModal());
+    document.getElementById('modalClose').addEventListener('click', () => this.closeModal());
+    document.getElementById('modalCancel').addEventListener('click', () => this.closeModal());
+    document.getElementById('modalSave').addEventListener('click', () => this.saveTask());
+
+    // Calendar nav
+    document.getElementById('calPrev').addEventListener('click', () => {
+      state.calDate.setMonth(state.calDate.getMonth() - 1);
+      this.renderCalendar();
+    });
+    document.getElementById('calNext').addEventListener('click', () => {
+      state.calDate.setMonth(state.calDate.getMonth() + 1);
+      this.renderCalendar();
+    });
+
+    this.populateClientFilter();
+    this.populateWeekFilter();
+  },
+
+  renderCurrentView() {
+    if (state.view === 'lista') this.renderList();
+    else if (state.view === 'kanban') this.renderKanban();
+    else if (state.view === 'calendario') this.renderCalendar();
+  },
+
+  getFilteredTasks() {
+    const fc = document.getElementById('filterCliente').value;
+    const fr = document.getElementById('filterResponsavel').value;
+    const fs = document.getElementById('filterSemana').value;
+    const fq = document.getElementById('searchInput').value.toLowerCase();
+    return state.tasks.filter(t => {
+      if (t.space !== state.space) return false;
+      if (fc && t.cliente !== fc) return false;
+      if (fr && t.responsavel !== fr) return false;
+      if (fs && t.semana !== fs) return false;
+      if (fq && !t.title.toLowerCase().includes(fq) && !t.cliente.toLowerCase().includes(fq)) return false;
+      return true;
+    });
+  },
+
+  renderList() {
+    const body = document.getElementById('listBody');
+    if (!body) return;
+    body.innerHTML = '';
+    const tasks = this.getFilteredTasks();
+    STATUSES.forEach(status => {
+      const sTasks = tasks.filter(t => t.status === status.id);
+      body.appendChild(this.buildStatusGroup(status, sTasks));
+    });
+  },
+
+  buildStatusGroup(status, tasks) {
+    const wrap = document.createElement('div');
+    wrap.className = 'status-group';
+    const hdr = document.createElement('div');
+    hdr.className = 'status-group-header';
+    const isOpen = state.expandedGroups[status.id] !== false;
+    hdr.innerHTML = `
+      <span class="status-toggle ${isOpen ? 'open' : ''}">▶</span>
+      <span class="status-badge ${status.cls}"><span class="status-dot" style="background:${status.dotColor}"></span>${status.label}</span>
+      <span class="status-count">${tasks.length}</span>
+    `;
+    const body = document.createElement('div');
+    body.className = 'status-group-body' + (isOpen ? '' : ' hidden');
+    hdr.addEventListener('click', () => {
+      const open = !body.classList.contains('hidden');
+      state.expandedGroups[status.id] = !open;
+      body.classList.toggle('hidden', open);
+      hdr.querySelector('.status-toggle').classList.toggle('open', !open);
+    });
+    tasks.forEach(task => body.appendChild(this.buildTaskRow(task, status)));
+    const addRow = document.createElement('div');
+    addRow.className = 'add-task-row';
+    addRow.innerHTML = `<span>+</span> Adicionar tarefa`;
+    addRow.addEventListener('click', () => this.openModal(null, status.id));
+    body.appendChild(addRow);
+    wrap.appendChild(hdr);
+    wrap.appendChild(body);
+    return wrap;
+  },
+
+  buildTaskRow(task, status) {
+    const wrap = document.createElement('div');
+    const hasSubtasks = task.subtasks && task.subtasks.length > 0;
+    const isExpanded = state.expandedTasks[task.id] === true;
+    const row = document.createElement('div');
+    row.className = 'task-row';
+    row.innerHTML = `
+      <div class="task-cell task-name-cell">
+        <span class="task-expand ${hasSubtasks ? '' : 'invisible'} ${isExpanded ? 'open' : ''}">▶</span>
+        <span class="task-checkbox"></span>
+        <span class="task-title">${task.title}</span>
+        ${hasSubtasks ? `<span class="subtask-count">↳ ${task.subtasks.length}</span>` : ''}
+      </div>
+      <div class="task-cell"><span class="priority-badge priority-${task.prioridade || 'normal'}">${(task.prioridade||'normal').toUpperCase()}</span></div>
+      <div class="task-cell">${task.responsavel ? `<div class="user-avatar" style="background:${getUserColor(task.responsavel)}">${task.responsavel.substring(0,2).toUpperCase()}</div>` : ''}</div>
+      <div class="task-cell date-cell">${fmtDate(task.dataPostagem)}</div>
+      <div class="task-cell date-cell">${fmtDate(task.dataVencimento)}</div>
+      <div class="task-cell">${task.revisao ? `<div class="user-avatar" style="background:${getUserColor(task.revisao)};scale:0.8">${task.revisao.substring(0,2).toUpperCase()}</div>` : ''}</div>
+      <div class="task-cell task-actions">
+        <button class="task-action-btn" data-action="edit">✏️</button>
+        <button class="task-action-btn" data-action="delete">🗑️</button>
+      </div>
+    `;
+    row.querySelector('.task-title').addEventListener('click', () => this.openModal(task.id));
+    row.querySelector('.task-action-btn[data-action="edit"]').addEventListener('click', () => this.openModal(task.id));
+    row.querySelector('.task-action-btn[data-action="delete"]').addEventListener('click', () => {
+      if (confirm('Excluir?')) { state.tasks = state.tasks.filter(t => t.id !== task.id); saveTasks(); this.renderCurrentView(); }
+    });
+    wrap.appendChild(row);
+    return wrap;
+  },
+
+  renderKanban() {
+    const board = document.getElementById('kanbanBoard');
+    if (!board) return;
+    board.innerHTML = '';
+    const tasks = this.getFilteredTasks();
+    STATUSES.filter(s => s.group !== 'closed').forEach(status => {
+      const col = document.createElement('div');
+      col.className = 'kanban-col';
+      const sTasks = tasks.filter(t => t.status === status.id);
+      col.innerHTML = `<div class="kanban-col-header"><div class="kanban-col-dot" style="background:${status.dotColor}"></div><div class="kanban-col-title">${status.label}</div><div class="kanban-col-count">${sTasks.length}</div></div><div class="kanban-cards"></div><div class="kanban-add">+ Adicionar</div>`;
+      const cardCont = col.querySelector('.kanban-cards');
+      sTasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'kanban-card';
+        card.innerHTML = `<div class="kanban-card-type">${task.tipo || 'feed'}</div><div class="kanban-card-title">${task.title}</div><div class="kanban-card-client">${task.cliente}</div><div class="kanban-card-footer"><div class="user-avatar" style="background:${getUserColor(task.responsavel)};scale:0.8">${(task.responsavel||'?').substring(0,2).toUpperCase()}</div><div class="kanban-card-date">${fmtDate(task.dataPostagem)}</div></div>`;
+        card.addEventListener('click', () => this.openModal(task.id));
+        cardCont.appendChild(card);
+      });
+      col.querySelector('.kanban-add').addEventListener('click', () => this.openModal(null, status.id));
+      board.appendChild(col);
+    });
+  },
+
+  renderCalendar() {
+    const grid = document.getElementById('calGrid');
+    if (!grid) return;
+    const d = state.calDate;
+    const year = d.getFullYear();
+    const month = d.getMonth();
+    document.getElementById('calMonth').textContent = `${d.toLocaleDateString('pt-BR',{month:'long'})} ${year}`;
+    grid.innerHTML = '';
+    ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'].forEach(n => { const el = document.createElement('div'); el.className='cal-day-name'; el.textContent=n; grid.appendChild(el); });
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < firstDay; i++) { grid.appendChild(Object.assign(document.createElement('div'), {className:'cal-day other-month'})); }
+    const tasks = this.getFilteredTasks();
+    for (let day = 1; day <= daysInMonth; day++) {
+      const el = document.createElement('div'); el.className = 'cal-day';
+      el.innerHTML = `<div class="cal-day-num">${day}</div>`;
+      const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(day).padStart(2,'0')}`;
+      tasks.filter(t => t.dataPostagem === dateStr).slice(0,3).forEach(t => {
+        const ev = document.createElement('div'); ev.className='cal-event'; ev.textContent=t.title; ev.style.background=getStatusById(t.status).dotColor;
+        ev.addEventListener('click', () => this.openModal(t.id));
+        el.appendChild(ev);
+      });
+      grid.appendChild(el);
+    }
+  },
+
+  populateClientFilter() {
+    const sel = document.getElementById('filterCliente');
+    const mSel = document.getElementById('ftCliente');
+    if (!sel || !mSel) return;
+    sel.innerHTML = '<option value="">Todos os Clientes</option>';
+    mSel.innerHTML = '<option value="">Selecione</option>';
+    getClients().forEach(c => {
+      const opt = `<option value="${c.name}">${c.name}</option>`;
+      sel.innerHTML += opt;
+      mSel.innerHTML += opt;
+    });
+  },
+
+  populateWeekFilter() {
+    const weeks = [...new Set(state.tasks.map(t => t.semana).filter(Boolean))].sort();
+    const sel = document.getElementById('filterSemana');
+    if (!sel) return;
+    sel.innerHTML = '<option value="">Todas as Semanas</option>';
+    weeks.forEach(w => sel.innerHTML += `<option value="${w}">${w}</option>`);
+  },
+
+  editingId: null,
+  openModal(id = null, defaultStatus = null) {
+    this.editingId = id;
+    if (id) {
+      const t = state.tasks.find(x => x.id === id);
+      if (!t) return;
+      document.getElementById('modalTitle').textContent = 'Editar Tarefa';
+      document.getElementById('ftTitle').value = t.title;
+      document.getElementById('ftCliente').value = t.cliente;
+      document.getElementById('ftStatus').value = t.status;
+      document.getElementById('ftResponsavel').value = t.responsavel;
+      document.getElementById('ftDataPostagem').value = t.dataPostagem;
+      document.getElementById('ftDataVencimento').value = t.dataVencimento;
+      document.getElementById('ftCaption').value = t.caption;
+    } else {
+      document.getElementById('modalTitle').textContent = 'Nova Tarefa';
+      document.getElementById('ftTitle').value = '';
+      document.getElementById('ftStatus').value = defaultStatus || 'a_fazer';
+      document.getElementById('ftResponsavel').value = state.user?.name || '';
+    }
+    document.getElementById('modalOverlay').classList.add('show');
+  },
+  closeModal() { document.getElementById('modalOverlay').classList.remove('show'); this.editingId = null; },
+  saveTask() {
+    const title = document.getElementById('ftTitle').value;
+    if (!title) return;
+    const data = {
+      id: this.editingId || Date.now().toString(),
+      space: state.space,
+      title,
+      cliente: document.getElementById('ftCliente').value,
+      tipo: document.getElementById('ftTipo').value,
+      status: document.getElementById('ftStatus').value,
+      responsavel: document.getElementById('ftResponsavel').value,
+      revisao: document.getElementById('ftRevisao').value,
+      prioridade: document.getElementById('ftPrioridade').value,
+      semana: document.getElementById('ftSemana').value,
+      dataPostagem: document.getElementById('ftDataPostagem').value,
+      dataVencimento: document.getElementById('ftDataVencimento').value,
+      caption: document.getElementById('ftCaption').value,
+      subtasks: []
+    };
+    if (this.editingId) state.tasks = state.tasks.map(t => t.id === this.editingId ? data : t);
+    else state.tasks.push(data);
+    saveTasks(); this.closeModal(); this.renderCurrentView();
+  }
+};
+
+// ============================================================
+// RELATORIOS MODULE
+// ============================================================
+const Relatorios = {
+  data: {
+    reports: JSON.parse(localStorage.getItem('st_reports') || '[]'),
+    clients: []
+  },
+  init() {
+    this.data.clients = getClients();
+    this.setupTabs();
+    this.render();
+  },
+  setupTabs() {
+    document.querySelectorAll('[data-rel-tab]').forEach(tab => {
+      tab.onclick = () => {
+        document.querySelectorAll('[data-rel-tab]').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        const target = document.getElementById('rel-tab-' + tab.dataset.relTab);
+        if (target) target.classList.add('active');
+        this.render();
+      };
+    });
+  },
+  save() { localStorage.setItem('st_reports', JSON.stringify(this.data.reports)); },
+  render() {
+    this.renderDashboard();
+  },
+  renderDashboard() {
+    const stats = document.getElementById('dashboardStats');
+    if (!stats) return;
+    const active = this.data.clients;
+    const mk = this.getCurrentMonthKey();
+    const mSent = this.data.reports.filter(r => r.type === 'monthly' && r.period === mk && r.status === 2).length;
+    stats.innerHTML = `
+      <div class="stat-card starken"><div class="stat-icon">📈</div><div class="stat-label">Clientes Ativos</div><div class="stat-value">${active.length}</div></div>
+      <div class="stat-card success"><div class="stat-icon">✅</div><div class="stat-label">Relatórios Mensais ${mk}</div><div class="stat-value">${mSent}/${active.length}</div></div>
+    `;
+  },
+  getCurrentMonthKey() {
+    const now = new Date();
+    return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  },
+  openSyncModal() { alert('Sincronização em breve.'); }
+};
+
+// ============================================================
+// CRONOGRAMA MODULE
+// ============================================================
+const Cronograma = {
+  data: JSON.parse(localStorage.getItem('st_cronogramas') || '[]'),
+  init() { this.render(); },
+  render() {
+    const dash = document.getElementById('caDashboard');
+    if (dash) dash.innerHTML = '<div style="padding:20px;color:var(--gray-500)">Nenhum cronograma ativo.</div>';
+  },
+  openNewModal() { alert('Em breve.'); }
+};
+
+// ============================================================
+// HUB MODULE
+// ============================================================
+const Hub = {
+  init() { this.render(); },
+  render() {
+    const cols = document.getElementById('hubColumns');
+    if (cols) cols.innerHTML = '<div style="padding:20px;color:var(--gray-500)">Hub de Clientes.</div>';
+  },
+  openModal() { alert('Em breve.'); }
+};
+
+// ============================================================
+// INIT
+// ============================================================
+window.addEventListener('DOMContentLoaded', () => {
+  initSupabase();
+  Nav.init();
+  Gestao.init();
+  
+  // Login logic
+  document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const name = document.getElementById('loginUser').value;
+    const pin  = document.getElementById('loginPin').value;
+    const user = USERS.find(u => u.name === name && u.pin === pin);
+    if (user) {
+      state.user = user;
+      document.getElementById('sbAvatar').textContent = user.name.substring(0,2).toUpperCase();
+      document.getElementById('sbAvatar').style.background = user.color;
+      document.getElementById('sbName').textContent = user.name;
+      document.getElementById('loginPage').classList.add('hidden');
+      document.getElementById('app').classList.remove('hidden');
+      Nav.showPage('gestao');
+    } else {
+      document.getElementById('loginError').classList.add('show');
+    }
+  });
+
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    state.user = null;
+    document.getElementById('loginPage').classList.remove('hidden');
+    document.getElementById('app').classList.add('hidden');
+  });
+});
+</script>
+
+</body>
+</html>

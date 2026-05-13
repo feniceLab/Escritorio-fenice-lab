@@ -1,0 +1,95 @@
+name: 📁 Organizar DeskRPG em pasta
+
+on:
+  workflow_dispatch:
+
+jobs:
+  organize:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v4
+        
+      - name: Criar pasta deskrpg
+        run: |
+          mkdir -p deskrpg
+          echo "✅ Pasta deskrpg criada"
+          
+      - name: Mover arquivos do DeskRPG para a pasta
+        run: |
+          # Arquivos do DeskRPG que estão na raiz
+          FILES=(
+            "CHANGELOG.md"
+            "Dockerfile"
+            "LICENSE.md"
+            "README.ko.md"
+            "RELEASING.md"
+            "dev-server.ts"
+            "docker-compose.test.yml"
+            "docker-entrypoint.sh"
+            "drizzle-sqlite.config.ts"
+            "drizzle.config.ts"
+            "migrate.js"
+            "next-env.d.ts"
+            "next.config.ts"
+            "postcss.config.mjs"
+            "server.js"
+            "tsconfig.json"
+            "tsconfig.tsbuildinfo"
+          )
+          
+          for file in "${FILES[@]}"; do
+            if [ -f "$file" ]; then
+              mv "$file" "deskrpg/$file"
+              echo "✅ Movido: $file"
+            fi
+          done
+          
+          # Mover package.json e package-lock.json
+          if [ -f "package.json" ]; then
+            # Verifica se é do DeskRPG (contém "next")
+            if grep -q "next" package.json; then
+              mv package.json deskrpg/package.json
+              echo "✅ Movido: package.json (DeskRPG)"
+            fi
+          fi
+          
+          if [ -f "package-lock.json" ]; then
+            mv package-lock.json deskrpg/package-lock.json
+            echo "✅ Movido: package-lock.json"
+          fi
+          
+          # Se houver pastas src, public, etc
+          for dir in src public lib utils app pages; do
+            if [ -d "$dir" ]; then
+              mv "$dir" "deskrpg/$dir"
+              echo "✅ Movido: pasta $dir"
+            fi
+          done
+          
+      - name: Listar estrutura final
+        run: |
+          echo "📁 Estrutura do repositório:"
+          ls -la
+          echo ""
+          echo "📁 Conteúdo de deskrpg/:"
+          ls -la deskrpg/
+          
+      - name: Configurar Git
+        run: |
+          git config --local user.email "github-actions@github.com"
+          git config --local user.name "GitHub Actions"
+          
+      - name: Commit alterações
+        run: |
+          git add -A
+          if git diff --cached --quiet; then
+            echo "ℹ️ Nenhuma mudança para fazer commit"
+          else
+            git commit -m "Organize DeskRPG files into deskrpg folder"
+            git push
+            echo "✅ Reorganização concluída e enviada"
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

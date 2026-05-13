@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Starken OS - Post Editor</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "outline-variant": "#c4c5d7",
+                        "secondary-fixed": "#e1e0ff",
+                        "tertiary-container": "#8a4cfc",
+                        "surface-container-highest": "#e0e3e6",
+                        "secondary": "#4648d4",
+                        "surface-container-low": "#f2f4f7",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fc",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary-fixed": "#07006c",
+                        "on-surface-variant": "#444654",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "tertiary": "#712ae2",
+                        "surface-tint": "#2d50d9",
+                        "secondary-container": "#6063ee",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eceef1",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fc",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b9c3ff",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary-container": "#4868f1",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e6e8eb",
+                        "on-surface": "#191c1e",
+                        "primary": "#2a4dd7",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed": "#25005a",
+                        "outline": "#747686",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-primary-fixed": "#001257",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed": "#eaddff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e6"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e0e3e6; border-radius: 10px; }
+        .glass-panel { backdrop-filter: blur(8px); background: rgba(255, 255, 255, 0.8); }
+    </style>
+</head>
+<body class="bg-background text-on-surface overflow-hidden">
+<!-- Global Layout Wrapper -->
+<div class="flex h-screen w-screen overflow-hidden">
+<!-- Sidebar Navigation (From Shared Components) -->
+<aside class="w-[240px] h-screen bg-[#191b23] flex flex-col py-6 fixed left-0 top-0 z-10">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg">grid_view</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-white tracking-tight">Starken OS</h1>
+<p class="text-[10px] uppercase tracking-wider text-white/40 font-bold">Management Platform</p>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<div class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 flex items-center px-6 py-2.5 transition-colors duration-200">
+<span class="material-symbols-outlined mr-3 text-[20px]">article</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Conteudo</span>
+</div>
+<div class="text-white/60 flex items-center px-6 py-2.5 hover:bg-white/5 transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined mr-3 text-[20px]">calendar_month</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Calendario</span>
+</div>
+<div class="text-white/60 flex items-center px-6 py-2.5 hover:bg-white/5 transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined mr-3 text-[20px]">info</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Infos</span>
+</div>
+<div class="text-white/60 flex items-center px-6 py-2.5 hover:bg-white/5 transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined mr-3 text-[20px]">grid_view</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Feed</span>
+</div>
+<div class="text-white/60 flex items-center px-6 py-2.5 hover:bg-white/5 transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined mr-3 text-[20px]">forum</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Interacoes</span>
+</div>
+<div class="text-white/60 flex items-center px-6 py-2.5 hover:bg-white/5 transition-colors duration-200 cursor-pointer">
+<span class="material-symbols-outlined mr-3 text-[20px]">analytics</span>
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold">Relatorios</span>
+</div>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full bg-primary text-white py-2 text-[13px] font-bold rounded flex items-center justify-center gap-2 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                    Novo Post
+                </button>
+<div class="mt-6 space-y-3">
+<div class="flex items-center gap-3 text-white/60 hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[20px]">account_circle</span>
+<span class="text-[13px]">JU Juan</span>
+</div>
+<div class="flex items-center gap-3 text-white/60 hover:text-white cursor-pointer transition-colors">
+<span class="material-symbols-outlined text-[20px]">palette</span>
+<span class="text-[13px]">Theme</span>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Canvas -->
+<main class="flex-1 ml-[240px] flex flex-col bg-surface">
+<!-- TopAppBar Placeholder -->
+<header class="h-[52px] bg-white border-b border-outline-variant/10 flex items-center justify-between px-8 z-[5]">
+<div class="flex items-center gap-6">
+<span class="text-[13px] font-medium text-primary border-b-2 border-primary h-[52px] flex items-center">Conteudo</span>
+<span class="text-[13px] font-medium text-slate-500 flex items-center">Calendario</span>
+<span class="text-[13px] font-medium text-slate-500 flex items-center">Infos</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined text-slate-500 cursor-pointer">notifications</span>
+</div>
+<img alt="Profile" class="w-7 h-7 rounded-full object-cover" data-alt="Portrait of a young creative professional smiling in a studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3R6m2Ul5B57-t7to0zpGeVMd3q3bdqzowumt84E98e-cGiVUejxpRf3tS_rZQfrhhlMSweJCIJy8TGx0WvyRLLy41Ofh-TKWCA61VsFI5eVNWXVP7c8bEgLGvXfY87PjzxJ7kEINLjw2mtWANg-FcaLPatil_oLu6N4K4dg-JkCcLDqQyTJ9wL-RVqn3bGMc3nHsfgZG8l0tztQgeEHIWIyV-Slw1MZ9mTQyYh6QQCs2aslVLQzAGyJGQWpnPHh1RT_6LEhtPAZ5K"/>
+</div>
+</header>
+<!-- TASK MODAL OVERLAY -->
+<div class="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] flex items-center justify-center p-4">
+<div class="bg-white w-full max-w-[1400px] h-[921px] rounded-xl shadow-2xl overflow-hidden flex">
+<!-- Left Sidebar (Tree Nav) -->
+<aside class="w-[220px] bg-surface-container border-r border-outline-variant/10 flex flex-col">
+<div class="p-4 border-b border-outline-variant/10">
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Campanha Abril</span>
+</div>
+<div class="flex-1 overflow-y-auto p-2 space-y-1">
+<div class="px-3 py-2 text-[13px] hover:bg-white/50 rounded cursor-pointer text-on-surface-variant">Post - Reels Lançamento</div>
+<div class="px-3 py-2 text-[13px] bg-white text-primary font-semibold rounded shadow-sm">Post - Sorteio</div>
+<div class="px-3 py-2 text-[13px] hover:bg-white/50 rounded cursor-pointer text-on-surface-variant">Story - Enquete Dia 1</div>
+<div class="px-3 py-2 text-[13px] hover:bg-white/50 rounded cursor-pointer text-on-surface-variant">Post - Carrossel Dicas</div>
+<div class="px-3 py-2 text-[13px] hover:bg-white/50 rounded cursor-pointer text-on-surface-variant">Story - Bastidores</div>
+</div>
+<div class="p-4 bg-surface-container-high">
+<button class="text-[11px] uppercase tracking-wider font-bold text-primary flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">add</span> Adicionar Tarefa
+                            </button>
+</div>
+</aside>
+<!-- Center Column (Main Content) -->
+<section class="flex-1 flex flex-col bg-white overflow-y-auto">
+<!-- Modal Header -->
+<div class="sticky top-0 bg-white/95 backdrop-blur-md z-10 p-6 flex items-start justify-between border-b border-outline-variant/10">
+<div class="space-y-3">
+<h2 class="text-[22px] font-bold tracking-tight text-on-surface">Post - Sorteio</h2>
+<div class="flex flex-wrap gap-2">
+<span class="bg-blue-100 text-[#0288d1] px-2 py-0.5 rounded text-[11px] uppercase font-bold tracking-tight">Agendar</span>
+<div class="flex items-center gap-1.5 bg-surface-container px-2 py-0.5 rounded">
+<div class="w-4 h-4 rounded-full bg-slate-300 overflow-hidden">
+<img alt="JU Juan" class="w-full h-full object-cover" data-alt="Small round profile avatar of a smiling man" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-VRDfdb8t4MbTU3lB6V2K-fDS0fsAOl7s0SVP_i0o7iFdbOfUY9frgdjqoqTrvMLjLSw5muC42p6mnRCczCvH_-DhpCxg5y4qxM52QVQDk1_7SD6giVy8YFahrDRTeYiUAOALIm3paW8CzpdCjptS_jBPLCxOmJ5X6gGUql1QuMVfERhpcMPMGi8XNiq7-Bzk4Vq75WYbva5oY4Os_ZHhiTfaynawh3OHMyVcLEQemQn6pwb0fe1wKua-QKa5ID_1BoKZDW6bMz2h"/>
+</div>
+<span class="text-[11px] font-medium text-on-surface-variant">JU Juan</span>
+</div>
+<span class="bg-surface-container px-2 py-0.5 rounded text-[11px] font-medium text-on-surface-variant flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span> 26/3/2026
+                                    </span>
+<span class="bg-surface-container px-2 py-0.5 rounded text-[11px] font-medium text-on-surface-variant">Priority: Normal</span>
+</div>
+</div>
+<div class="flex gap-2">
+<a class="bg-[#2e7d32] text-white px-4 py-1.5 text-[13px] font-bold rounded active:scale-95 transition-transform inline-block" href="{{DATA:SCREEN:SCREEN_10}}">Salvar</a>
+<a class="p-1.5 text-on-surface-variant hover:bg-surface-container rounded-lg inline-block" href="{{DATA:SCREEN:SCREEN_11}}">
+<span class="material-symbols-outlined">close</span>
+</a>
+</div>
+</div>
+<!-- Content Grid -->
+<div class="p-8 space-y-10">
+<!-- Briefing -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Briefing</label>
+<textarea class="w-full border-none bg-surface-container-low rounded-lg p-4 text-[13px] focus:ring-1 focus:ring-primary min-h-[80px]" placeholder="Descreva os objetivos deste sorteio..."></textarea>
+</section>
+<!-- Referencias Visuais -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Referencias Visuais</label>
+<div class="grid grid-cols-4 gap-3">
+<div class="aspect-square bg-surface-container-low rounded-lg flex items-center justify-center cursor-pointer border-2 border-dashed border-outline-variant/30 hover:bg-surface-container-high">
+<span class="material-symbols-outlined text-outline">add_photo_alternate</span>
+</div>
+<img alt="Ref 1" class="aspect-square rounded-lg object-cover" data-alt="Instagram interface on a smartphone screen showing aesthetic social media posts" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDs-2stjXwWlTbGC1ZLZ1QhvA3naHnuuA2OKs-e-DgIfNI2NLoJqIV297-3e-9mZZbL9n1P39JjgrfQM8GZc-J1sTVk2qdmZ0kZyfy-cTj45U1awlPRMbfKgqokB3TTzuz8F_XacpTvfefxeUlJgR_geogItKz4x8yHgD_q5xxs2yRyuO3vhGOWFitEKigRn6WrU4_gToxkZ5XQBy6bKiFIQndVtfmUiMxX7btr1Y1EJazxKldf2bqtP_OD9-qDWXz08e9Hb60f8pS_"/>
+<img alt="Ref 2" class="aspect-square rounded-lg object-cover" data-alt="Vibrant abstract blue and purple gradient background with smooth transitions" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhbD-kqgf-NzSbRtDJY_CE6NwMzdIHpViq1_ijPrK7w5Fldpvgb0eDr9qUX3kkrqhTOKfadVnB1hTMU--ZcivSAu3Tb3yRObcUxXjC5b_ziXOcdJt-EVucVud5FylUZU9-xxpCjMPckUYRi1ojRPqdmM5fJOWUt315q192yePuRqXM49CwRAkEBZ1EILqNOnVyVMc-9iC2SmlZQNCNaLj2ox634SSTMEizCK7bP9gXU5DKCVB0w6TxnU2D0eFv8k7tsJQkCTcmRhKJ"/>
+<img alt="Ref 3" class="aspect-square rounded-lg object-cover" data-alt="Professional graphic design workspace with a tablet and sleek modern aesthetics" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAflC9rgfbiJn4L4Tpym7hJCfcrygybXv6yu4N4OiHHjiOoF7kP6e9Akc_rl_wJCBqNVXZVVB9y5aNLxkLzaV1-OHifOPPSHVnwroNVATzGuAB4WZp_UhwuLJiz1cK8Zi229q1TjwjMFecoKgl_f4y1ZmVULQJ86_5o7oJGnYUrHPxZ88YXZ3G-RMdEqtu8nsjD8PdVBZXup4VtRccNx61TEaQgvZRAQawtWL-xJqUGUXdS1lRLHdUKb5MLvt6CMo0uah7HR6ELLSvT"/>
+</div>
+</section>
+<!-- Formatos & Criativo -->
+<div class="grid grid-cols-2 gap-8">
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Formatos</label>
+<div class="flex gap-2">
+<button class="flex-1 py-2 rounded border border-primary bg-primary/5 text-primary text-[11px] font-bold uppercase">Feed</button>
+<button class="flex-1 py-2 rounded border border-outline-variant/30 text-on-surface-variant text-[11px] font-bold uppercase">Stories</button>
+<button class="flex-1 py-2 rounded border border-outline-variant/30 text-on-surface-variant text-[11px] font-bold uppercase">Reels</button>
+</div>
+</section>
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Criativo</label>
+<div class="flex gap-2">
+<div class="w-12 h-12 bg-slate-200 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Thumbnail of a corporate meeting showing data charts on a screen" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBQ3zAwa7FkBZuqCMfVXlyALblOcQF-R0sBk4uQkjZElDZ_1oI1-VhmFZPG_0vPAFDD2dgPPsZAO1dNhxnvlFODjsmFEKiFuQyUsCaaOi6q9VETguDiLAPAdtGV6c8-9BtMY1nKTxsXqi1VIPyS83FbHdUHc1YUmzXxxfZt_7D_nqHplk8KjzU6-r5mQ46ZU2mgEAgHLaynSVBp_n3i8_uuJ4tY9_v_JmVculrINdLBJuYn7YZNfT4bPhuaf7leXXX_wI68FaAhNe4M"/>
+</div>
+<div class="w-12 h-12 bg-slate-200 rounded overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="Close up of a keyboard and financial reports on a desk" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuu9nfoZRlsV0TMRPLMFYb_fVn6BuZfuLM2RsrisPoCZ0_Z4JeZFJz_K0DzZPd5G4-MIDiHfbCQ3C_2sHxkBF4zLV7lcvFT2mTM9QgfhkIjkMTqV_y8p1KYb9zKc2E_ZwAcFysfDVu7jLV-bdlYFMCZ_w68NKd7JaqNwR8UbN3ETwwsu5T_fw9ACFiFK3tDwsaKnDYaZJNaIMccd64pz5je_GUsGBkXrjH1Q_06xkBsXQNdHKmfQjW_eXB5frfbdCJBRGWdebku44p"/>
+</div>
+<div class="w-12 h-12 bg-surface-container flex items-center justify-center rounded">
+<span class="material-symbols-outlined text-[18px]">add</span>
+</div>
+</div>
+</section>
+</div>
+<!-- Musica -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Musica</label>
+<div class="p-4 bg-surface-container-low rounded-lg space-y-4">
+<input class="w-full bg-white border-none rounded p-2 text-[13px] shadow-sm" placeholder="URL da referência (Spotify/TikTok/YT)" type="text"/>
+<div class="flex items-center justify-between">
+<div class="flex gap-2">
+<span class="text-[11px] font-bold px-3 py-1 bg-white shadow-sm rounded">MP3 1.wav</span>
+<span class="text-[11px] font-bold px-3 py-1 text-on-surface-variant">Referencia.mp3</span>
+</div>
+<button class="bg-tertiary text-white px-4 py-1.5 text-[11px] uppercase font-bold rounded flex items-center gap-2">
+<span class="material-symbols-outlined text-[16px]">equalizer</span> Renderizar
+                                        </button>
+</div>
+</div>
+</section>
+<!-- Copy -->
+<section class="space-y-3">
+<div class="flex justify-between items-end">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Copy</label>
+<a class="bg-[#2e7d32] text-white px-4 py-1.5 text-[13px] font-bold rounded active:scale-95 transition-transform inline-block" href="{{DATA:SCREEN:SCREEN_10}}">Salvar</a>
+</div>
+<textarea class="w-full border-none bg-surface-container-low rounded-lg p-4 text-[13px] focus:ring-1 focus:ring-primary min-h-[120px]" placeholder="Escreva a legenda aqui..."></textarea>
+</section>
+<!-- Publicar -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Publicar</label>
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-lg">
+<div class="flex gap-4">
+<div class="flex items-center gap-2">
+<input checked="" class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-[13px] font-medium">Instagram</span>
+</div>
+<div class="flex items-center gap-2">
+<input class="rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+<span class="text-[13px] font-medium">Facebook</span>
+</div>
+</div>
+<button class="bg-primary text-white px-6 py-2 text-[11px] uppercase font-bold rounded">Conectar e Publicar</button>
+</div>
+</section>
+<!-- Subtarefas -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Subtarefas</label>
+<div class="space-y-2">
+<div class="flex items-center gap-3 group">
+<input class="rounded-sm border-outline-variant text-primary" type="checkbox"/>
+<span class="text-[13px] flex-1">Criar arte para o feed</span>
+<span class="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 cursor-pointer text-[18px]">delete</span>
+</div>
+<div class="flex items-center gap-3 group">
+<input class="rounded-sm border-outline-variant text-primary" type="checkbox"/>
+<span class="text-[13px] flex-1">Aprovar texto com cliente</span>
+<span class="material-symbols-outlined text-outline opacity-0 group-hover:opacity-100 cursor-pointer text-[18px]">delete</span>
+</div>
+<input class="w-full bg-transparent border-b border-outline-variant/30 py-2 text-[13px] focus:border-primary outline-none" placeholder="+ Adicionar subtarefa" type="text"/>
+</div>
+</section>
+<!-- Agenda -->
+<section class="space-y-3">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Agenda</label>
+<div class="flex gap-2">
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center">
+<p class="text-[10px] font-bold text-on-surface-variant">SEG</p>
+<p class="text-[14px] font-bold">23</p>
+</div>
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center">
+<p class="text-[10px] font-bold text-on-surface-variant">TER</p>
+<p class="text-[14px] font-bold">24</p>
+</div>
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center">
+<p class="text-[10px] font-bold text-on-surface-variant">QUA</p>
+<p class="text-[14px] font-bold">25</p>
+</div>
+<div class="flex-1 p-2 bg-primary text-white rounded text-center">
+<p class="text-[10px] font-bold opacity-70">QUI</p>
+<p class="text-[14px] font-bold">26</p>
+</div>
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center">
+<p class="text-[10px] font-bold text-on-surface-variant">SEX</p>
+<p class="text-[14px] font-bold">27</p>
+</div>
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center text-error">
+<p class="text-[10px] font-bold">SAB</p>
+<p class="text-[14px] font-bold">28</p>
+</div>
+<div class="flex-1 p-2 bg-surface-container-low rounded text-center text-error">
+<p class="text-[10px] font-bold">DOM</p>
+<p class="text-[14px] font-bold">29</p>
+</div>
+</div>
+</section>
+<!-- Comentarios -->
+<section class="space-y-4 pt-4">
+<label class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Comentários</label>
+<div class="flex gap-3">
+<img class="w-8 h-8 rounded-full object-cover" data-alt="User avatar for comment input" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRmMs0ag2TeGJd4wpUWe_OzQTEcxVWcNO9vhKBDbuo3eACf4-p5YrFNxXIButBq6EqCUBZ-EHeGCBxCKhlkb9N6o9Acyttnc-u0yBTsTLJTnugPeFUQMpTvudTOYRn7buWlVO2WAym6altMcyFQp_9qYEk4t1aLySsT2rasByi7WdNYnqn7h-VLxYnCF5FmFkyaIORFpbk4bx-Fie2xM6fosrZ7qsqKp2u0-l8J7BPo9MtAeQlmuFufSdw1X99v3fTvjs1Gi1PPsCu"/>
+<div class="flex-1 relative">
+<input class="w-full bg-surface-container rounded-full px-4 py-2 text-[13px] border-none focus:ring-1 focus:ring-primary" placeholder="Escreva um comentário..." type="text"/>
+<span class="material-symbols-outlined absolute right-3 top-2 text-primary text-[18px] cursor-pointer">send</span>
+</div>
+</div>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-8 h-8 rounded-full bg-slate-400 flex-shrink-0"></div>
+<div>
+<div class="flex items-center gap-2">
+<span class="text-[12px] font-bold">Maria Silva</span>
+<span class="text-[10px] text-on-surface-variant">Há 2 horas</span>
+</div>
+<p class="text-[13px] text-on-surface-variant">A arte ficou ótima, mas acho que poderíamos aumentar o destaque do prêmio no layout.</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</section>
+<!-- Right Sidebar (Activity Log) -->
+<aside class="w-[280px] bg-surface-container-low border-l border-outline-variant/10 flex flex-col">
+<div class="p-4 border-b border-outline-variant/10 bg-white">
+<span class="text-[11px] uppercase tracking-[0.8px] font-bold text-on-surface-variant">Log de Atividades</span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-6">
+<div class="relative pl-6 before:content-[''] before:absolute before:left-[3px] before:top-[12px] before:bottom-[-24px] before:w-[1px] before:bg-outline-variant/30 last:before:hidden">
+<div class="absolute left-0 top-1 w-2 h-2 rounded-full bg-primary shadow-[0_0_0_3px_rgba(42,77,215,0.2)]"></div>
+<p class="text-[12px] text-on-surface-variant"><span class="font-bold text-on-surface">JU Juan</span> alterou o status para <span class="text-[#0288d1] font-bold">Agendar</span></p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">Hoje, 14:20</p>
+</div>
+<div class="relative pl-6 before:content-[''] before:absolute before:left-[3px] before:top-[12px] before:bottom-[-24px] before:w-[1px] before:bg-outline-variant/30 last:before:hidden">
+<div class="absolute left-0 top-1 w-2 h-2 rounded-full bg-outline-variant"></div>
+<p class="text-[12px] text-on-surface-variant"><span class="font-bold text-on-surface">Maria Silva</span> anexou 3 arquivos</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">Hoje, 11:05</p>
+</div>
+<div class="relative pl-6 before:content-[''] before:absolute before:left-[3px] before:top-[12px] before:bottom-[-24px] before:w-[1px] before:bg-outline-variant/30 last:before:hidden">
+<div class="absolute left-0 top-1 w-2 h-2 rounded-full bg-outline-variant"></div>
+<p class="text-[12px] text-on-surface-variant"><span class="font-bold text-on-surface">JU Juan</span> definiu a data de entrega para <span class="font-bold">26/03/2026</span></p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">Ontem, 16:45</p>
+</div>
+<div class="relative pl-6 last:before:hidden">
+<div class="absolute left-0 top-1 w-2 h-2 rounded-full bg-outline-variant"></div>
+<p class="text-[12px] text-on-surface-variant"><span class="font-bold text-on-surface">Sistema</span> criou a tarefa</p>
+<p class="text-[10px] text-outline mt-1 uppercase font-bold">Ontem, 09:00</p>
+</div>
+</div>
+</aside>
+</div>
+</div>
+</main>
+</div>
+</body></html>

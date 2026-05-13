@@ -1,0 +1,196 @@
+{
+  "version": 1,
+  "memoryRoot": "/var/www/starken-os/agent-memory",
+  "openclaw": {
+    "baseUrl": "http://127.0.0.1:18789",
+    "tokenEnv": "OPENCLAW_TOKEN"
+  },
+  "group": {
+    "enabled": false,
+    "chatIdEnv": "TELEGRAM_AGENTS_GROUP_ID",
+    "defaultAgentId": "lord-starken",
+    "coordinatorAgentId": "lurdinha"
+  },
+  "agents": [
+    {
+      "id": "lord-starken",
+      "officeNpcId": "b56d2862-0bc4-4a0c-8510-46ff39d9cb35",
+      "openclawAgentId": "gael-ceo",
+      "displayName": "Lord Starken",
+      "pronunciation": "Lord Starken",
+      "aliases": ["Lord Starken", "Lorde Stark", "Lord Starken", "Gael", "Gael Ceo"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_LORD_STARKEN_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "lord-starken",
+      "role": "CEO e coordenador estratégico do escritório"
+    },
+    {
+      "id": "lurdinha",
+      "officeNpcId": "8522db81-c1a2-4705-af18-e71227544b40",
+      "openclawAgentId": "gerente-operacional",
+      "displayName": "Lurdinha",
+      "pronunciation": "Lurdinha",
+      "aliases": ["Lurdinha", "Gerente Operacional", "Chief of Staff"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_LURDINHA_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "lurdinha",
+      "role": "Chief of Staff e coordenadora operacional"
+    },
+    {
+      "id": "josy",
+      "officeNpcId": "7d99a990-c949-42f8-8c50-37c0dc7060fe",
+      "openclawAgentId": "josy-integracoes-ferramentas",
+      "displayName": "Josy",
+      "pronunciation": "Josy",
+      "aliases": ["Josy", "Integrações", "Ferramentas"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_JOSY_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "josy",
+      "role": "Especialista em integrações e ferramentas"
+    },
+    {
+      "id": "sneider",
+      "officeNpcId": "e1d05ec3-6c54-4c42-834f-e06f1d469c79",
+      "openclawAgentId": "sneider-design",
+      "displayName": "Sneider",
+      "pronunciation": "Sneider",
+      "aliases": ["Sneider", "Design"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_SNEIDER_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "sneider",
+      "role": "Design e direção visual"
+    },
+    {
+      "id": "nina",
+      "officeNpcId": "eeff317d-0722-47f5-9ceb-74971caec74b",
+      "openclawAgentId": "nina-qa-publicacoes",
+      "displayName": "Nina",
+      "pronunciation": "Nina",
+      "aliases": ["Nina", "QA", "QA de Publicações"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_NINA_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "nina",
+      "role": "QA de publicações"
+    },
+    {
+      "id": "ravi",
+      "officeNpcId": "93f95b3c-eac7-48fa-9e59-11f996da08d5",
+      "openclawAgentId": "ravi-engenharia-plataforma",
+      "displayName": "Ravi",
+      "pronunciation": "Ravi",
+      "aliases": ["Ravi", "Engenharia de Plataforma"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_RAVI_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "ravi",
+      "role": "Engenharia de plataforma"
+    },
+    {
+      "id": "maria",
+      "officeNpcId": "dc617446-be18-447a-b361-0c11ac24545a",
+      "openclawAgentId": "maria-onboarding-clientes",
+      "displayName": "Maria",
+      "pronunciation": "Maria",
+      "aliases": ["Maria", "Onboarding"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_MARIA_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "maria",
+      "role": "Onboarding de clientes"
+    },
+    {
+      "id": "joao",
+      "officeNpcId": "d51c5eab-b060-4bbd-8862-2b79dbb92310",
+      "openclawAgentId": "joao-relatorios-analise",
+      "displayName": "Joao",
+      "pronunciation": "Joao",
+      "aliases": ["Joao", "João", "Relatórios", "Análise de dados"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_JOAO_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "joao",
+      "role": "Relatórios e análise de dados"
+    },
+    {
+      "id": "zezin",
+      "officeNpcId": "46f32fd9-921c-4d47-b571-0159ef53b465",
+      "openclawAgentId": "zezin-monitoramento-proativo",
+      "displayName": "Zezin",
+      "pronunciation": "Zezin",
+      "aliases": ["Zezin", "Monitoramento"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_ZEZIN_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "zezin",
+      "role": "Monitoramento proativo"
+    },
+    {
+      "id": "teo",
+      "officeNpcId": "47a9c89a-739d-4d0c-9df1-66a03a15e8cc",
+      "openclawAgentId": "teo-eficiencia-operacional",
+      "displayName": "Teo",
+      "pronunciation": "Teo",
+      "aliases": ["Teo", "Téo", "Eficiência Operacional"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_TEO_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "teo",
+      "role": "Eficiência operacional"
+    },
+    {
+      "id": "gaia",
+      "officeNpcId": "1ad842dc-5251-4a95-84cc-7a97e7224167",
+      "openclawAgentId": "gaia-produto-e-evolucao",
+      "displayName": "Gaia",
+      "pronunciation": "Gaia",
+      "aliases": ["Gaia", "Produto", "Evolução"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_GAIA_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "gaia",
+      "role": "Produto e evolução"
+    },
+    {
+      "id": "maya",
+      "officeNpcId": "211fe108-f13c-4fff-a6fa-1fb45be28350",
+      "openclawAgentId": "maya-memoria-e-conhecimento",
+      "displayName": "Maya",
+      "pronunciation": "Maya",
+      "aliases": ["Maya", "Memória", "Conhecimento"],
+      "telegram": {
+        "enabled": false,
+        "tokenEnv": "TELEGRAM_MAYA_TOKEN",
+        "username": ""
+      },
+      "memorySlug": "maya",
+      "role": "Memória e conhecimento"
+    }
+  ]
+}

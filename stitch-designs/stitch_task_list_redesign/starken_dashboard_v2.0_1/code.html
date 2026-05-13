@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "outline-variant": "#c4c5d7",
+                        "secondary-fixed": "#e1e0ff",
+                        "tertiary-container": "#8a4cfc",
+                        "surface-container-highest": "#e0e3e6",
+                        "secondary": "#4648d4",
+                        "surface-container-low": "#f2f4f7",
+                        "on-error-container": "#93000a",
+                        "background": "#f7f9fc",
+                        "error-container": "#ffdad6",
+                        "on-secondary-container": "#fffbff",
+                        "on-secondary-fixed": "#07006c",
+                        "on-surface-variant": "#444654",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "tertiary": "#712ae2",
+                        "surface-tint": "#2d50d9",
+                        "secondary-container": "#6063ee",
+                        "primary-fixed": "#dde1ff",
+                        "on-primary-container": "#fffbff",
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eceef1",
+                        "on-tertiary-container": "#fffbff",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fc",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#b9c3ff",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container-lowest": "#ffffff",
+                        "on-background": "#191c1e",
+                        "primary-container": "#4868f1",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-primary": "#ffffff",
+                        "surface-container-high": "#e6e8eb",
+                        "on-surface": "#191c1e",
+                        "primary": "#2a4dd7",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "on-tertiary-fixed": "#25005a",
+                        "outline": "#747686",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-primary-fixed": "#001257",
+                        "inverse-on-surface": "#eff1f4",
+                        "tertiary-fixed": "#eaddff",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e0e3e6"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; -webkit-font-smoothing: antialiased; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface">
+<!-- SideNavBar (from JSON) -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-[#191b23] flex flex-col py-6 z-50">
+<a class="px-6 mb-8 block" href="{{DATA:SCREEN:SCREEN_9}}">
+<h1 class="text-lg font-bold text-white tracking-tight">Starken OS</h1>
+<p class="text-[11px] text-white/40 uppercase tracking-[0.8px]">Management Platform</p>
+</a>
+<nav class="flex-1 space-y-1">
+<a class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 flex items-center px-4 py-2 transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3 text-[20px]">grid_view</span>
+<span class="text-[13px]">Feed</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3 text-[20px]">article</span>
+<span class="text-[13px]">Conteudo</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3 text-[20px]">calendar_month</span>
+<span class="text-[13px]">Calendario</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">info</span>
+<span class="text-[13px]">Infos</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">forum</span>
+<span class="text-[13px]">Interacoes</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">analytics</span>
+<span class="text-[13px]">Relatorios</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">group</span>
+<span class="text-[13px]">Equipe</span>
+</a>
+<a class="text-white/60 flex items-center px-4 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">settings</span>
+<span class="text-[13px]">Configuracoes</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-4">
+<button class="w-full bg-primary text-white text-[13px] font-bold py-2.5 rounded-lg active:scale-95 transition-all">
+                Novo Post
+            </button>
+<div class="pt-4 border-t border-white/10 space-y-1">
+<a class="text-white/60 flex items-center px-2 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">account_circle</span>
+<span class="text-[13px]">JU Juan</span>
+</a>
+<a class="text-white/60 flex items-center px-2 py-2 hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined mr-3 text-[20px]">palette</span>
+<span class="text-[13px]">Theme</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- TopAppBar (from JSON) -->
+<header class="h-[52px] w-[calc(100%-240px)] ml-[240px] fixed top-0 bg-white border-b border-outline-variant/15 flex items-center justify-between px-8 z-40">
+<div class="flex items-center space-x-6 h-full">
+<a class="text-[13px] font-bold text-primary tracking-tight" href="{{DATA:SCREEN:SCREEN_9}}">DASHBOARD</a>
+<nav class="flex items-center space-x-1 h-full">
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] font-medium transition-all" href="{{DATA:SCREEN:SCREEN_10}}">Conteudo</a>
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] font-medium transition-all" href="{{DATA:SCREEN:SCREEN_11}}">Calendario</a>
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] font-medium transition-all" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center space-x-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-9 pr-4 py-1.5 text-[13px] w-64 focus:ring-1 focus:ring-primary" placeholder="Search..." type="text"/>
+</div>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+<img alt="JU Juan Profile" class="w-8 h-8 rounded-full object-cover ring-2 ring-primary/10" data-alt="Professional portrait of a young male creative director in a minimalist studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCIzEh2RAJ6bEELXtc91AwpD-9Cs30Uyj4PThbGjhJT45b4ssr4cXWw8CGv9VFBrhyAY3esXbT07P4jpPsbg0_n8szzjypoob2X7bMAmvBEeZLMJw_eSVXRsWPr526o0hHwHPZU-bYhgtqv4gViTIid8WyV0_HM83qtYvrR3DowU2vXa9o_L7Gwh9-8aHLblnOWiRVXMj_sk5-qjwfpwadyXkzqOMFqB8AMP_lfmBkJadv4qmDeknvyYE6-NhNUNaaXFh7hY1d_uSAv"/>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-[240px] pt-[52px] p-8 min-h-screen">
+<!-- KPI Row -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+<!-- Card 1 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] flex flex-col justify-between group hover:translate-y-[-2px] transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.8px] text-outline">Total de clientes</span>
+<div class="p-2 bg-primary/10 rounded-lg">
+<span class="material-symbols-outlined text-primary text-[20px]">group</span>
+</div>
+</div>
+<div class="text-3xl font-extrabold text-on-surface">26</div>
+<div class="mt-2 flex items-center text-[11px] text-green-600 font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1">trending_up</span>
+                    +12% vs last month
+                </div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] flex flex-col justify-between group hover:translate-y-[-2px] transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.8px] text-outline">Clientes ativos</span>
+<div class="p-2 bg-green-100 rounded-lg">
+<span class="material-symbols-outlined text-green-600 text-[20px]">person_check</span>
+</div>
+</div>
+<div class="text-3xl font-extrabold text-on-surface">10</div>
+<div class="mt-2 flex items-center text-[11px] text-slate-500 font-bold">
+                    38% of total base
+                </div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] flex flex-col justify-between group hover:translate-y-[-2px] transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.8px] text-outline">Posts agendados</span>
+<div class="p-2 bg-orange-100 rounded-lg">
+<span class="material-symbols-outlined text-orange-600 text-[20px]">calendar_today</span>
+</div>
+</div>
+<div class="text-3xl font-extrabold text-on-surface">36</div>
+<div class="mt-2 flex items-center text-[11px] text-orange-600 font-bold">
+                    Awaiting approval
+                </div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-container-lowest p-5 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] flex flex-col justify-between group hover:translate-y-[-2px] transition-all">
+<div class="flex items-center justify-between mb-4">
+<span class="text-[11px] font-bold uppercase tracking-[0.8px] text-outline">Posts publicados</span>
+<div class="p-2 bg-red-100 rounded-lg">
+<span class="material-symbols-outlined text-red-600 text-[20px]">task_alt</span>
+</div>
+</div>
+<div class="text-3xl font-extrabold text-on-surface">0/36</div>
+<div class="mt-2 w-full bg-surface-container rounded-full h-1.5 overflow-hidden">
+<div class="bg-red-500 h-full w-[2%]"></div>
+</div>
+</div>
+</div>
+<!-- Progress Bento Grid -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+<!-- Weekly Progress -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-[13px] font-bold text-on-surface tracking-tight uppercase">Progresso Semanal</h2>
+<span class="text-[11px] font-bold text-primary bg-primary/5 px-2 py-1 rounded tracking-[0.5px]">WEEK 42</span>
+</div>
+<div class="space-y-8">
+<!-- Progress Item 1 -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-[13px] font-semibold text-on-surface">Starken Performance</h3>
+<p class="text-[11px] text-outline">Instagram &amp; LinkedIn campaign</p>
+</div>
+<span class="text-[11px] font-bold text-on-surface">8/12 Posts</span>
+</div>
+<div class="flex gap-1.5 h-3">
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-primary rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+</div>
+</div>
+<!-- Progress Item 2 -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-[13px] font-semibold text-on-surface">Alpha Assessoria</h3>
+<p class="text-[11px] text-outline">Content Strategy Revamp</p>
+</div>
+<span class="text-[11px] font-bold text-on-surface">4/10 Posts</span>
+</div>
+<div class="flex gap-1.5 h-3">
+<div class="flex-1 bg-secondary rounded-sm"></div>
+<div class="flex-1 bg-secondary rounded-sm"></div>
+<div class="flex-1 bg-secondary rounded-sm"></div>
+<div class="flex-1 bg-secondary rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+<div class="flex-1 bg-surface-container rounded-sm"></div>
+</div>
+</div>
+</div>
+</section>
+<!-- Monthly Progress -->
+<section class="bg-surface-container-lowest p-6 rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)]">
+<div class="flex items-center justify-between mb-8">
+<h2 class="text-[13px] font-bold text-on-surface tracking-tight uppercase">Progresso Mensal</h2>
+<span class="text-[11px] font-bold text-secondary bg-secondary/5 px-2 py-1 rounded tracking-[0.5px]">OUTUBRO</span>
+</div>
+<div class="space-y-8">
+<!-- Progress Item 1 -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-[13px] font-semibold text-on-surface">Starken Performance</h3>
+<p class="text-[11px] text-outline">Global Performance Goals</p>
+</div>
+<span class="text-[11px] font-bold text-on-surface">22/48 Posts</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-sm overflow-hidden flex">
+<div class="bg-primary-container h-full" style="width: 45.8%"></div>
+</div>
+</div>
+<!-- Progress Item 2 -->
+<div class="space-y-3">
+<div class="flex justify-between items-end">
+<div>
+<h3 class="text-[13px] font-semibold text-on-surface">Alpha Assessoria</h3>
+<p class="text-[11px] text-outline">Organic Growth KPI</p>
+</div>
+<span class="text-[11px] font-bold text-on-surface">15/40 Posts</span>
+</div>
+<div class="w-full bg-surface-container h-3 rounded-sm overflow-hidden flex">
+<div class="bg-tertiary-container h-full" style="width: 37.5%"></div>
+</div>
+</div>
+</div>
+</section>
+</div>
+<!-- Activity Feed List (Ultimos Envios) -->
+<section class="bg-surface-container-lowest rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] overflow-hidden">
+<div class="p-6 flex items-center justify-between bg-surface-container-low/50">
+<h2 class="text-[13px] font-bold text-on-surface tracking-tight uppercase">Ultimos Envios</h2>
+<button class="text-[11px] font-bold text-primary uppercase tracking-widest hover:underline transition-all">Ver todos</button>
+</div>
+<div class="divide-y divide-outline-variant/10">
+<!-- Feed Item 1 -->
+<a class="px-6 py-4 flex items-center justify-between hover:bg-surface-container-low transition-all block" href="{{DATA:SCREEN:SCREEN_7}}">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 bg-blue-50 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-blue-600 text-[20px]">send</span>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-on-surface">Starken Performance - LinkedIn Ad #2</p>
+<p class="text-[11px] text-outline">Sent by JU Juan • 2 hours ago</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="bg-blue-100/50 text-blue-700 text-[11px] font-bold px-2 py-1 rounded uppercase tracking-[0.5px]">Scheduled</div>
+<span class="material-symbols-outlined text-outline hover:text-on-surface transition-colors text-[20px]">more_vert</span>
+</div>
+</a>
+<!-- Feed Item 2 -->
+<div class="px-6 py-4 flex items-center justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 bg-green-50 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-green-600 text-[20px]">done_all</span>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-on-surface">Alpha Assessoria - Reels Concept</p>
+<p class="text-[11px] text-outline">Approved by Client • 5 hours ago</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="bg-green-100/50 text-green-700 text-[11px] font-bold px-2 py-1 rounded uppercase tracking-[0.5px]">Approved</div>
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Feed Item 3 -->
+<div class="px-6 py-4 flex items-center justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 bg-orange-50 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-orange-600 text-[20px]">feedback</span>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-on-surface">Starken OS - Q4 Product Roadmap</p>
+<p class="text-[11px] text-outline">Revision requested • Yesterday</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="bg-orange-100/50 text-orange-700 text-[11px] font-bold px-2 py-1 rounded uppercase tracking-[0.5px]">Revision</div>
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Feed Item 4 -->
+<div class="px-6 py-4 flex items-center justify-between hover:bg-surface-container-low transition-all">
+<div class="flex items-center space-x-4">
+<div class="w-10 h-10 bg-purple-50 flex items-center justify-center rounded-lg">
+<span class="material-symbols-outlined text-purple-600 text-[20px]">auto_awesome</span>
+</div>
+<div>
+<p class="text-[13px] font-semibold text-on-surface">Alpha Assessoria - Blog Header Design</p>
+<p class="text-[11px] text-outline">In Creative Queue • 2 days ago</p>
+</div>
+</div>
+<div class="flex items-center space-x-6">
+<div class="bg-purple-100/50 text-purple-700 text-[11px] font-bold px-2 py-1 rounded uppercase tracking-[0.5px]">Creative</div>
+<button class="text-outline hover:text-on-surface transition-colors">
+<span class="material-symbols-outlined text-[20px]">more_vert</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+</main>
+</body></html>

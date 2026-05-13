@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              colors: {
+                "on-secondary-fixed-variant": "#2f2ebe",
+                "tertiary-fixed-dim": "#d2bbff",
+                "outline-variant": "#c4c5d7",
+                "secondary-fixed": "#e1e0ff",
+                "tertiary-container": "#8a4cfc",
+                "surface-container-highest": "#e0e3e6",
+                "secondary": "#4648d4",
+                "surface-container-low": "#f2f4f7",
+                "on-error-container": "#93000a",
+                "background": "#f7f9fc",
+                "error-container": "#ffdad6",
+                "on-secondary-container": "#fffbff",
+                "on-secondary-fixed": "#07006c",
+                "on-surface-variant": "#444654",
+                "on-tertiary-fixed-variant": "#5a00c6",
+                "tertiary": "#712ae2",
+                "surface-tint": "#2d50d9",
+                "secondary-container": "#6063ee",
+                "primary-fixed": "#dde1ff",
+                "on-primary-container": "#fffbff",
+                "on-tertiary": "#ffffff",
+                "surface-container": "#eceef1",
+                "on-tertiary-container": "#fffbff",
+                "inverse-surface": "#2d3133",
+                "surface": "#f7f9fc",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#b9c3ff",
+                "surface-bright": "#f7f9fc",
+                "on-error": "#ffffff",
+                "surface-dim": "#d8dadd",
+                "surface-container-lowest": "#ffffff",
+                "on-background": "#191c1e",
+                "primary-container": "#4868f1",
+                "primary-fixed-dim": "#b9c3ff",
+                "on-primary": "#ffffff",
+                "surface-container-high": "#e6e8eb",
+                "on-surface": "#191c1e",
+                "primary": "#2a4dd7",
+                "secondary-fixed-dim": "#c0c1ff",
+                "on-tertiary-fixed": "#25005a",
+                "outline": "#747686",
+                "on-primary-fixed-variant": "#0034c0",
+                "on-primary-fixed": "#001257",
+                "inverse-on-surface": "#eff1f4",
+                "tertiary-fixed": "#eaddff",
+                "error": "#ba1a1a",
+                "surface-variant": "#e0e3e6"
+              },
+              fontFamily: {
+                "headline": ["Inter"],
+                "body": ["Inter"],
+                "label": ["Inter"]
+              },
+              borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+            },
+          },
+        }
+      </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 18px;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .tonal-layering { background-color: #f7f9fc; }
+        .no-border { border: none !important; }
+        .sidebar-label { font-size: 11px; letter-spacing: 0.8px; font-weight: 700; }
+        .task-row { height: 42px; }
+        .ghost-border { border-bottom: 1px solid rgba(196, 197, 215, 0.15); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden">
+<!-- SideNavBar (Fixed) -->
+<aside class="w-[240px] h-screen fixed left-0 top-0 bg-[#191b23] flex flex-col py-6 z-50">
+<a class="px-6 mb-8 flex items-center gap-3 hover:opacity-80 transition-opacity" href="{{DATA:SCREEN:SCREEN_9}}">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">rocket_launch</span>
+</div>
+<span class="text-lg font-bold text-white tracking-tight">Starken OS</span>
+</a>
+<div class="flex-1 overflow-y-auto space-y-6">
+<!-- Navigation Groups -->
+<div>
+<h3 class="px-6 sidebar-label text-white/40 uppercase mb-3">Conteudo</h3>
+<nav>
+<a class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 flex items-center px-6 py-2 transition-all" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3">article</span>
+<span class="text-[13px]">Conteudo</span>
+</a>
+<a class="text-white/60 flex items-center px-6 py-2 hover:bg-white/5 transition-colors" href="{{DATA:SCREEN:SCREEN_10}}">
+<span class="material-symbols-outlined mr-3">calendar_month</span>
+<span class="text-[13px]">Calendario</span>
+</a>
+</nav>
+</div>
+<div>
+<h3 class="px-6 sidebar-label text-white/40 uppercase mb-3">Clientes</h3>
+<nav>
+<a class="text-white flex items-center px-6 py-2 bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3 text-amber-500">local_pizza</span>
+<span class="text-[13px]">Dilokas Pizzaria</span>
+</a>
+</nav>
+</div>
+<div>
+<h3 class="px-6 sidebar-label text-white/40 uppercase mb-3">Tools</h3>
+<nav>
+<a class="text-white/60 flex items-center px-6 py-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="text-[13px]">Relatorios</span>
+</a>
+<a class="text-white/60 flex items-center px-6 py-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">forum</span>
+<span class="text-[13px]">Interacoes</span>
+</a>
+</nav>
+</div>
+<div>
+<h3 class="px-6 sidebar-label text-white/40 uppercase mb-3">Geral</h3>
+<nav>
+<a class="text-white/60 flex items-center px-6 py-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">group</span>
+<span class="text-[13px]">Equipe</span>
+</a>
+<a class="text-white/60 flex items-center px-6 py-2 hover:bg-white/5" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="text-[13px]">Configuracoes</span>
+</a>
+</nav>
+</div>
+</div>
+<div class="mt-auto px-6 border-t border-white/10 pt-6">
+<div class="flex items-center gap-3 p-2 rounded hover:bg-white/5 cursor-pointer">
+<div class="w-8 h-8 rounded-full bg-surface-container-high overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="professional headshot of a creative manager in a clean studio setting with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAa4JR1qss3bq46or3vz6_d53YTaOlwcJAa4Mc7Hov-LmMCt2NJAMQGBLZFYSp3rQK8O7DWU-uzE0EGfQ6AaNjnesvI3am-J1-UDxyS518TAMO9AeZUXwlfdXbX1LC85UL_eV1kNLVRVvCdJjQwWf6588Zp-AO5sqgT93492V4KGytb4Rss1kEosL-ZnaZO0MauzqkYJstsnOmVAKZwi0Yl3fTFrvv5z2iBBWcwLYYsGlExV4VOs8yF9kT3xxI0Gxque5O4JnPymVr_"/>
+</div>
+<div class="flex-1">
+<p class="text-white text-[13px] font-medium leading-none">Juan Perez</p>
+<p class="text-white/40 text-[11px] mt-1">Starken Admin</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-[240px] flex flex-col h-screen">
+<!-- TopAppBar -->
+<header class="h-[52px] w-full flex items-center justify-between px-8 bg-white dark:bg-slate-900 border-b border-surface-container">
+<div class="flex items-center h-full">
+<a class="text-primary border-b-2 border-primary font-bold px-4 h-full flex items-center text-[13px] cursor-pointer" href="{{DATA:SCREEN:SCREEN_10}}">
+                    Conteudo
+                </a>
+<a class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] cursor-pointer transition-all" href="{{DATA:SCREEN:SCREEN_11}}">
+                    Calendario
+                </a>
+<div class="text-slate-500 hover:text-slate-900 px-4 h-full flex items-center text-[13px] cursor-pointer transition-all">
+                    Infos
+                </div>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">search</span>
+<input class="h-8 w-64 bg-surface-container-low border-none rounded text-[13px] pl-10 focus:ring-1 focus:ring-primary/30" placeholder="Pesquisar tarefas..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-slate-500">
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">notifications</span>
+<span class="material-symbols-outlined cursor-pointer hover:text-primary">help_outline</span>
+</div>
+</div>
+</header>
+<!-- Toolbar -->
+<div class="px-8 py-4 bg-surface-container-lowest flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2 px-3 py-1.5 bg-surface-container-low rounded cursor-pointer hover:bg-surface-container">
+<span class="text-[13px] font-medium">Filtros</span>
+<span class="material-symbols-outlined text-[16px]">filter_list</span>
+</div>
+<div class="h-4 w-[1px] bg-outline-variant/30"></div>
+<div class="flex items-center gap-2 text-slate-500 text-[13px] cursor-pointer">
+<span>Responsável:</span>
+<span class="font-semibold text-slate-800">Todos</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+<div class="flex items-center gap-2 text-slate-500 text-[13px] cursor-pointer">
+<span>Status:</span>
+<span class="font-semibold text-slate-800">Ativos</span>
+<span class="material-symbols-outlined text-[16px]">expand_more</span>
+</div>
+</div>
+<button class="bg-primary text-white px-4 py-2 rounded flex items-center gap-2 text-[13px] font-bold shadow-sm hover:opacity-90 active:scale-95 transition-all">
+<span class="material-symbols-outlined">add</span>
+                Novo Grupo
+            </button>
+</div>
+<!-- Content Canvas -->
+<div class="flex-1 overflow-y-auto bg-surface p-8">
+<div class="bg-surface-container-lowest rounded-lg overflow-hidden">
+<!-- Group Header -->
+<div class="px-4 py-3 bg-surface-container-low flex items-center gap-3">
+<span class="material-symbols-outlined text-slate-400">folder</span>
+<span class="text-[13px] font-bold text-slate-700">Marco - 4ª semana (3)</span>
+</div>
+<!-- Table -->
+<table class="w-full border-collapse">
+<thead>
+<tr class="bg-surface-container-lowest ghost-border">
+<th class="w-12 text-center py-3">
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">NOME</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">FORMATO</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">STATUS</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">RESPONSAVEL</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">DATA</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">PUBLICACAO</th>
+<th class="sidebar-label text-slate-400 text-left py-3 px-4">PRIORIDADE</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<!-- Task Row 1 -->
+<tr class="task-row hover:bg-slate-50 transition-colors group">
+<td class="flex items-center justify-center gap-1 h-[42px]">
+<span class="material-symbols-outlined text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">drag_indicator</span>
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</td>
+<td class="px-4 text-[13px] font-medium text-slate-800"><a class="hover:text-primary transition-colors cursor-pointer" href="{{DATA:SCREEN:SCREEN_7}}">Post - Sorteio</a></td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-purple-50 text-purple-700 sidebar-label">FEED</span>
+</td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-emerald-50 text-emerald-700 sidebar-label">PUBLICADO</span>
+</td>
+<td class="px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">JU</div>
+<span class="text-[12px] text-slate-600">Juan</span>
+</div>
+</td>
+<td class="px-4 text-[12px] text-slate-500">24/03</td>
+<td class="px-4">
+<div class="flex gap-1">
+<span class="px-1.5 py-0.5 rounded-[4px] bg-emerald-50 text-emerald-700 text-[9px] font-bold">FB 24/03 17:40</span>
+<span class="px-1.5 py-0.5 rounded-[4px] bg-emerald-50 text-emerald-700 text-[9px] font-bold">IG 24/03 17:40</span>
+</div>
+</td>
+<td class="px-4">
+<span class="material-symbols-outlined text-red-500" style="font-variation-settings: 'FILL' 1;">priority_high</span>
+</td>
+</tr>
+<!-- Task Row 2 -->
+<tr class="task-row hover:bg-slate-50 transition-colors group">
+<td class="flex items-center justify-center gap-1 h-[42px]">
+<span class="material-symbols-outlined text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">drag_indicator</span>
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</td>
+<td class="px-4 text-[13px] font-medium text-slate-800">Post - Reels Promo</td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-indigo-50 text-indigo-700 sidebar-label">REELS</span>
+</td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-amber-50 text-amber-700 sidebar-label">AGENDADO</span>
+</td>
+<td class="px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-[10px] font-bold text-primary">JU</div>
+<span class="text-[12px] text-slate-600">Juan</span>
+</div>
+</td>
+<td class="px-4 text-[12px] text-slate-500">25/03</td>
+<td class="px-4 text-[11px] text-slate-400">---</td>
+<td class="px-4">
+<span class="material-symbols-outlined text-slate-300">low_priority</span>
+</td>
+</tr>
+<!-- Task Row 3 -->
+<tr class="task-row hover:bg-slate-50 transition-colors group">
+<td class="flex items-center justify-center gap-1 h-[42px]">
+<span class="material-symbols-outlined text-slate-300 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab">drag_indicator</span>
+<input class="rounded-sm border-slate-300 text-primary focus:ring-primary h-4 w-4" type="checkbox"/>
+</td>
+<td class="px-4 text-[13px] font-medium text-slate-800">Post - Reels Menu</td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-indigo-50 text-indigo-700 sidebar-label">REELS</span>
+</td>
+<td class="px-4">
+<span class="px-2 py-0.5 rounded-[4px] bg-slate-100 text-slate-600 sidebar-label">CRIATIVO</span>
+</td>
+<td class="px-4">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-pink-100 flex items-center justify-center text-[10px] font-bold text-pink-600">ML</div>
+<span class="text-[12px] text-slate-600">Malu</span>
+</div>
+</td>
+<td class="px-4 text-[12px] text-slate-500">26/03</td>
+<td class="px-4 text-[11px] text-slate-400">---</td>
+<td class="px-4">
+<span class="material-symbols-outlined text-amber-500" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</main>
+<!-- Floating Action Bar (Bottom Center) -->
+<div class="fixed bottom-8 left-1/2 -translate-x-1/2 translate-y-0 bg-[#191b23] text-white rounded-xl shadow-2xl px-6 py-3 flex items-center gap-8 z-50 animate-bounce-short">
+<div class="flex items-center gap-2 border-r border-white/10 pr-6">
+<span class="bg-indigo-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded">3</span>
+<span class="text-[12px] font-medium">Selecionados</span>
+</div>
+<div class="flex items-center gap-6">
+<button class="flex items-center gap-2 text-[12px] text-white/80 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">adjust</span>
+                Status
+            </button>
+<button class="flex items-center gap-2 text-[12px] text-white/80 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">person</span>
+                Responsavel
+            </button>
+<button class="flex items-center gap-2 text-[12px] text-white/80 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">outlined_flag</span>
+                Prioridade
+            </button>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-1.5 rounded text-[12px] font-bold hover:opacity-90">
+<span class="material-symbols-outlined text-[18px]">schedule</span>
+                Agendar
+            </button>
+<button class="flex items-center gap-2 text-[12px] text-white/80 hover:text-white transition-colors">
+<span class="material-symbols-outlined text-[18px]">content_copy</span>
+                Duplicar
+            </button>
+<button class="flex items-center gap-2 text-[12px] text-error hover:text-red-400 transition-colors">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+                Excluir
+            </button>
+</div>
+<button class="ml-4 p-1 hover:bg-white/10 rounded">
+<span class="material-symbols-outlined text-[20px] text-white/40">close</span>
+</button>
+</div>
+</body></html>

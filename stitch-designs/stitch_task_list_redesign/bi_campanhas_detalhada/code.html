@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Starken OS - BI de Campanhas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-container": "#eceef1",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-secondary-fixed": "#07006c",
+                        "primary": "#2a4dd7",
+                        "secondary": "#4648d4",
+                        "secondary-fixed": "#e1e0ff",
+                        "outline-variant": "#c4c5d7",
+                        "surface-container-low": "#f2f4f7",
+                        "on-primary-fixed": "#001257",
+                        "on-surface-variant": "#444654",
+                        "error": "#ba1a1a",
+                        "outline": "#747686",
+                        "secondary-container": "#6063ee",
+                        "tertiary-container": "#8a4cfc",
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-primary-container": "#fffbff",
+                        "surface-bright": "#f7f9fc",
+                        "background": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed": "#25005a",
+                        "tertiary": "#712ae2",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b9c3ff",
+                        "on-secondary-container": "#fffbff",
+                        "surface-variant": "#e0e3e6",
+                        "tertiary-fixed": "#eaddff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface": "#f7f9fc",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-tint": "#2d50d9",
+                        "on-tertiary-container": "#fffbff",
+                        "primary-container": "#4868f1",
+                        "on-tertiary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar (Workspace Navigation) -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#191b23] flex flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-bold text-white tracking-tight">Starken OS V2.0</h1>
+<p class="text-[11px] font-medium uppercase tracking-[0.8px] text-white/40">Alpha Workspace</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="mx-2 flex items-center px-4 py-3 text-white/60 hover:text-white transition-colors duration-200 hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Dashboard</span>
+</a>
+<a class="mx-2 flex items-center px-4 py-3 bg-[#6366f1]/14 text-white border-l-2 border-[#6366f1] rounded-r-sm group" href="#">
+<span class="material-symbols-outlined mr-3">analytics</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Analytics</span>
+</a>
+<a class="mx-2 flex items-center px-4 py-3 text-white/60 hover:text-white transition-colors duration-200 hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined mr-3">campaign</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Campaigns</span>
+</a>
+<a class="mx-2 flex items-center px-4 py-3 text-white/60 hover:text-white transition-colors duration-200 hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined mr-3">assessment</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Reports</span>
+</a>
+<a class="mx-2 flex items-center px-4 py-3 text-white/60 hover:text-white transition-colors duration-200 hover:bg-white/5 group" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Settings</span>
+</a>
+</nav>
+<div class="px-4 mb-6">
+<button class="w-full bg-primary py-2.5 rounded-lg text-white text-[13px] font-semibold transition-transform scale-95 active:scale-90 flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Project
+            </button>
+</div>
+<div class="border-t border-white/10 pt-4 space-y-1">
+<a class="mx-2 flex items-center px-4 py-2 text-white/60 hover:text-white transition-colors duration-200 text-[13px]" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">help</span>
+                Help
+            </a>
+<a class="mx-2 flex items-center px-4 py-2 text-white/60 hover:text-white transition-colors duration-200 text-[13px]" href="#">
+<span class="material-symbols-outlined mr-3 text-sm">logout</span>
+                Logout
+            </a>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-16 w-full sticky top-0 bg-white/80 backdrop-blur-md z-40 border-b border-slate-200/50 shadow-sm">
+<div class="flex items-center gap-8">
+<h2 class="text-black font-bold text-[13px] uppercase tracking-wider">Starken OS</h2>
+<nav class="flex gap-6">
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium" href="#">Conteúdo</a>
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium" href="#">Calendário</a>
+<a class="text-[#2a4dd7] border-b-2 border-[#2a4dd7] pb-4 font-bold text-[13px]" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-lg text-[13px] w-64 focus:ring-1 focus:ring-primary transition-all" placeholder="Procurar campanhas..." type="text"/>
+</div>
+<button class="p-2 text-slate-500 hover:text-primary transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden border border-slate-300">
+<img class="h-full w-full object-cover" data-alt="close-up portrait of a professional male analyst in a modern office setting with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBlJCvDSDbYkAl9YXcCAPk14lN8B8Re42wLjhtfNpnjrzaTIar7QSbYhVCLXgoSEDGLMUjSu_V5MafM76Uw0tiZsA0fzpMKasZxUbr8wh67g0DXj2DhZ670CXTzE7nXEnLvr_akApSb6UwWB1rrCnR_VujNJ-WFherysrzDO5wNkaOtnsVQzGwdr1AwxC3L5PrXec1gtaXjVxquKpqyqcSNlINJb0LJCDe_dmGOQ--4UQxzRLqR6qoigUEsUT0vhbdqb8Xbq5n_xRYl"/>
+</div>
+</div>
+</header>
+<!-- Page Content -->
+<div class="p-8 space-y-8">
+<!-- Header Section with Banner -->
+<section class="space-y-6">
+<div class="flex items-center justify-between">
+<button class="flex items-center gap-2 text-slate-500 hover:text-primary transition-all text-[13px] font-medium group">
+<span class="material-symbols-outlined text-lg group-hover:-translate-x-1 transition-transform">arrow_back</span>
+                        Voltar
+                    </button>
+<div class="flex gap-2">
+<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-[4px] text-[11px] font-bold uppercase tracking-[0.8px] flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">restaurant</span>
+                            Gastronomia
+                        </span>
+<span class="bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-[4px] text-[11px] font-bold uppercase tracking-[0.8px]">
+                            ATIVO
+                        </span>
+</div>
+</div>
+<div class="relative overflow-hidden rounded-xl h-48 flex items-center px-10">
+<div class="absolute inset-0 bg-gradient-to-r from-[#191b23] via-[#2a4dd7]/40 to-transparent z-10"></div>
+<img class="absolute inset-0 w-full h-full object-cover grayscale opacity-40" data-alt="High-tech digital dashboard with glowing data visualization and abstract financial charts on a dark background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCOxXbda_x-cJh9_chEi2Jnkq1KmOS-oMcuBD6S_AkWSrweytEqYYBbKoUP1BLgQVmRZkXCa07_QrbmOcfjkW9IRw4NhOlmIKDTmBthQwhwGnOUOFAgsIeIhFrCCKMk6Xax6gmbClqQES07nJOsodOO19UoKygCGdVOI-AJPvv2TVjgjlxPCqKHekUE_F9LdDQ7q-bBkAoq_JH-X87XpopIeHgb1oNJVqoqDCOqweCBxp7egzY5QiOtS59r9wViDz3HIjejpZY8ZbXR"/>
+<div class="relative z-20 space-y-2">
+<h3 class="text-white text-3xl font-extrabold tracking-tight">Dashboard Meta Ads</h3>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg bg-white/10 backdrop-blur flex items-center justify-center">
+<span class="material-symbols-outlined text-white">restaurant_menu</span>
+</div>
+<div>
+<p class="text-white/90 font-bold text-lg">Mestre do Frango Passo Fundo</p>
+<p class="text-white/60 text-xs font-medium uppercase tracking-[1px]">Performance Mensal • Outubro 2023</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- KPI Row -->
+<div class="grid grid-cols-4 gap-6">
+<div class="bg-white p-6 rounded-xl border border-slate-200/50 shadow-sm space-y-2">
+<p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px]">Investimento Total</p>
+<div class="flex items-end justify-between">
+<h4 class="text-2xl font-extrabold text-[#2a4dd7]">R$ 4.250,00</h4>
+<span class="text-green-600 text-xs font-bold flex items-center">+12% <span class="material-symbols-outlined text-xs">trending_up</span></span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-200/50 shadow-sm space-y-2">
+<p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px]">Alcance Total</p>
+<div class="flex items-end justify-between">
+<h4 class="text-2xl font-extrabold text-slate-900">142.850</h4>
+<span class="text-green-600 text-xs font-bold flex items-center">+5% <span class="material-symbols-outlined text-xs">trending_up</span></span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-200/50 shadow-sm space-y-2">
+<p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px]">Impressões</p>
+<div class="flex items-end justify-between">
+<h4 class="text-2xl font-extrabold text-slate-900">284.912</h4>
+<span class="text-red-500 text-xs font-bold flex items-center">-2% <span class="material-symbols-outlined text-xs">trending_down</span></span>
+</div>
+</div>
+<div class="bg-white p-6 rounded-xl border border-slate-200/50 shadow-sm space-y-2">
+<p class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px]">Visitas ao Perfil</p>
+<div class="flex items-end justify-between">
+<h4 class="text-2xl font-extrabold text-slate-900">8.124</h4>
+<span class="text-green-600 text-xs font-bold flex items-center">+18% <span class="material-symbols-outlined text-xs">trending_up</span></span>
+</div>
+</div>
+</div>
+<!-- Detailed Performance & Insight Bento -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Performance Table/Grid -->
+<div class="col-span-8 bg-white rounded-xl border border-slate-200/50 overflow-hidden shadow-sm">
+<div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+<h5 class="text-[13px] font-bold text-slate-800">Performance Detalhada por Campanha</h5>
+<div class="flex gap-2">
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">filter_list</span>
+<span class="material-symbols-outlined text-slate-400 cursor-pointer hover:text-primary transition-colors">download</span>
+</div>
+</div>
+<div class="p-0 overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-white">
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">Campanha</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">Invest.</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">Visitas</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">CPA</th>
+<th class="px-4 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">ROAS</th>
+<th class="px-6 py-3 text-[11px] font-bold text-slate-400 uppercase tracking-[0.8px]">Status</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-slate-50">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-blue-500"></div>
+<span class="text-[13px] font-semibold text-slate-700">Conversão • Delivery Direto</span>
+</div>
+</td>
+<td class="px-4 py-4 text-[13px] font-medium">R$ 1.840</td>
+<td class="px-4 py-4 text-[13px] font-medium">3.412</td>
+<td class="px-4 py-4 text-[13px] font-medium text-primary">R$ 4,12</td>
+<td class="px-4 py-4 text-[13px] font-bold text-green-600">8.4x</td>
+<td class="px-6 py-4">
+<span class="bg-blue-50 text-blue-600 px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-tight">Otimizando</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-purple-500"></div>
+<span class="text-[13px] font-semibold text-slate-700">Reconhecimento • Branding Local</span>
+</div>
+</td>
+<td class="px-4 py-4 text-[13px] font-medium">R$ 950</td>
+<td class="px-4 py-4 text-[13px] font-medium">2.105</td>
+<td class="px-4 py-4 text-[13px] font-medium text-primary">R$ 1,80</td>
+<td class="px-4 py-4 text-[13px] font-bold text-slate-400">--</td>
+<td class="px-6 py-4">
+<span class="bg-purple-50 text-purple-600 px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-tight">Engajamento</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-2 h-2 rounded-full bg-orange-500"></div>
+<span class="text-[13px] font-semibold text-slate-700">Promoção • Balde Mestre</span>
+</div>
+</td>
+<td class="px-4 py-4 text-[13px] font-medium">R$ 1.460</td>
+<td class="px-4 py-4 text-[13px] font-medium">2.607</td>
+<td class="px-4 py-4 text-[13px] font-medium text-primary">R$ 5,20</td>
+<td class="px-4 py-4 text-[13px] font-bold text-green-600">6.1x</td>
+<td class="px-6 py-4">
+<span class="bg-orange-50 text-orange-600 px-2 py-0.5 rounded-[4px] text-[10px] font-bold uppercase tracking-tight">Escalando</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Insights Section -->
+<div class="col-span-4 space-y-6">
+<div class="bg-primary/5 border border-primary/20 rounded-xl p-6 relative overflow-hidden">
+<div class="absolute -right-4 -top-4 text-primary/10 scale-150">
+<span class="material-symbols-outlined text-8xl" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+</div>
+<div class="relative z-10 space-y-4">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<h6 class="text-[13px] font-bold text-primary uppercase tracking-[0.8px]">Traduzindo isso:</h6>
+</div>
+<p class="text-[13px] leading-relaxed text-slate-700">
+                                "A campanha de <span class="font-bold text-slate-900">Conversão</span> está performando 24% acima da média do setor. O público de 'Interesse em Gastronomia Local' está gerando o menor CPA. Recomendamos mover 15% do orçamento de Branding para a promoção <span class="font-bold text-slate-900">Balde Mestre</span> no final de semana."
+                            </p>
+<button class="text-primary text-[11px] font-bold uppercase tracking-widest hover:underline">Ver relatório completo</button>
+</div>
+</div>
+<div class="bg-white rounded-xl border border-slate-200/50 p-6 shadow-sm">
+<div class="flex items-center justify-between mb-4">
+<h6 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px]">Inteligência de Tráfego</h6>
+<span class="material-symbols-outlined text-slate-400 text-sm">info</span>
+</div>
+<div class="space-y-3">
+<div class="flex justify-between items-center text-[13px]">
+<span class="text-slate-500">Qualidade Criativa</span>
+<span class="font-bold text-green-600 uppercase">Excelente</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-green-500 h-full w-[88%]"></div>
+</div>
+<div class="flex justify-between items-center text-[13px] mt-4">
+<span class="text-slate-500">Otimização de Público</span>
+<span class="font-bold text-blue-600 uppercase">Focado</span>
+</div>
+<div class="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+<div class="bg-blue-500 h-full w-[72%]"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Dashboard Bottom Grid -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Cardápio Data Section -->
+<div class="col-span-4 bg-white rounded-xl border border-slate-200/50 p-6 shadow-sm flex flex-col justify-between">
+<div>
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-[#2a4dd7]">restaurant_menu</span>
+<h6 class="text-[13px] font-bold text-slate-800">Dados do Sistema - Cardápio</h6>
+</div>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<span class="text-[13px] text-slate-600">Tickets Gerados</span>
+<span class="text-[15px] font-extrabold text-slate-900">1.242</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<span class="text-[13px] text-slate-600">Ticket Médio</span>
+<span class="text-[15px] font-extrabold text-slate-900">R$ 84,50</span>
+</div>
+<div class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg">
+<span class="text-[13px] text-slate-600">Novos Clientes</span>
+<span class="text-[15px] font-extrabold text-slate-900">312</span>
+</div>
+</div>
+</div>
+<div class="mt-6 pt-6 border-t border-slate-100">
+<p class="text-[11px] text-slate-400 italic">Sincronizado há 14 minutos</p>
+</div>
+</div>
+<!-- Charts Section -->
+<div class="col-span-8 grid grid-cols-2 gap-6">
+<!-- ROAS Bar Chart Representation -->
+<div class="bg-white rounded-xl border border-slate-200/50 p-6 shadow-sm">
+<h6 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px] mb-6">ROAS por Campanha</h6>
+<div class="flex items-end justify-between h-40 gap-4">
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/20 hover:bg-primary transition-colors h-[80%] rounded-t-sm relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">8.4x</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Conv.</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/20 hover:bg-primary transition-colors h-[40%] rounded-t-sm relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">4.2x</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Prom.</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/20 hover:bg-primary transition-colors h-[65%] rounded-t-sm relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">6.1x</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Mestre</span>
+</div>
+<div class="flex flex-col items-center flex-1 gap-2">
+<div class="w-full bg-primary/20 hover:bg-primary transition-colors h-[30%] rounded-t-sm relative group">
+<div class="absolute -top-6 left-1/2 -translate-x-1/2 bg-slate-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity">2.8x</div>
+</div>
+<span class="text-[10px] font-bold text-slate-400 uppercase">Other</span>
+</div>
+</div>
+</div>
+<!-- Budget Distribution Representation -->
+<div class="bg-white rounded-xl border border-slate-200/50 p-6 shadow-sm">
+<h6 class="text-[11px] font-bold text-slate-500 uppercase tracking-[0.8px] mb-6">Distribuição do Investimento</h6>
+<div class="flex items-center justify-center h-40">
+<div class="relative w-32 h-32 rounded-full border-[12px] border-primary/10 flex items-center justify-center">
+<div class="absolute inset-0 rounded-full border-[12px] border-primary border-r-transparent border-b-transparent -rotate-45"></div>
+<div class="text-center">
+<p class="text-[18px] font-black text-slate-900">43%</p>
+<p class="text-[9px] font-bold text-slate-400 uppercase leading-none">Conversão</p>
+</div>
+</div>
+<div class="ml-6 space-y-2">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary"></div>
+<span class="text-[11px] font-bold text-slate-600">Conversão</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary/40"></div>
+<span class="text-[11px] font-bold text-slate-600">Branding</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-primary/20"></div>
+<span class="text-[11px] font-bold text-slate-600">Mensagens</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

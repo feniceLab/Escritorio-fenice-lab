@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container-high": "#e6e8eb",
+                        "surface-container": "#eceef1",
+                        "on-error": "#ffffff",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "on-secondary-fixed": "#07006c",
+                        "primary": "#2a4dd7",
+                        "secondary": "#4648d4",
+                        "secondary-fixed": "#e1e0ff",
+                        "outline-variant": "#c4c5d7",
+                        "surface-container-low": "#f2f4f7",
+                        "on-primary-fixed": "#001257",
+                        "on-surface-variant": "#444654",
+                        "error": "#ba1a1a",
+                        "outline": "#747686",
+                        "secondary-container": "#6063ee",
+                        "tertiary-container": "#8a4cfc",
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "on-surface": "#191c1e",
+                        "error-container": "#ffdad6",
+                        "on-background": "#191c1e",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-primary-container": "#fffbff",
+                        "surface-bright": "#f7f9fc",
+                        "background": "#f7f9fc",
+                        "inverse-surface": "#2d3133",
+                        "on-tertiary-fixed": "#25005a",
+                        "tertiary": "#712ae2",
+                        "on-error-container": "#93000a",
+                        "inverse-primary": "#b9c3ff",
+                        "on-secondary-container": "#fffbff",
+                        "surface-variant": "#e0e3e6",
+                        "tertiary-fixed": "#eaddff",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#e0e3e6",
+                        "surface": "#f7f9fc",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-on-surface": "#eff1f4",
+                        "surface-tint": "#2d50d9",
+                        "on-tertiary-container": "#fffbff",
+                        "primary-container": "#4868f1",
+                        "on-tertiary": "#ffffff"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: { "DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem" },
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; background-color: #f7f9fc; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #e0e3e6; border-radius: 10px; }
+    </style>
+</head>
+<body class="text-on-surface antialiased">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 bg-[#191b23] flex flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-bold text-white tracking-tight">Starken OS V2.0</h1>
+<p class="text-[11px] font-medium uppercase tracking-[0.8px] text-white/40 mt-1">Alpha Workspace</p>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 bg-[#6366f1]/14 text-white border-l-2 border-[#6366f1] rounded-r-sm group" href="#">
+<span class="material-symbols-outlined text-[20px]">analytics</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]">campaign</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Campaigns</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]">assessment</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Settings</span>
+</a>
+</nav>
+<div class="px-3 mt-auto space-y-1">
+<button class="w-full mb-4 bg-primary text-white py-2.5 rounded-lg text-[13px] font-bold shadow-lg shadow-primary/20 active:scale-95 transition-transform">
+                New Project
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Help</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="text-[11px] font-medium uppercase tracking-[0.8px]">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="flex justify-between items-center px-8 h-16 w-[calc(100%-16rem)] ml-64 fixed top-0 bg-white border-b border-slate-200/50 z-40">
+<div class="flex items-center gap-8">
+<span class="text-black font-bold text-base tracking-tight">Starken OS</span>
+<nav class="flex gap-6">
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium transition-all" href="#">Conteúdo</a>
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium transition-all" href="#">Calendário</a>
+<a class="text-[#2a4dd7] border-b-2 border-[#2a4dd7] pb-5 text-[13px] font-bold transition-all" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-lg text-[13px] w-64 focus:ring-1 focus:ring-primary/20" placeholder="Search..." type="text"/>
+</div>
+<div class="flex items-center gap-2 ml-4">
+<button class="p-2 text-slate-500 hover:bg-surface-container rounded-full transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-slate-200">
+<img class="w-full h-full object-cover" data-alt="professional corporate headshot of a smiling man with clean background for user profile" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDjoloW9QxW-swiBoiHUpVVJ4YkHIEBGnO3csJDIhbJ4ce1AVX29k0goNYjyVr6evXndg4fry9P2sEKgY5kR6T-VnPmm3IDbcRMclu02LxWLA9YAP5GzNCgcTqxX6se6d5Bgy89zcisc8lOPV2ywqOLfqKy2xYTPnk4pLaO6s7Csi5p1A10L-PTYOqYe6zYNKeSb9EgdTSN0xsYz0JVrAPuEPfdioEAM_GEaaS7S9HAJe8PMj7DucHzxw1BDEEDlocOsSYwyU3WuHRe"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 mt-16 p-8 min-h-[calc(100vh-4rem)] bg-surface">
+<!-- Header Section -->
+<div class="flex justify-between items-center mb-8">
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Gerenciar Clientes</h2>
+<p class="text-[13px] text-outline mt-1">Visualize e edite sua base de clientes ativos e assessoria.</p>
+</div>
+<button class="flex items-center gap-2 bg-primary text-white px-5 py-2.5 rounded-lg text-[13px] font-bold shadow-md shadow-primary/10 active:scale-95 transition-transform">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                Novo Cliente
+            </button>
+</div>
+<!-- Asymmetric Bento Grid Layout -->
+<div class="grid grid-cols-12 gap-6">
+<!-- Column 1: Starken (Left, Larger) -->
+<section class="col-span-12 lg:col-span-8">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col h-full">
+<div class="p-5 flex justify-between items-center bg-surface-container-low/30">
+<div class="flex items-center gap-3">
+<span class="w-1.5 h-6 bg-primary rounded-full"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider">Starken</h3>
+<span class="text-[11px] font-bold bg-primary/10 text-primary px-2 py-0.5 rounded">12 Clientes</span>
+</div>
+<button class="text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-[20px]">filter_list</span>
+</button>
+</div>
+<div class="flex-1 overflow-auto custom-scrollbar">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/10 border-b border-outline-variant/10">
+<th class="px-6 py-3 w-10">
+<input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/>
+</th>
+<th class="px-6 py-3 text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Cliente</th>
+<th class="px-6 py-3 text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Categoria</th>
+<th class="px-6 py-3 text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Status</th>
+<th class="px-6 py-3 text-right text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Ações</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant/5">
+<!-- Row 1 -->
+<tr class="group hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="vibrant healthy food bowl on light background for gourmet restaurant client avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuClxr22g6PnYZM6uwR-cXXailqITIHaScq6GxO6qILJiSi8EiS-68KqEwyvUSeidZe7c7CazcAeuoNI-SQ1DZ8bkbJ1YPOfjHfQltzjHvcmpVgunmQ6rxrl5AIJcGiJ9GCvlh3SQFf1F1XH_pG0msG3xW4-H1LlokUBLad57INOuw9Pdb9nUo9-AbNqQQxvvHKBpDqvnK2E-8z9JhZISJJuhjULJUDCYQ2KEAgrfwcVSybAXW9mo5ns7t21B6tZeGjMm8199QpaTPvp"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold">Lumière Gastronomie</span>
+<span class="text-[11px] text-outline">ID: #SK-8821</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container-high px-2.5 py-1 rounded">GASTRONOMIA</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.5px] bg-[#2e7d32]/10 text-[#2e7d32]">Ativo</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-primary/5 rounded">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-outline hover:text-error hover:bg-error/5 rounded">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 2 -->
+<tr class="group hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="minimalist clean watch product shot on neutral background for tech accessories brand client" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCMWyQ1RlWKj-Z1Qza-rHeA7GxUK-JoF_USXEfiukkNoZ7BxIItAR6hpgpZjK6i8xF214rpXILIsUrzNpfYeCGZ0Ot1FmVaCnrD7PVBUbokuWkdLQWtiPoxgONhr3JsGh0COkbSvuQW926-wbbhIhGrhPr9ELSnS98m7JFp-e4t04JqsYVgIL1R-4XT3ZVTmDocEd5DJ-SpVgFb12Sjlk-JNv9KMz7O2ohoNxUNbIolmZl-01U5oAkPylmnxUqp3sXZptIhhAAwc9pE"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold">Nexus Tech Hub</span>
+<span class="text-[11px] text-outline">ID: #SK-4412</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container-high px-2.5 py-1 rounded">TECNOLOGIA</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.5px] bg-[#2e7d32]/10 text-[#2e7d32]">Ativo</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-primary/5 rounded">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-outline hover:text-error hover:bg-error/5 rounded">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="group hover:bg-surface-container-low/30 transition-colors">
+<td class="px-6 py-4"><input class="w-4 h-4 rounded border-outline-variant text-primary focus:ring-primary" type="checkbox"/></td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="luxury hotel resort aerial view for travel and hospitality brand client avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCzACVCFuWlYENgV_uo-YkjshQvCmDwoV8p8lYKBjaEidTPyK52ZouyptcdnZ2u8jxynemPRvNYqAGDM_Hht-ArhXk9Js2nQdWodc0n3fa0sutIhdkyGr9hlJ6gJ5KSvARcBRsrnBvEokKRGVkh27lWpKCIEGfoaS_p1EIIpegWjyw8Pvtp7EDLVzFsQqFZu35gnWfdHH7H6UfKOKKBBMch80KTsGckww-yVys3VsUQtci-3w7B-jmNNJ4xw8K5sjd6DSlK2iK9vhci"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold">Reserva Exclusive</span>
+<span class="text-[11px] text-outline">ID: #SK-1129</span>
+</div>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container-high px-2.5 py-1 rounded">TURISMO</span>
+</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-bold uppercase tracking-[0.5px] bg-[#2e7d32]/10 text-[#2e7d32]">Ativo</span>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 text-outline hover:text-primary hover:bg-primary/5 rounded">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="p-1.5 text-outline hover:text-error hover:bg-error/5 rounded">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<!-- Column 2: Alpha Assessoria (Right, Smaller) -->
+<section class="col-span-12 lg:col-span-4">
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden flex flex-col h-full border border-outline-variant/10">
+<div class="p-5 flex justify-between items-center bg-surface-container-low/30">
+<div class="flex items-center gap-3">
+<span class="w-1.5 h-6 bg-tertiary rounded-full"></span>
+<h3 class="text-sm font-bold uppercase tracking-wider">Alpha Assessoria</h3>
+</div>
+</div>
+<div class="p-4 space-y-3 flex-1 overflow-auto custom-scrollbar">
+<!-- Client Card 1 -->
+<div class="p-4 rounded-lg bg-surface-container-low/40 border border-outline-variant/5 group hover:bg-surface-container-low/80 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 ring-2 ring-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="interior design modern studio office for creative agency client avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC0KNdp9WXl8G_DPePxir1zIx6MVtbrRR84PSVE9BnN9DaXAYuIluFF7uoI6CK3K-MkUUn_zELPm40RiEHQ4sGCuAMo-qf15-K8rUnZHtgZtCIWwskcJHTZIRWhYRD6R9p4bpkkqIuN9pdC4ujwXNqUADWV7aeX2yAYsS6byRukTxxgJr_YpngA4d73C2MmTx4hsvTnlXce_hCmbCjoQuMmneQdV5REdy7x4Bf49erKj8ZNVtNTiA_9nT07BvbBApEuIkCwsFvfYb5u"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold truncate max-w-[120px]">Studio Urbano</span>
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded inline-block w-fit">ARQUITETURA</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.5px] bg-[#2e7d32]/10 text-[#2e7d32]">Ativo</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBpxus2aWfgHe2Ogj3IAtz447zqND9Co_HY-5vcPdTSDAv3xL0yWdmYPWIfULb4DsMkVTs2W7u8j6d0ipeLQyx6sO_Iao_0yHCwNc0f9Q7bD1VktcnqJykETEyacOqH7wQHsJU5R4o1WyNVPS_TuMe-nOD4XZO5f17euGHozqdZyTULa4hrk2b0QjihXde92tQnKRgx0GpbxpBQ485EJ5pPFl2fu23NabBCf3KV102UJ5ouMIorBHBDJvqYCwjGdGo--RZdHPFadBR4"/>
+</div>
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB_BzSx1en-focE2NCLa7hnvVFXjVj1_NYRfKq1l2csBQDR4I7kfFQrLXCYiu-slAbccLUYvwfqcSdYhSTBJixHWltqh1asW3ILaag4UOmZXnrwKjjSQwPmWkYBgKaOwG1BGNEPNs-_mZPSJkWSaSrHOMsR5c1lwcI190lGNbBSU1JfhdQwxPeUL2hOMeQuW7_YVCpT5629lxt8uyOXMPCEnv5ZxiwZzrVRM99iu92OoRxdgocpxJ7hZo42Xp6prRtjdUkhmH81zjQE"/>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-primary hover:bg-primary/5 rounded">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-error hover:bg-error/5 rounded">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Client Card 2 -->
+<div class="p-4 rounded-lg bg-surface-container-low/40 border border-outline-variant/5 group hover:bg-surface-container-low/80 transition-all">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-lg overflow-hidden bg-slate-100 ring-2 ring-white shadow-sm">
+<img class="w-full h-full object-cover" data-alt="zen yoga studio interior with soft lighting for wellness client avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuATyzfTmkl8Ep6J4CAiUQNwbEm5uRDhBWoEFzILvlA_lGEFZip81ULwqeM2rxkbx89SQuXhdOaIVz1hx0_vFOLkN7wWNrUO2V_XIUUMXRTo5Jgv-9e4Duw_JH_NL8nETOHDgurKfV83pe_8PI2AqlzW1ySEdOK1gPB8EoQ8wI53GjGLa6uIiy5HbjSuwih0MtlyJgUKvFI-O5fbNPhyxAVho4X0BujbRex-DrrFzQ44k-4GOQ0d7GGsQjl-y3P5KJLXQlkR7UOpULDo"/>
+</div>
+<div class="flex flex-col">
+<span class="text-[13px] font-bold truncate max-w-[120px]">Zen Wellness</span>
+<span class="text-[11px] font-bold text-on-surface-variant bg-surface-container-high px-1.5 py-0.5 rounded inline-block w-fit">SAÚDE</span>
+</div>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-[0.5px] bg-[#2e7d32]/10 text-[#2e7d32]">Ativo</span>
+</div>
+<div class="flex justify-between items-center">
+<div class="flex -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-white bg-slate-200 overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="team member avatar" src="https://lh3.googleusercontent.com/aida-public/AB6AXuADkiCz77Kkg3diqU3J0oieOGcdHXUg0zSp58hF7phMe_VQMJJ_VrWNImRmPI6ZKfF1KZmUxTHvwzYBCTLLsjidM-AtC69vJz1htsMcUeEkHok4FdoMDIrfy-_x2xohMrO5o0wcJIvtZUPAjHohAIpFDXRUVz8T0fJ9kEB3VhPbd-oOlYb0m_Du3qBL5Qy8ThwZE1boI6hiA0o-in2HqLX4yavtP3UVVPzrajrqrUa80v_kn7cLF-Xm6qCC8Y_2XQngCZpmaw3IO34f"/>
+</div>
+</div>
+<div class="flex gap-1">
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-primary hover:bg-primary/5 rounded">
+<span class="material-symbols-outlined text-[18px]">edit</span>
+</button>
+<button class="w-8 h-8 flex items-center justify-center text-outline hover:text-error hover:bg-error/5 rounded">
+<span class="material-symbols-outlined text-[18px]">delete</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<div class="p-4 bg-surface-container-low/50">
+<button class="w-full py-2 border border-dashed border-outline-variant text-[11px] font-bold uppercase tracking-widest text-outline hover:border-primary hover:text-primary transition-all">
+                            Vincular à Assessoria
+                        </button>
+</div>
+</div>
+</section>
+</div>
+<!-- Glassmorphic Footer Info Panel -->
+<div class="mt-8 bg-white/40 backdrop-blur-md rounded-xl p-6 border border-white/60 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="flex flex-col">
+<span class="text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Total de Clientes</span>
+<span class="text-xl font-extrabold text-on-surface">24</span>
+</div>
+<div class="w-px h-10 bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Novos (Mês)</span>
+<span class="text-xl font-extrabold text-[#2e7d32]">+4</span>
+</div>
+<div class="w-px h-10 bg-outline-variant/20"></div>
+<div class="flex flex-col">
+<span class="text-[11px] font-medium uppercase tracking-[0.8px] text-outline">Aguardando Setup</span>
+<span class="text-xl font-extrabold text-[#ed6c02]">02</span>
+</div>
+</div>
+<div class="flex items-center gap-3">
+<span class="text-[13px] text-outline">Próxima renovação em 4 dias</span>
+<span class="material-symbols-outlined text-primary">event_upcoming</span>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,13 @@
+{
+  "rewrites": [
+    { "source": "/", "destination": "/checklist-relatorios.html" }
+  ],
+  "functions": {
+    "api/meta/media.js": {
+      "maxDuration": 60
+    },
+    "api/meta/publish.js": {
+      "maxDuration": 60
+    }
+  }
+}

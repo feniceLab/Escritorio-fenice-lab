@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#e0e3e6",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-background": "#191c1e",
+                        "surface-container-high": "#e6e8eb",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e1e0ff",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "background": "#f7f9fc",
+                        "primary-container": "#4868f1",
+                        "on-tertiary-fixed": "#25005a",
+                        "outline-variant": "#c4c5d7",
+                        "on-secondary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "secondary": "#4648d4",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e6",
+                        "tertiary": "#712ae2",
+                        "inverse-on-surface": "#eff1f4",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#444654",
+                        "tertiary-fixed": "#eaddff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container": "#eceef1",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fc",
+                        "secondary-container": "#6063ee",
+                        "primary": "#2a4dd7",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b9c3ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "on-primary-fixed": "#001257",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "surface-tint": "#2d50d9",
+                        "tertiary-container": "#8a4cfc",
+                        "outline": "#747686",
+                        "on-secondary-fixed": "#07006c"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased">
+<!-- SideNavBar Shell -->
+<aside class="bg-[#191b23] h-screen w-64 fixed left-0 top-0 overflow-y-auto border-r border-white/5 shadow-2xl z-40 flex flex-col py-6 font-['Inter'] antialiased text-[13px] tracking-tight">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white text-lg">dashboard</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-white tracking-wider uppercase leading-none">Starken OS</h1>
+<p class="text-white/40 text-[10px] mt-1">V2.0 Agency</p>
+</div>
+</div>
+<nav class="flex-1 px-3 space-y-1">
+<div class="px-3 mb-2 text-white/30 text-[10px] uppercase font-bold tracking-widest">General</div>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 font-medium px-4 py-3 flex items-center gap-3 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span>Accounts</span>
+</a>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="api">api</span>
+<span>Meta Ads</span>
+</a>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Schedules</span>
+</a>
+<div class="px-3 mt-6 mb-2 text-white/30 text-[10px] uppercase font-bold tracking-widest">Management</div>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Clients</span>
+</a>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 active:scale-[0.98] transition-transform" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="px-6 py-4 border-t border-white/5 mt-auto">
+<button class="w-full bg-primary text-white font-semibold py-2.5 rounded-lg flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Account
+            </button>
+</div>
+<div class="px-3 space-y-1 mt-4">
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<a class="text-white/60 hover:text-white px-4 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar Shell -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 z-30 bg-white dark:bg-slate-900 bg-[#eceef1] dark:bg-slate-800 flex items-center justify-between px-8 w-full h-full font-['Inter'] text-[13px]">
+<div class="flex items-center gap-8">
+<nav class="flex items-center gap-6">
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Conteudo</a>
+<a class="text-[#2a4dd7] font-semibold" href="#">Saldo das Contas</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Calendario</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<div class="relative focus-within:ring-2 focus-within:ring-indigo-500/20 rounded-lg">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-2 text-[13px] w-64 focus:ring-0" placeholder="Search accounts..." type="text"/>
+</div>
+<div class="flex items-center gap-2">
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-[#2a4dd7] transition-colors">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-[#2a4dd7] transition-colors">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="flex items-center gap-2 pl-2 ml-2 border-l border-slate-200">
+<div class="w-8 h-8 rounded-full overflow-hidden">
+<img alt="Profile" class="w-full h-full object-cover" data-alt="professional portrait of a creative agency director with a confident expression and stylish glasses" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA5ZdphRUzNHrZPBbL1o49hcNdQ7xkg8LyMjFUqM36td2D99UXBq-Jb0JdPjbxQngZwFQGhDPx4qXDllwxKsPK-79nc6yCt5iusUQhCTlfjXmsQoGAOB5fDx0YzggXAfKSaI1rEa8muluQmsIhxqpifV0UKmS-I3ia8Q30RIDZeEUQY5quk842yHGUsTnl6ueq8pf5gf9iMzktL9hsa02vIInwWHZWE7rakYB6ICV-CkQ-OG9pzFkU_i4URuM2prFg3J21TLlfxJ9Ot"/>
+</div>
+<span class="material-symbols-outlined text-slate-400" data-icon="account_circle">account_circle</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 pt-16 min-h-screen bg-surface-container">
+<div class="max-w-[1440px] mx-auto p-8">
+<!-- Page Header -->
+<div class="flex items-center justify-between mb-8">
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Saldo das Contas de Anuncios</h2>
+<p class="text-on-surface-variant text-[13px] mt-1">Gerenciamento financeiro em tempo real para contas vinculadas.</p>
+</div>
+<button class="bg-primary text-white px-6 py-2.5 rounded font-bold text-[11px] uppercase tracking-wider shadow-sm hover:opacity-90 transition-opacity flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">refresh</span>
+                    Atualizar
+                </button>
+</div>
+<!-- Top Alert Box -->
+<div class="bg-[#fff4e5] border-l-4 border-warning border-[#ed6c02]/20 p-5 rounded-lg mb-8 flex items-start gap-4">
+<div class="w-10 h-10 rounded-lg bg-[#ed6c02]/10 flex items-center justify-center flex-shrink-0">
+<span class="material-symbols-outlined text-[#ed6c02]">warning</span>
+</div>
+<div>
+<h4 class="text-[#ed6c02] font-bold text-sm uppercase tracking-wide">Atenção: Saldo Crítico</h4>
+<p class="text-[#663c00] text-[13px] leading-relaxed mt-1">
+                        Existem <strong>3 contas</strong> com saldo abaixo de R$ 100,00. Recomendamos a recarga imediata para evitar a pausa dos anúncios de Starken e Alpha Assessoria.
+                    </p>
+</div>
+</div>
+<!-- Grid Content -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Account Card 1 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-lg transition-shadow border border-outline-variant/15">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-on-surface text-base">Starken OS - Principal</h3>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-0.5">act_29481749201 (BRL)</p>
+</div>
+<span class="bg-[#2e7d32]/10 text-[#2e7d32] text-[11px] font-bold uppercase tracking-[0.8px] px-2 py-1 rounded-[4px]">Ativa</span>
+</div>
+<div class="mb-6">
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Saldo Atual</p>
+<p class="text-3xl font-extrabold text-primary tracking-tight">R$ 732,05</p>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-surface-container">
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Total Gasto</p>
+<p class="font-bold text-[13px]">R$ 14.201,88</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Última Recarga</p>
+<p class="font-bold text-[13px]">Há 2 dias</p>
+</div>
+</div>
+</div>
+<!-- Account Card 2 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-lg transition-shadow border border-outline-variant/15">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-on-surface text-base">Alpha Assessoria</h3>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-0.5">act_8832910455 (BRL)</p>
+</div>
+<span class="bg-[#d32f2f]/10 text-[#d32f2f] text-[11px] font-bold uppercase tracking-[0.8px] px-2 py-1 rounded-[4px]">Crítico</span>
+</div>
+<div class="mb-6">
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Saldo Atual</p>
+<p class="text-3xl font-extrabold text-[#d32f2f] tracking-tight">R$ 12,40</p>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-surface-container">
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Total Gasto</p>
+<p class="font-bold text-[13px]">R$ 5.940,00</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Status</p>
+<p class="font-bold text-[13px] text-error">Requer Ação</p>
+</div>
+</div>
+</div>
+<!-- Account Card 3 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-lg transition-shadow border border-outline-variant/15">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-on-surface text-base">E-commerce Beta</h3>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-0.5">act_1120394855 (BRL)</p>
+</div>
+<span class="bg-[#2e7d32]/10 text-[#2e7d32] text-[11px] font-bold uppercase tracking-[0.8px] px-2 py-1 rounded-[4px]">Ativa</span>
+</div>
+<div class="mb-6">
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Saldo Atual</p>
+<p class="text-3xl font-extrabold text-on-surface tracking-tight">R$ 2.450,00</p>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-surface-container">
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Total Gasto</p>
+<p class="font-bold text-[13px]">R$ 48.102,12</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Última Recarga</p>
+<p class="font-bold text-[13px]">Há 5 horas</p>
+</div>
+</div>
+</div>
+<!-- Account Card 4 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-lg transition-shadow border border-outline-variant/15">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-on-surface text-base">Landing Pages High</h3>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-0.5">act_5564738291 (BRL)</p>
+</div>
+<span class="bg-[#0288d1]/10 text-[#0288d1] text-[11px] font-bold uppercase tracking-[0.8px] px-2 py-1 rounded-[4px]">Processando</span>
+</div>
+<div class="mb-6">
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Saldo Atual</p>
+<p class="text-3xl font-extrabold text-on-surface tracking-tight">R$ 402,19</p>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-surface-container">
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Total Gasto</p>
+<p class="font-bold text-[13px]">R$ 2.100,50</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Crédito</p>
+<p class="font-bold text-[13px]">R$ 0,00</p>
+</div>
+</div>
+</div>
+<!-- Account Card 5 -->
+<div class="bg-surface-container-lowest p-6 rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-lg transition-shadow border border-outline-variant/15">
+<div class="flex justify-between items-start mb-6">
+<div>
+<h3 class="font-bold text-on-surface text-base">Vendas Express</h3>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-0.5">act_0093847562 (BRL)</p>
+</div>
+<span class="bg-[#ed6c02]/10 text-[#ed6c02] text-[11px] font-bold uppercase tracking-[0.8px] px-2 py-1 rounded-[4px]">Atenção</span>
+</div>
+<div class="mb-6">
+<p class="text-[11px] text-on-surface-variant uppercase font-bold tracking-wider mb-1">Saldo Atual</p>
+<p class="text-3xl font-extrabold text-[#ed6c02] tracking-tight">R$ 84,32</p>
+</div>
+<div class="grid grid-cols-2 gap-4 pt-4 border-t border-surface-container">
+<div>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Total Gasto</p>
+<p class="font-bold text-[13px]">R$ 1.200,00</p>
+</div>
+<div class="text-right">
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider">Vencimento</p>
+<p class="font-bold text-[13px]">Hoje</p>
+</div>
+</div>
+</div>
+<!-- Add New Account Card -->
+<div class="border-2 border-dashed border-outline-variant/40 rounded-lg flex flex-col items-center justify-center p-8 hover:bg-surface-container-low transition-colors group cursor-pointer">
+<div class="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined text-outline group-hover:text-primary transition-colors">add</span>
+</div>
+<p class="font-bold text-sm text-on-surface-variant group-hover:text-primary transition-colors">Vincular Nova Conta</p>
+<p class="text-[11px] text-on-surface-variant uppercase tracking-wider mt-1 text-center">Meta Ads Business Manager</p>
+</div>
+</div>
+<!-- Detailed Summary Table - Asymmetric Element -->
+<div class="mt-12 bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm border border-outline-variant/15">
+<div class="px-8 py-5 border-b border-surface-container flex items-center justify-between">
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-surface">Histórico de Fluxo de Caixa</h3>
+<div class="flex gap-2">
+<span class="text-[11px] font-bold uppercase text-primary border border-primary/20 px-2 py-1 rounded">Mês Atual</span>
+<span class="text-[11px] font-bold uppercase text-on-surface-variant px-2 py-1">Setembro</span>
+<span class="text-[11px] font-bold uppercase text-on-surface-variant px-2 py-1">Agosto</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low">
+<th class="px-8 py-3 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Cliente</th>
+<th class="px-8 py-3 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Conta ID</th>
+<th class="px-8 py-3 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Investimento Total</th>
+<th class="px-8 py-3 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Saldo Médio</th>
+<th class="px-8 py-3 text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Status Financeiro</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-4 font-bold text-[13px]">Starken OS</td>
+<td class="px-8 py-4 text-[13px] text-on-surface-variant">act_29481749201</td>
+<td class="px-8 py-4 text-[13px] font-semibold">R$ 45.900,00</td>
+<td class="px-8 py-4 text-[13px]">R$ 1.200,00</td>
+<td class="px-8 py-4">
+<span class="bg-[#2e7d32]/10 text-[#2e7d32] text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-[4px]">Estável</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-4 font-bold text-[13px]">Alpha Assessoria</td>
+<td class="px-8 py-4 text-[13px] text-on-surface-variant">act_8832910455</td>
+<td class="px-8 py-4 text-[13px] font-semibold">R$ 12.000,00</td>
+<td class="px-8 py-4 text-[13px]">R$ 15,00</td>
+<td class="px-8 py-4">
+<span class="bg-[#d32f2f]/10 text-[#d32f2f] text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-[4px]">Crítico</span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low/50 transition-colors">
+<td class="px-8 py-4 font-bold text-[13px]">E-commerce Beta</td>
+<td class="px-8 py-4 text-[13px] text-on-surface-variant">act_1120394855</td>
+<td class="px-8 py-4 text-[13px] font-semibold">R$ 89.430,00</td>
+<td class="px-8 py-4 text-[13px]">R$ 3.100,00</td>
+<td class="px-8 py-4">
+<span class="bg-[#2e7d32]/10 text-[#2e7d32] text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-[4px]">Estável</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</main>
+</body></html>

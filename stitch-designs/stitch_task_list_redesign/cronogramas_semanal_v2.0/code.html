@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "surface-container-highest": "#e0e3e6",
+                        "on-primary-fixed-variant": "#0034c0",
+                        "on-background": "#191c1e",
+                        "surface-container-high": "#e6e8eb",
+                        "tertiary-fixed-dim": "#d2bbff",
+                        "on-tertiary-container": "#fffbff",
+                        "surface-bright": "#f7f9fc",
+                        "on-error": "#ffffff",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed": "#e1e0ff",
+                        "on-tertiary-fixed-variant": "#5a00c6",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f2f4f7",
+                        "background": "#f7f9fc",
+                        "primary-container": "#4868f1",
+                        "on-tertiary-fixed": "#25005a",
+                        "outline-variant": "#c4c5d7",
+                        "on-secondary-container": "#fffbff",
+                        "on-primary-container": "#fffbff",
+                        "secondary": "#4648d4",
+                        "primary-fixed-dim": "#b9c3ff",
+                        "error-container": "#ffdad6",
+                        "on-surface": "#191c1e",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary": "#ffffff",
+                        "surface-variant": "#e0e3e6",
+                        "tertiary": "#712ae2",
+                        "inverse-on-surface": "#eff1f4",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#444654",
+                        "tertiary-fixed": "#eaddff",
+                        "surface-dim": "#d8dadd",
+                        "surface-container": "#eceef1",
+                        "inverse-surface": "#2d3133",
+                        "surface": "#f7f9fc",
+                        "secondary-container": "#6063ee",
+                        "primary": "#2a4dd7",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#b9c3ff",
+                        "on-tertiary": "#ffffff",
+                        "on-secondary-fixed-variant": "#2f2ebe",
+                        "on-primary-fixed": "#001257",
+                        "secondary-fixed-dim": "#c0c1ff",
+                        "surface-tint": "#2d50d9",
+                        "tertiary-container": "#8a4cfc",
+                        "outline": "#747686",
+                        "on-secondary-fixed": "#07006c"
+                    },
+                    fontFamily: {
+                        "headline": ["Inter"],
+                        "body": ["Inter"],
+                        "label": ["Inter"]
+                    },
+                    borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+                },
+            },
+        }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden">
+<!-- SideNavBar -->
+<aside class="h-screen w-64 fixed left-0 top-0 overflow-y-auto bg-[#191b23] flex flex-col py-6 border-r border-white/5 shadow-2xl z-40">
+<div class="px-6 mb-8">
+<h1 class="text-lg font-bold text-white tracking-wider uppercase">Starken OS</h1>
+<p class="text-[10px] text-white/40 font-['Inter']">V2.0 Agency</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-6 py-3 transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[20px]">dashboard</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-6 py-3 transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Accounts</span>
+</a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-6 py-3 transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[20px]">api</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Meta Ads</span>
+</a>
+<a class="flex items-center gap-3 bg-indigo-500/15 text-white border-l-2 border-indigo-500 font-medium px-6 py-3" href="#">
+<span class="material-symbols-outlined text-[20px]">calendar_month</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Schedules</span>
+</a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-6 py-3 transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[20px]">group</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Clients</span>
+</a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-6 py-3 transition-colors hover:bg-white/5" href="#">
+<span class="material-symbols-outlined text-[20px]">settings</span>
+<span class="font-['Inter'] text-[13px] tracking-tight">Settings</span>
+</a>
+</nav>
+<div class="px-4 mt-auto pt-6 space-y-1">
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2.5 rounded-lg text-[13px] font-semibold transition-all active:scale-[0.98] mb-4">
+                New Account
+            </button>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">help</span>
+<span class="font-['Inter'] text-[13px]">Support</span>
+</a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white px-4 py-2 transition-colors" href="#">
+<span class="material-symbols-outlined text-[20px]">logout</span>
+<span class="font-['Inter'] text-[13px]">Logout</span>
+</a>
+</div>
+</aside>
+<!-- TopAppBar -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 z-30 bg-white border-b border-[#eceef1] flex items-center justify-between px-8">
+<div class="flex items-center gap-8">
+<nav class="flex gap-6">
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors text-[13px] font-medium uppercase tracking-wider" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors text-[13px] font-medium uppercase tracking-wider" href="#">Conteudo</a>
+<a class="text-[#2a4dd7] font-semibold text-[13px] uppercase tracking-wider" href="#">Calendario</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors text-[13px] font-medium uppercase tracking-wider" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-5">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="bg-surface-container-low border-none rounded-lg pl-10 pr-4 py-1.5 text-[13px] w-64 focus:ring-2 focus:ring-indigo-500/20" placeholder="Search..." type="text"/>
+</div>
+<div class="flex items-center gap-3 text-slate-500">
+<button class="hover:text-[#2a4dd7] transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="hover:text-[#2a4dd7] transition-colors">
+<span class="material-symbols-outlined">history</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden bg-surface-container-high border border-outline-variant/20">
+<img class="h-full w-full object-cover" data-alt="Professional studio portrait of a man in a modern office setting with soft natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYasJPhhbFXU9ElbTk0U-GR5Rg462MbbGHCNYLaRQdcD9-OnuVnDWdj43kWiD7Yc037pi3YaBavinOGI2bhxfUFVhUH8gigdp4DgOPnNFT1Jq3rYBHSHbvi7PlIDFd8NT8xl0MvurV0Wmw-zDD6PQGsQpanGFPXI20upVlfQtBp4Eiho701SPnaBs2GCPVQG8Km8eatLmJCxehJX9jke6a60dDI_JOd4yvb3UPypnI4lyv1IhZNsF05nepmPzIRJcK2v09f1jrIJl7"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="ml-64 pt-16 h-screen overflow-hidden flex flex-col bg-surface">
+<!-- Header Section -->
+<div class="px-8 py-6 bg-white border-b border-[#eceef1]">
+<div class="flex items-center justify-between mb-6">
+<div>
+<h2 class="text-2xl font-extrabold text-on-background tracking-tight">Cronogramas — Semanal</h2>
+<p class="text-[13px] text-on-surface-variant/60 mt-1">Gestão de planejamento estratégico e entregas.</p>
+</div>
+<div class="flex items-center gap-3">
+<div class="flex bg-surface-container-low p-1 rounded-lg">
+<button class="px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest bg-white shadow-sm rounded-md">Semanal</button>
+<button class="px-4 py-1.5 text-[11px] font-bold uppercase tracking-widest text-on-surface-variant hover:text-primary">Mensal</button>
+</div>
+<button class="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-[13px] font-semibold hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                        Novo Cronograma
+                    </button>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<!-- Filters -->
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[18px] text-primary">calendar_today</span>
+<span class="text-[13px] font-semibold">Março 2026</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+<div class="flex items-center gap-2 bg-surface-container-low px-3 py-2 rounded-lg cursor-pointer hover:bg-surface-container-high transition-colors">
+<span class="text-[13px] font-semibold text-on-surface-variant">Semana 12 (16 - 22 Mar)</span>
+<span class="material-symbols-outlined text-[18px]">expand_more</span>
+</div>
+<div class="ml-auto flex items-center gap-6">
+<div class="flex items-center gap-4">
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-amber-500"></div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Pendente</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-purple-500"></div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Gerado</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2 h-2 rounded-full bg-emerald-500"></div>
+<span class="text-[11px] font-bold uppercase tracking-wider text-on-surface-variant">Enviado</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Grid View -->
+<div class="flex-1 overflow-y-auto p-8 grid grid-cols-2 gap-8 bg-surface-bright">
+<!-- Group Column 1: Starken -->
+<div class="flex flex-col">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-3">
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-background">Starken</h3>
+<span class="px-2 py-0.5 bg-surface-container-high rounded text-[10px] font-bold text-on-surface-variant">26 CLIENTES</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-[11px] font-medium text-on-surface-variant">
+<span class="text-primary font-bold">12/26</span> ENVIADOS <span class="mx-2">•</span> <span class="text-purple-600 font-bold">4</span> GERADOS
+                        </div>
+<div class="flex items-center gap-1 text-[11px] font-bold text-primary cursor-pointer">
+                            TODOS <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<!-- Client Row Item -->
+<div class="bg-white p-3 flex items-center justify-between rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-outline-variant/10 group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container" data-alt="Minimalist geometric architectural logo design with clean sharp lines in monochromatic tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWHhF9IZ4dgb5W7e67ddRI6grqIHpKIE9D3ZPoD3Le_l-8LoGuOH1SOz3RLcfOnoiqyeEU8ExLMDD6Xz14IosjiK5255vqJoGUUGYP00iPeRG2A96j901aOtiMtX-VvR3UPRXo7mpLOU5NWxxAK8peFpFZ9P-t_FYZ8C35NqduG6-L7ZR6Q50RcNEPrbP6jDTiOQBt8N5FE2hO36rmxM7FlyXddzZVTDc26_AX9nbucrQBqqlfMknz1TsNkHwjIU8dKGaLNNnfurLb"/>
+<div>
+<h4 class="text-[13px] font-bold text-on-background">Lumina Creative</h4>
+<span class="text-[11px] font-bold uppercase tracking-wider text-emerald-500 bg-emerald-500/10 px-2 py-0.5 rounded">ENVIADO</span>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<!-- Client Row Item -->
+<div class="bg-white p-3 flex items-center justify-between rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-outline-variant/10 group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container" data-alt="Close-up of a high-end luxury watch face on a dark textured background with dramatic lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKuY6dWIdq3vewnZV7WsFEDcqMl5-OZfzY5vlPGZmDKNgWX9RQE_VmfdUjUXjeR6KWDm1c1VHqWLDzbzu-3FxJ44sHS8ugC4JKQ0VoOO4kb6tciV22QOrA6iok0ykztH98f40cz4kI79z4-4veZ1LAA2CKbK9jjMfnTwnqahKD9OzRGVKxTzV3qcnVqP9bEFtKedrL7RlcpYu9HVavbLOJR8zHEqGrVlXszBhb8cgm3CW_HvUuEoing1SLJGaVE3hEVo1jX-gA_ZEd"/>
+<div>
+<h4 class="text-[13px] font-bold text-on-background">Kronos Digital</h4>
+<span class="text-[11px] font-bold uppercase tracking-wider text-purple-600 bg-purple-600/10 px-2 py-0.5 rounded">GERADO</span>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-primary/10 text-primary hover:bg-primary/20 rounded-lg transition-colors">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<!-- Client Row Item -->
+<div class="bg-white p-3 flex items-center justify-between rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-outline-variant/10 group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container" data-alt="Minimalist tech office space with glass partitions and soft overhead panel lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAMSpSLaOAfdVWxkVW6l6b1LrpN9pO71n36eYOagG99f5eEG91jJk7x2slnIlbzKxBKn0oIfJNCcjoZrzN5B4BUDzAZRCJnDZyLEpocrAO2FbCN822enXZKi4urOLvWm-lZCLyKJHA9snhSofuKZuTVGnkpT8mV9C1alPJh3lqz8JVbewxMHXWXBQGLsLFCALf4XmelFR1JU8gZDijQaQ0lR5S-MXdkPaJmkwoKlidY_NIx5sqWobAB8d8CgZI8hJVodJDuqids1AV3"/>
+<div>
+<h4 class="text-[13px] font-bold text-on-background">Nexus Systems</h4>
+<span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 bg-amber-600/10 px-2 py-0.5 rounded">PENDENTE</span>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-slate-100 text-slate-400 cursor-not-allowed rounded-lg">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<!-- Repeat Items to fill space -->
+<div class="bg-white/40 p-3 flex items-center justify-between rounded-lg border border-dashed border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">add</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-widest text-outline">Adicionar Novo Cliente</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Group Column 2: Alpha Assessoria -->
+<div class="flex flex-col border-l border-[#eceef1] pl-8">
+<div class="flex items-center justify-between mb-4 px-2">
+<div class="flex items-center gap-3">
+<h3 class="text-sm font-bold uppercase tracking-widest text-on-background">Alpha Assessoria</h3>
+<span class="px-2 py-0.5 bg-surface-container-high rounded text-[10px] font-bold text-on-surface-variant">14 CLIENTES</span>
+</div>
+<div class="flex items-center gap-4">
+<div class="text-[11px] font-medium text-on-surface-variant">
+<span class="text-primary font-bold">0/14</span> ENVIADOS <span class="mx-2">•</span> <span class="text-purple-600 font-bold">0</span> GERADOS
+                        </div>
+<div class="flex items-center gap-1 text-[11px] font-bold text-primary cursor-pointer">
+                            TODOS <span class="material-symbols-outlined text-[14px]">expand_more</span>
+</div>
+</div>
+</div>
+<div class="space-y-3">
+<!-- Client Row Item -->
+<div class="bg-white p-3 flex items-center justify-between rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-outline-variant/10 group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container" data-alt="Modern abstract corporate brand mark with orange and grey colors on a clean white field" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDo0Ue5Fr5EFsqh5Yn-kxz2_Z8BwyXzOfqAk9rIQgDpkJtz-MGALqwXH3cBrSvjTNbKvQE_ZHI_VzNLA-s3mu4w92ipkSVDu1LNHR4r3UitaJNUibNS41KlrLyajBNfxWAcbORndkgHTAL6fsdHYyCvizuvjWCAbTJSx7NToBIrOBoJXre2bFRk7t-zQF8gyx3J4Al6Ide274vlINHqvCrR-Z7otPYunxxeQgvjVKoMtVgkSvMkjz8_X0TN3V3laUNhtkTfGiLUFQAj"/>
+<div>
+<h4 class="text-[13px] font-bold text-on-background">Solaris Group</h4>
+<span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 bg-amber-600/10 px-2 py-0.5 rounded">PENDENTE</span>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-slate-100 text-slate-400 cursor-not-allowed rounded-lg">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<!-- Client Row Item -->
+<div class="bg-white p-3 flex items-center justify-between rounded-lg shadow-[0_1px_3px_rgba(0,0,0,0.04)] border border-outline-variant/10 group hover:shadow-md transition-shadow">
+<div class="flex items-center gap-4">
+<img class="w-10 h-10 rounded-lg object-cover bg-surface-container" data-alt="Exterior view of a contemporary glass and concrete office building at twilight with glowing interior lights" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZKhzBfN5nDaQLM6jzd2_Y5xhO57YD10hcKpNcW52F2c1LoighvvvVyUlIMjQcwtxfWw3DjTTE6OZElM2MkxDg0P2rl6NbPVsa8tg2DxgnjOcWvo5CfWSN9qhoUuPpam0EVe268wDNSuqH4diOT6N1Pz9Wn7qTTHLCbLX3XO3XYVwWeqd3VZ1CF9iEj-eRUYuUd19TsJoIX1Z6uek7KNVlQPTINsrU4ExzX7WmloJG0zGS04WSeThIyaKuSwd8Ksz1aJTR8Ptp8d50"/>
+<div>
+<h4 class="text-[13px] font-bold text-on-background">Vanguard Estate</h4>
+<span class="text-[11px] font-bold uppercase tracking-wider text-amber-600 bg-amber-600/10 px-2 py-0.5 rounded">PENDENTE</span>
+</div>
+</div>
+<div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">edit</span>
+</button>
+<button class="p-2 hover:bg-surface-container rounded-lg text-on-surface-variant transition-colors">
+<span class="material-symbols-outlined text-[20px]">picture_as_pdf</span>
+</button>
+<button class="p-2 bg-slate-100 text-slate-400 cursor-not-allowed rounded-lg">
+<span class="material-symbols-outlined text-[20px]">send</span>
+</button>
+</div>
+</div>
+<!-- Empty Placeholder for column depth -->
+<div class="bg-white/40 p-3 flex items-center justify-between rounded-lg border border-dashed border-outline-variant/30">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-lg bg-surface-container-high flex items-center justify-center">
+<span class="material-symbols-outlined text-outline">add</span>
+</div>
+<span class="text-[11px] font-bold uppercase tracking-widest text-outline">Adicionar Novo Cliente</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+<span class="material-symbols-outlined text-[32px]" style="font-variation-settings: 'FILL' 1;">add</span>
+</button>
+</body></html>

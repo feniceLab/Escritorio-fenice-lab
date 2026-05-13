@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Starken OS - BI de Campanhas</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+        }
+        /* Custom scrollbar for a clean look */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f7f9fc; }
+        ::-webkit-scrollbar-thumb { background: #dde1ff; border-radius: 10px; }
+    </style>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "secondary-fixed-dim": "#c0c1ff",
+              "surface-dim": "#d8dadd",
+              "surface-container-high": "#e6e8eb",
+              "surface-container": "#eceef1",
+              "on-error": "#ffffff",
+              "tertiary-fixed-dim": "#d2bbff",
+              "primary-fixed-dim": "#b9c3ff",
+              "on-secondary-fixed": "#07006c",
+              "primary": "#2a4dd7",
+              "secondary": "#4648d4",
+              "secondary-fixed": "#e1e0ff",
+              "outline-variant": "#c4c5d7",
+              "surface-container-low": "#f2f4f7",
+              "on-primary-fixed": "#001257",
+              "on-surface-variant": "#444654",
+              "error": "#ba1a1a",
+              "outline": "#747686",
+              "secondary-container": "#6063ee",
+              "tertiary-container": "#8a4cfc",
+              "on-secondary-fixed-variant": "#2f2ebe",
+              "on-tertiary-fixed-variant": "#5a00c6",
+              "on-surface": "#191c1e",
+              "error-container": "#ffdad6",
+              "on-background": "#191c1e",
+              "on-primary-fixed-variant": "#0034c0",
+              "on-primary-container": "#fffbff",
+              "surface-bright": "#f7f9fc",
+              "background": "#f7f9fc",
+              "inverse-surface": "#2d3133",
+              "on-tertiary-fixed": "#25005a",
+              "tertiary": "#712ae2",
+              "on-error-container": "#93000a",
+              "inverse-primary": "#b9c3ff",
+              "on-secondary-container": "#fffbff",
+              "surface-variant": "#e0e3e6",
+              "tertiary-fixed": "#eaddff",
+              "on-primary": "#ffffff",
+              "surface-container-highest": "#e0e3e6",
+              "surface": "#f7f9fc",
+              "primary-fixed": "#dde1ff",
+              "on-secondary": "#ffffff",
+              "surface-container-lowest": "#ffffff",
+              "inverse-on-surface": "#eff1f4",
+              "surface-tint": "#2d50d9",
+              "on-tertiary-container": "#fffbff",
+              "primary-container": "#4868f1",
+              "on-tertiary": "#ffffff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="bg-[#191b23] h-screen w-64 fixed left-0 top-0 flex flex-col py-6 z-50">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center text-white font-bold">S</div>
+<div>
+<h1 class="text-lg font-bold text-white tracking-tight leading-none">Starken OS V2.0</h1>
+<p class="text-[11px] text-white/40 uppercase tracking-wider mt-1">Alpha Workspace</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 px-4 space-y-1">
+<!-- Dashboard (Active) -->
+<a class="flex items-center gap-3 px-3 py-2.5 bg-[#6366f1]/14 text-white border-l-2 border-[#6366f1] rounded-r-sm group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="dashboard">dashboard</span>
+<span class="text-[13px] font-medium">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="analytics">analytics</span>
+<span class="text-[13px] font-medium">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="campaign">campaign</span>
+<span class="text-[13px] font-medium">Campaigns</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="assessment">assessment</span>
+<span class="text-[13px] font-medium">Reports</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-white/60 hover:text-white hover:bg-white/5 transition-colors duration-200 group" href="#">
+<span class="material-symbols-outlined text-[20px]" data-icon="settings">settings</span>
+<span class="text-[13px] font-medium">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto space-y-4">
+<button class="w-full bg-primary hover:bg-primary-container text-white py-2.5 px-4 rounded font-medium text-[13px] transition-all transform active:scale-95">
+                New Project
+            </button>
+<div class="pt-4 space-y-2">
+<a class="flex items-center gap-3 text-white/60 hover:text-white text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="help">help</span> Help
+                </a>
+<a class="flex items-center gap-3 text-white/60 hover:text-white text-[13px]" href="#">
+<span class="material-symbols-outlined text-[18px]" data-icon="logout">logout</span> Logout
+                </a>
+</div>
+</div>
+</aside>
+<!-- TopAppBar (Execution from JSON) -->
+<header class="flex justify-between items-center px-8 h-16 w-[calc(100%-16rem)] ml-64 bg-white border-b border-slate-200/50 fixed top-0 z-40">
+<div class="flex items-center gap-8">
+<span class="text-black font-bold text-[15px]">Starken OS</span>
+<nav class="flex items-center gap-6">
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium" href="#">Conteúdo</a>
+<a class="text-slate-500 hover:text-slate-900 text-[13px] font-medium" href="#">Calendário</a>
+<a class="text-[#2a4dd7] border-b-2 border-[#2a4dd7] pb-[19px] font-bold text-[13px]" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[18px]" data-icon="search">search</span>
+<input class="pl-10 pr-4 py-1.5 bg-surface-container-low border-none rounded-lg text-[13px] w-64 focus:ring-1 focus:ring-primary" placeholder="Search data..." type="text"/>
+</div>
+<div class="flex items-center gap-4">
+<button class="text-slate-500 hover:text-primary transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<div class="h-8 w-8 rounded-full overflow-hidden border border-slate-200">
+<img alt="User Profile" data-alt="professional portrait of a creative agency director with a modern urban background and soft daylight" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBRuOwaZjjJS0K05IUKfRA5Cf5KzYGuXQmOUth4Asrpb3ZTl34n1foFOTm-sh0iELYxJDckMgxJbwAA0GHN-ObhOUmXYExmO8cBBCLilpTUX0MLm4bBfRFGYrrR59UJ_qsE5o3YAcFHn8pOWyfWj0fC05S47JaO8L5XSA92NonDrhojE-rqxf6rjBJWH_vfdZSc1wjB7dsH05SVgJcT0H3PNfCsDX1OwVScwOM7VgMRoiEaT2XOuw_9n457X1D7kyz-g_UjLodpE3yP"/>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Canvas -->
+<main class="ml-64 mt-16 p-8 h-[calc(100vh-4rem)] overflow-y-auto bg-surface">
+<!-- Hero Banner Section -->
+<section class="relative w-full h-56 rounded-xl overflow-hidden mb-8 shadow-sm">
+<img alt="Dashboard Banner" class="w-full h-full object-cover" data-alt="abstract digital visualization of data nodes and connecting lines in deep blue and purple hues with a sleek tech aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDeacXsETubxQmn4Rk1u9XKhbKv5yx6iGuQNcaEvDTQUHsEbH3nJzqhXQ5U7ORJG_WbNr-Y5ujwzzMVal6MAMBS6lFiGev7jq3vdtB0JzQ5jzqCLHF0doljqzc6m-rpMotv8iq-QD_mRMcMmv7QBbBmiCJn8CcnvmhLTcaVWwCEQD7GcXVdq2WewceKTr58TegdE3K8kt04CkIdFXNZUlcGoEh_Cnpmiypx1sPWPQgz9xLdjVBG9tjYAnkYYu6jRHp0MIcfY52weiaJ"/>
+<div class="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent flex items-center px-12">
+<div>
+<div class="flex items-center gap-3 mb-2">
+<span class="bg-primary px-2 py-0.5 rounded text-[10px] font-bold text-white uppercase tracking-widest">Premium Module</span>
+<span class="text-white/60 text-[12px] font-medium tracking-wide">V2.0 STARKEN CORE</span>
+</div>
+<h2 class="text-4xl font-extrabold text-white tracking-tight leading-tight">Dashboard Meta Ads</h2>
+<p class="text-white/80 mt-2 max-w-md text-[14px]">Visualização completa de BI para performance de campanhas pagas e gestão de tráfego direto.</p>
+</div>
+</div>
+</section>
+<!-- Toggle Switch Container -->
+<section class="flex items-center justify-between mb-8">
+<div class="flex bg-surface-container rounded-lg p-1 w-fit">
+<button class="px-6 py-2 bg-white shadow-sm text-primary font-bold text-[13px] rounded-md transition-all">
+                    Starken Performance
+                </button>
+<button class="px-6 py-2 text-slate-500 font-medium text-[13px] hover:text-slate-800 transition-all">
+                    Alpha Assessoria
+                </button>
+</div>
+<div class="flex gap-4">
+<div class="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/20 rounded-lg text-[13px] font-medium text-slate-600">
+<span class="material-symbols-outlined text-[18px]" data-icon="filter_list">filter_list</span>
+                    Filtrar
+                </div>
+<div class="flex items-center gap-2 px-4 py-2 bg-white border border-outline-variant/20 rounded-lg text-[13px] font-medium text-slate-600">
+<span class="material-symbols-outlined text-[18px]" data-icon="calendar_today">calendar_today</span>
+                    Últimos 30 dias
+                </div>
+</div>
+</section>
+<!-- Client Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Card Component (Repeated) -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="minimalist modern corporate logo icon with geometric shapes in gradient colors" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDEpI7x0DmqUr0j3a2sdvHZbCawKZLi1bbc15xNPc92EIXbsY5X2T7Dd-0z4jAEArRlSqtiuTdwDyOjgg6T7GWdz6dOOTTkUOhI3Cu143fYOLVPGrFeFmEbiUGAE67O1MScjaFZV3p3H7Hj3o616GlvdC_IeFAf_UOSXpUUH1X9K2s4H5nXBadHU9FsEOM51YYj3FSyb3ibkt1cmVHLmGf2eHAPMHu4f65ylysqC0nPI0aSpu9Fu23MKTrmRWbR9Myg6m0bDkYMqsmZ"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">New Service</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 12.450,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#2e7d32]">4.2x</p>
+</div>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="abstract red and white brand mark for a high-end food service company" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDRdkcbn5zjAtY-9PZ5_EwGAorfdWTF0IqUc7zyxRRxqZYSEcB3nIIRt2rrf5sX7e6Qwh5q0n9Pt6XpTHHi6z-0AP8Miy-7GOPtV_Pr8bCSpbkXCZjv93OjNm8sMS39jm76jEgSPzDKaEc5Aw_dZlUwcCLJj_aCEc-taBFpzKFE9Vd-7el9jttl97dG9C39T7VOOPB00IpxzY5NJtkIdXLVuy47R-dPBlfpHVhUdEnlhsA_-ilnwVpsOb13drCDDKUwBkV8wxIpxNAW"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Sr Salsicha</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 8.200,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#2e7d32]">3.8x</p>
+</div>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="minimalist blue and teal business logo symbol with soft shadows" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBCUAXP0vggJ0c9fp90cuE1R-mFOYEO23mLNGDyHpjF01_CMSUsYiM04UIftJOwU9Nj4dgiijrnhs5yqpBe_LqKj-A76rrMR_lr9QqF9Y0W2rCg1FoiS5TC3KgYjRxzE7se6-pZGYRwgBW-Dr-Nz-UD9IdWeVFguMYRAQE4sTgkQqzJAMGpCAJPLlyT-EaeOfdfduvrfIGdPB1uzal6zSvp_G8TkJ5EzqCtSME1HCO_uyBdJrYP-enOIutfF8X053uTJwg1OgBXsGto"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Melhor Visao</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 45.100,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#2e7d32]">6.1x</p>
+</div>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="colorful creative agency logo featuring vibrant overlapping circles on a clean white background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAJtDD3np6gumXXdQUQkvBP1AlzyG9au2O52AuCg0fA0ZrjnRvu3-yxgg2qenO-ipZqVkgVBHFEd9irKPplC88aOrJBZKbpyTYbzuOKUwWQtn44JMrMMhidH8HbjdbFRA6qTQZcJcAaaaADj10kZc4vSU4IuGoFJC-9zF6gJvNSScmFX_1lkcG786QqTzPkTH6SVjJB55Bf14URd2leS31QyCAmnGY2GA8JVFj1-KSxXOWLzUtOng6Lh7Mt_OlRsFTBla9A2EZpY0e2"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Creative Hub</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 5.900,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#ed6c02]">1.9x</p>
+</div>
+</div>
+</div>
+<!-- Card 5 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="elegant gold and charcoal emblem for a luxury retail brand with sophisticated typography" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCCfSCc28tut7zeii37Ou25Gd2etKu_tAim1wYhGl-6EHwl0lz9fVNX74v1e4dpRcsu_olmlKXFBoalz5SlpPO8b_pW0JQZSG_5y9aRjYmJBbwBsG62kC0e1UGw1AakhuYBdjstAYV8A5w0ZpmRHIxhW9L_iTrYr5Bk9G9uX2xNg-HoZjT2L8r-_pnFKjUI-2K41MeVOjuLi-04tnWG_9xhuxJ9ExNRtCJ-7HpJV3plJ3NrBIhcI6hduugxlN-SzeQtdfoRIc-HY4v4"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Lux Store</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 28.300,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#2e7d32]">5.4x</p>
+</div>
+</div>
+</div>
+<!-- Card 6 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="modern tech startup logo with navy blue gradient and sleek minimalist icon" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBNGqKHplrlvTY-21x2oDUZIoLHssuuYOOWSG2pcYIvIBb2N5GMRhsxm5FaMkvnLd9VRcCvQyVxNhi0Ak7Rv6GZQ3fmGEV9YlEDAuHen0SMaDXkUGGbjVe8ibAWN1LUaBTDFuheyLLZi5V5cIUQh4clC_pC_4ROJ5xWqeuN7sVLRdZ6ZBDsC6m-bpgzGOksbDyE6Qsep0eKOtCkFStcI-NwV54JLZUu1AcOnTY0Nv1RsJbP3ZK-zluT39x_p9l5qNbA18Rn2rPMQ_Pj"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Tech Flux</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 15.000,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#7b1fa2]">2.5x</p>
+</div>
+</div>
+</div>
+<!-- Card 7 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="professional consulting firm logo with silver and black metallic textures" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB602VepezYTKhGjcjLwJrYkz2aSLPOy-XAxalm4f0vxDqqKySTzRuDwYZdL5DEezQeVhswPhicJyG4eU0uTi-d28NBMxrAq-oXz-LBrxE10ZV5irAaYgmq5Xzra5RQazVSegvWDJGpwqG_5fj8ZkfEujoHZP4o1nb5EAd0rKTHVGKLmmUrbNNrcopOdL4FIlJUIc9s9brTOivcO35Vjqo6mgSMV9geo7Iiym9VAsfHVLZxBZMhNuujZCUc-WxiPT95Hp9HxPRgIypY"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Alpha Gestoes</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 2.450,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#d32f2f]">0.8x</p>
+</div>
+</div>
+</div>
+<!-- Card 8 -->
+<div class="group bg-white rounded-xl shadow-[0_1px_3px_rgba(0,0,0,0.06)] hover:shadow-md transition-all duration-300 border border-transparent hover:border-primary/10 overflow-hidden flex flex-col">
+<div class="p-6 flex items-center gap-4">
+<div class="w-12 h-12 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden">
+<img alt="Client" data-alt="nature-themed wellness brand logo with soft green leaves and earthy tones" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3c7EMMW9dslRtKlBcl8EPkCEUX-ALEYi8Gladl9EMt7G7A2B1PfDSopSnCaRLN7aRe5_a-dYO406A3OvPY7VkbmF1a7dzD4KZBbDwiOQ0vD8VydsmOYeizfsCFWlM5BRGMmWh2clRCMP953Z6HZ9RcSk3RF4F70OZg6BZe2_Aiyb8xZVtVljOXcKteRgdZkKOa4lBQGQfut0DSzDjE-n0TOFYFnMvq28LyapOvz9C5lcZYmWD9m6MEu4HEY9V5wrDK4AVwZx_AAyb"/>
+</div>
+<div>
+<h3 class="text-[15px] font-bold text-slate-900 group-hover:text-primary transition-colors">Eco Vida</h3>
+<p class="text-[11px] text-slate-400 font-medium uppercase tracking-wider">Click para detalhes</p>
+</div>
+<button class="ml-auto text-slate-300 group-hover:text-slate-600">
+<span class="material-symbols-outlined" data-icon="arrow_forward">arrow_forward</span>
+</button>
+</div>
+<div class="mt-auto grid grid-cols-2 bg-surface-container-low/50">
+<div class="p-4 border-r border-outline-variant/10">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">Investido</p>
+<p class="text-[14px] font-bold text-slate-900">R$ 7.120,00</p>
+</div>
+<div class="p-4">
+<p class="text-[10px] text-slate-500 uppercase tracking-widest font-bold mb-1">ROAS</p>
+<p class="text-[14px] font-bold text-[#2e7d32]">4.0x</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Footer Info -->
+<footer class="mt-12 flex items-center justify-between text-slate-400 text-[12px]">
+<p>Showing 8 of 42 active client dashboards</p>
+<div class="flex gap-2">
+<button class="px-3 py-1 bg-white border border-outline-variant/20 rounded hover:bg-surface-container transition-all">Prev</button>
+<button class="px-3 py-1 bg-primary text-white rounded shadow-sm">1</button>
+<button class="px-3 py-1 bg-white border border-outline-variant/20 rounded hover:bg-surface-container transition-all">2</button>
+<button class="px-3 py-1 bg-white border border-outline-variant/20 rounded hover:bg-surface-container transition-all">3</button>
+<button class="px-3 py-1 bg-white border border-outline-variant/20 rounded hover:bg-surface-container transition-all">Next</button>
+</div>
+</footer>
+</main>
+<!-- Floating Action Button (Suppressed based on context: Details list view doesn't primary action for creation here) -->
+</body></html>

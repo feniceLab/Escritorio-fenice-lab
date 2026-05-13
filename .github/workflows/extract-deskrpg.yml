@@ -1,0 +1,44 @@
+name: Extrair DeskRPG.zip
+
+on:
+  push:
+    paths:
+      - 'DeskRPG.zip'
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Clonar repositório
+        uses: actions/checkout@v3
+        
+      - name: Verificar se DeskRPG.zip existe
+        id: check
+        run: |
+          if [ -f "DeskRPG.zip" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+          
+      - name: Extrair DeskRPG.zip
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          unzip -q DeskRPG.zip
+          rm DeskRPG.zip
+          echo "✅ Arquivo extraído com sucesso"
+          
+      - name: Configurar Git
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          
+      - name: Commit e push das mudanças
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          git add -A
+          git commit -m "Extract DeskRPG.zip and remove archive"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

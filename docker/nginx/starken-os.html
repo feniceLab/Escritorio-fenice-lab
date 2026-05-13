@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Starken OS</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #0a0a0a;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .container { text-align: center; }
+    .logo { font-size: 3rem; font-weight: 800; letter-spacing: -2px; }
+    .logo span { color: #6366f1; }
+    .status { margin-top: 1rem; color: #6b7280; font-size: 0.9rem; }
+    .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%;
+           background: #22c55e; margin-right: 6px; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="logo">STARKEN<span>OS</span></div>
+    <p class="status"><span class="dot"></span>Sistema operacional online</p>
+  </div>
+</body>
+</html>

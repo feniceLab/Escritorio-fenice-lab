@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Política de Privacidade — Starken OS</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', -apple-system, sans-serif; background: #f8fafc; color: #1e293b; line-height: 1.7; }
+    .container { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+    h1 { font-size: 2rem; margin-bottom: 8px; color: #0f172a; }
+    .subtitle { color: #64748b; margin-bottom: 32px; font-size: 0.95rem; }
+    h2 { font-size: 1.25rem; margin-top: 32px; margin-bottom: 12px; color: #0f172a; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+    p, li { margin-bottom: 12px; color: #334155; }
+    ul { padding-left: 24px; }
+    .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #e2e8f0; color: #94a3b8; font-size: 0.85rem; text-align: center; }
+    a { color: #3b82f6; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Política de Privacidade</h1>
+    <p class="subtitle">Starken OS — Sistema de Gestão de Marketing Digital<br>Última atualização: 24 de março de 2026</p>
+
+    <h2>1. Informações Gerais</h2>
+    <p>O Starken OS é um sistema interno de gestão de marketing digital operado pela <strong>Starken Assessoria Ltda</strong>, CNPJ 62.839.769/0001-55 ("nós", "nosso"). Esta política descreve como coletamos, usamos e protegemos informações ao utilizar nosso sistema e integrações com plataformas de terceiros, incluindo Meta (Facebook e Instagram).</p>
+
+    <h2>2. Dados que Coletamos</h2>
+    <p>Nosso sistema coleta e processa os seguintes tipos de dados:</p>
+    <ul>
+      <li><strong>Dados de contas Meta:</strong> Informações públicas de páginas do Facebook, contas do Instagram e contas de anúncios vinculadas ao Business Manager do cliente, incluindo nomes, IDs, métricas de desempenho e insights de campanhas.</li>
+      <li><strong>Conteúdo de publicações:</strong> Textos, imagens e vídeos que os usuários do sistema fazem upload para publicação nas redes sociais dos clientes.</li>
+      <li><strong>Dados de campanhas publicitárias:</strong> Métricas de performance (impressões, cliques, alcance, conversões, gastos) obtidas via Meta Marketing API.</li>
+      <li><strong>Dados de usuários do sistema:</strong> Nome e PIN de acesso dos operadores internos (equipe da agência).</li>
+      <li><strong>Dados de clientes da agência:</strong> Informações comerciais como nome do negócio, segmento, contatos, links de redes sociais e materiais de identidade visual.</li>
+    </ul>
+
+    <h2>3. Como Usamos os Dados</h2>
+    <p>Utilizamos os dados exclusivamente para:</p>
+    <ul>
+      <li>Gerenciar e publicar conteúdo nas redes sociais dos clientes da agência.</li>
+      <li>Agendar publicações no Facebook e Instagram.</li>
+      <li>Monitorar e analisar o desempenho de campanhas publicitárias.</li>
+      <li>Gerar relatórios de performance para os clientes.</li>
+      <li>Gerenciar campanhas de anúncios (criação, edição, pausar/ativar).</li>
+      <li>Produzir cronogramas de conteúdo em formato PDF.</li>
+    </ul>
+
+    <h2>4. Integrações com Terceiros</h2>
+    <p>O Starken OS integra-se com os seguintes serviços:</p>
+    <ul>
+      <li><strong>Meta Graph API (v25.0):</strong> Para publicação de conteúdo, leitura de insights e gerenciamento de anúncios no Facebook, Instagram e Threads.</li>
+      <li><strong>Supabase:</strong> Para armazenamento seguro de dados e arquivos do sistema.</li>
+      <li><strong>Vercel:</strong> Para hospedagem e execução do sistema.</li>
+    </ul>
+    <p>Não compartilhamos dados com terceiros além dos serviços necessários para o funcionamento do sistema.</p>
+
+    <h2>5. Armazenamento e Segurança</h2>
+    <ul>
+      <li>Os dados são armazenados em servidores seguros do Supabase (PostgreSQL com criptografia em trânsito e em repouso).</li>
+      <li>Tokens de acesso à Meta API são armazenados de forma segura como variáveis de ambiente no servidor.</li>
+      <li>O acesso ao sistema é restrito a usuários autorizados da equipe via autenticação por PIN.</li>
+      <li>Arquivos de mídia são armazenados no Supabase Storage com acesso controlado.</li>
+    </ul>
+
+    <h2>6. Retenção de Dados</h2>
+    <p>Os dados são mantidos enquanto o cliente mantiver contrato ativo com a agência. Dados de clientes encerrados podem ser removidos mediante solicitação.</p>
+
+    <h2>7. Direitos dos Usuários</h2>
+    <p>Em conformidade com a Lei Geral de Proteção de Dados (LGPD — Lei 13.709/2018), os titulares de dados têm direito a:</p>
+    <ul>
+      <li>Solicitar acesso aos seus dados pessoais.</li>
+      <li>Solicitar correção de dados incorretos.</li>
+      <li>Solicitar exclusão de dados pessoais.</li>
+      <li>Revogar consentimento a qualquer momento.</li>
+    </ul>
+
+    <h2>8. Uso da Meta Platform</h2>
+    <p>O uso de dados obtidos através das APIs da Meta está sujeito à <a href="https://developers.facebook.com/terms/" target="_blank">Política da Plataforma Meta</a>. Nós:</p>
+    <ul>
+      <li>Não vendemos dados obtidos da Meta a terceiros.</li>
+      <li>Não utilizamos dados da Meta para fins de vigilância.</li>
+      <li>Não transferimos dados da Meta para data brokers.</li>
+      <li>Limitamos o uso dos dados ao escopo autorizado pelas permissões concedidas.</li>
+      <li>Excluímos dados da Meta quando solicitado pelo usuário ou quando o acesso é revogado.</li>
+    </ul>
+
+    <h2>9. Exclusão de Dados</h2>
+    <p>Para solicitar a exclusão dos seus dados, entre em contato conosco pelo e-mail abaixo. Processaremos sua solicitação em até 30 dias.</p>
+
+    <h2>10. Contato</h2>
+    <p>Para dúvidas sobre esta política ou solicitações relacionadas a dados pessoais:</p>
+    <ul>
+      <li><strong>Empresa:</strong> Starken Assessoria Ltda — CNPJ 62.839.769/0001-55</li>
+      <li><strong>E-mail:</strong> juan.starken@gmail.com</li>
+      <li><strong>Responsável:</strong> Juan Fernando Mello Minni — Sócio Administrador</li>
+    </ul>
+
+    <h2>11. Alterações nesta Política</h2>
+    <p>Esta política pode ser atualizada periodicamente. A data da última atualização será sempre indicada no topo desta página.</p>
+
+    <div class="footer">
+      <p>&copy; 2026 Starken Assessoria Ltda — Todos os direitos reservados</p>
+      <p>Starken OS v1.0 — Sistema de Gestão de Marketing Digital</p>
+    </div>
+  </div>
+</body>
+</html>

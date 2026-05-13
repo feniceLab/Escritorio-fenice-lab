@@ -1,0 +1,94 @@
+# =============================================================================
+# LITELLM PROXY CONFIGURATION - Starken Agent Ecosystem
+# =============================================================================
+# This file configures the unified LLM gateway used by all Starken agents.
+# Changes take effect after restarting the litellm-proxy container.
+#
+# Reference: https://docs.litellm.ai/docs/proxy/configs
+# =============================================================================
+
+# Master authentication key - must match LITELLM_MASTER_KEY in .env
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  store_model_in_db: false          # keep config file as single source of truth
+  drop_params: true                  # silently drop unsupported params per provider
+  request_timeout: 120               # seconds before proxy times out upstream call
+  num_retries: 2                     # retry failed upstream calls before erroring
+
+# ---------------------------------------------------------------------------
+# LITELLM SERVER SETTINGS
+# ---------------------------------------------------------------------------
+litellm_settings:
+  set_verbose: false
+  success_callback: []               # add "langfuse" here to enable tracing
+  failure_callback: []
+  cache: false                       # enable Redis cache by adding cache: true + redis config
+
+# ---------------------------------------------------------------------------
+# MODEL DEFINITIONS
+# Each entry defines a routable model alias for all agent projects.
+# ---------------------------------------------------------------------------
+model_list:
+
+  # ---- Groq: Llama 3.3 70B (grátis, ultra rápido) -------------------------
+  - model_name: gemini-flash
+    litellm_params:
+      model: groq/llama-3.3-70b-versatile
+      api_key: os.environ/GROQ_API_KEY
+    model_info:
+      description: "Llama 3.3 70B via Groq — grátis, ultra rápido"
+      max_tokens: 8192
+      tags: ["assessoria", "gsd", "aiox"]
+
+  # ---- Groq: Llama 3.1 8B (ultra rápido, tarefas simples) -----------------
+  - model_name: gemini-fast
+    litellm_params:
+      model: groq/llama-3.1-8b-instant
+      api_key: os.environ/GROQ_API_KEY
+    model_info:
+      description: "Llama 3.1 8B via Groq — tarefas simples e rápidas"
+      max_tokens: 4096
+      tags: ["assessoria", "gsd", "aiox"]
+
+  # ---- Groq: DeepSeek R1 (raciocínio avançado) ----------------------------
+  - model_name: gemini-pro
+    litellm_params:
+      model: groq/deepseek-r1-distill-llama-70b
+      api_key: os.environ/GROQ_API_KEY
+    model_info:
+      description: "DeepSeek R1 70B via Groq — raciocínio avançado"
+      max_tokens: 8192
+      tags: ["assessoria", "gsd", "aiox"]
+
+# ---------------------------------------------------------------------------
+# PER-PROJECT RATE LIMITS (via virtual keys in .env or LiteLLM UI)
+# These define spend/rate guardrails per agent ecosystem project.
+# ---------------------------------------------------------------------------
+router_settings:
+  routing_strategy: simple-shuffle    # options: least-busy | latency-based | simple-shuffle
+  num_retries: 2
+  timeout: 90
+  retry_after: 5
+
+  # Project-level rate limits (requests per minute)
+  allowed_fails: 3
+  cooldown_time: 30                   # seconds to cool down a model after allowed_fails
+
+# ---------------------------------------------------------------------------
+# MODEL ALIASES
+# Short convenience names each project can use without knowing the full model ID.
+# ---------------------------------------------------------------------------
+model_alias_map:
+  # ASSESSORIA aliases
+  assessoria-fast: gemini-flash        # 2.0 Flash Lite
+  assessoria-smart: gemini-pro         # 2.5 Flash (thinking)
+  assessoria-default: gemini-fast      # 2.0 Flash
+
+  # GSD aliases
+  gsd-default: gemini-flash
+  gsd-smart: gemini-pro
+
+  # AIOX aliases
+  aiox-default: gemini-pro
+  aiox-fast: gemini-flash
+  aiox-standard: gemini-fast

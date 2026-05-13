@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-br"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "surface-container-highest": "#e0e3e6",
+              "on-primary-fixed-variant": "#0034c0",
+              "on-background": "#191c1e",
+              "surface-container-high": "#e6e8eb",
+              "tertiary-fixed-dim": "#d2bbff",
+              "on-tertiary-container": "#fffbff",
+              "surface-bright": "#f7f9fc",
+              "on-error": "#ffffff",
+              "on-error-container": "#93000a",
+              "secondary-fixed": "#e1e0ff",
+              "on-tertiary-fixed-variant": "#5a00c6",
+              "surface-container-lowest": "#ffffff",
+              "surface-container-low": "#f2f4f7",
+              "background": "#f7f9fc",
+              "primary-container": "#4868f1",
+              "on-tertiary-fixed": "#25005a",
+              "outline-variant": "#c4c5d7",
+              "on-secondary-container": "#fffbff",
+              "on-primary-container": "#fffbff",
+              "secondary": "#4648d4",
+              "primary-fixed-dim": "#b9c3ff",
+              "error-container": "#ffdad6",
+              "on-surface": "#191c1e",
+              "primary-fixed": "#dde1ff",
+              "on-secondary": "#ffffff",
+              "surface-variant": "#e0e3e6",
+              "tertiary": "#712ae2",
+              "inverse-on-surface": "#eff1f4",
+              "error": "#ba1a1a",
+              "on-surface-variant": "#444654",
+              "tertiary-fixed": "#eaddff",
+              "surface-dim": "#d8dadd",
+              "surface-container": "#eceef1",
+              "inverse-surface": "#2d3133",
+              "surface": "#f7f9fc",
+              "secondary-container": "#6063ee",
+              "primary": "#2a4dd7",
+              "on-primary": "#ffffff",
+              "inverse-primary": "#b9c3ff",
+              "on-tertiary": "#ffffff",
+              "on-secondary-fixed-variant": "#2f2ebe",
+              "on-primary-fixed": "#001257",
+              "secondary-fixed-dim": "#c0c1ff",
+              "surface-tint": "#2d50d9",
+              "tertiary-container": "#8a4cfc",
+              "outline": "#747686",
+              "on-secondary-fixed": "#07006c"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+            font-size: 20px;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface antialiased overflow-hidden">
+<!-- SIDE NAV BAR -->
+<aside class="bg-[#191b23] h-screen w-64 fixed left-0 top-0 overflow-y-auto shadow-2xl border-r border-white/5 flex flex-col py-6 z-40 font-['Inter'] antialiased text-[13px] tracking-tight">
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 bg-primary rounded flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">dataset</span>
+</div>
+<div>
+<h1 class="text-lg font-bold text-white tracking-wider uppercase leading-none">Starken OS</h1>
+<p class="text-[10px] text-white/40 uppercase tracking-[1px] mt-1">V2.0 Agency</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="text-white/60 hover:text-white px-6 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span>Dashboard</span>
+</a>
+<a class="text-white/60 hover:text-white px-6 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="account_balance_wallet">account_balance_wallet</span>
+<span>Accounts</span>
+</a>
+<a class="bg-indigo-500/15 text-white border-l-2 border-indigo-500 font-medium px-6 py-3 flex items-center gap-3 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="api" style="font-variation-settings: 'FILL' 1;">api</span>
+<span>Meta Ads</span>
+</a>
+<a class="text-white/60 hover:text-white px-6 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span>
+<span>Schedules</span>
+</a>
+<a class="text-white/60 hover:text-white px-6 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span>Clients</span>
+</a>
+<a class="text-white/60 hover:text-white px-6 py-3 transition-colors flex items-center gap-3 hover:bg-white/5 transition-all duration-200 active:scale-[0.98]" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span>Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-1 pt-6 border-t border-white/5">
+<button class="w-full bg-primary text-white py-2.5 rounded-lg font-semibold mb-4 transition-all hover:brightness-110 active:scale-[0.98]">
+                New Account
+            </button>
+<a class="text-white/60 hover:text-white px-2 py-2 transition-colors flex items-center gap-3 hover:bg-white/5 text-[12px]" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span>Support</span>
+</a>
+<a class="text-white/60 hover:text-white px-2 py-2 transition-colors flex items-center gap-3 hover:bg-white/5 text-[12px]" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span>Logout</span>
+</a>
+</div>
+</aside>
+<!-- TOP APP BAR -->
+<header class="fixed top-0 right-0 w-[calc(100%-16rem)] h-16 z-30 bg-white font-['Inter'] text-[13px] border-b border-[#eceef1]">
+<div class="flex items-center justify-between px-8 w-full h-full">
+<div class="flex items-center gap-8">
+<nav class="flex items-center gap-6">
+<a class="text-[#2a4dd7] font-semibold flex items-center gap-2" href="#">Dashboard</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Conteúdo</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Calendário</a>
+<a class="text-slate-500 hover:text-[#2a4dd7] transition-colors" href="#">Infos</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 material-symbols-outlined scale-90">search</span>
+<input class="bg-[#f2f4f7] border-none rounded-lg pl-10 pr-4 py-1.5 text-xs w-64 focus:ring-2 focus:ring-indigo-500/20 transition-all" placeholder="Search accounts..." type="text"/>
+</div>
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:text-[#2a4dd7] transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-[#2a4dd7] transition-colors"><span class="material-symbols-outlined" data-icon="history">history</span></button>
+<div class="h-8 w-8 rounded-full bg-slate-200 overflow-hidden flex items-center justify-center">
+<span class="material-symbols-outlined text-slate-500" data-icon="account_circle">account_circle</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- MAIN CONTENT CANVAS -->
+<main class="ml-64 pt-16 h-screen overflow-y-auto bg-background no-scrollbar">
+<div class="max-w-[1440px] mx-auto p-8 space-y-8">
+<!-- HEADER SECTION -->
+<div class="flex items-end justify-between">
+<div>
+<h2 class="text-2xl font-extrabold tracking-tight text-on-surface">Configuração Meta Ads</h2>
+<p class="text-on-surface-variant mt-1 text-sm">Gerencie conexões de API e ativos de anúncios para seus clientes.</p>
+</div>
+<button class="bg-primary text-white px-5 py-2.5 rounded-lg flex items-center gap-2 font-medium shadow-sm hover:brightness-110 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="search">search</span>
+<span>Descobrir Ativos</span>
+</button>
+</div>
+<!-- API CONNECTION CARD -->
+<section class="bg-surface-container-lowest rounded-xl p-6 shadow-[0_1px_3px_rgba(0,0,0,0.06)] border border-outline-variant/15">
+<div class="flex items-center gap-3 mb-6">
+<div class="w-10 h-10 bg-secondary-container/10 text-secondary-container rounded flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="cable" style="font-variation-settings: 'FILL' 1;">cable</span>
+</div>
+<div>
+<h3 class="text-sm font-bold uppercase tracking-wider text-on-surface-variant">Conexão Zappy API</h3>
+<p class="text-[11px] text-slate-500">Configuração global de integração WhatsApp</p>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+<div class="space-y-1.5">
+<label class="text-[11px] font-bold uppercase tracking-[0.8px] text-on-surface-variant">URL da API</label>
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2.5 text-[13px] focus:ring-2 focus:ring-primary/20" type="text" value="https://api.zappy.chat/v1/instance"/>
+</div>
+<div class="space-y-1.5">
+<label class="text-[11px] font-bold uppercase tracking-[0.8px] text-on-surface-variant">Token de Acesso</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-none rounded-lg px-4 py-2.5 text-[13px] focus:ring-2 focus:ring-primary/20" type="password" value="sk_zappy_live_8293048510"/>
+<button class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+<span class="material-symbols-outlined scale-90">visibility</span>
+</button>
+</div>
+</div>
+<div>
+<button class="bg-primary text-white w-full py-2.5 rounded-lg font-semibold hover:brightness-110 transition-all">
+                            Salvar Configurações
+                        </button>
+</div>
+</div>
+</section>
+<!-- GROUPS RENDER -->
+<div class="space-y-12 pb-12">
+<!-- GROUP 1: Starken Performance -->
+<div class="space-y-6">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-4">
+<div class="flex items-center gap-3">
+<h3 class="text-lg font-bold text-on-surface">Starken Performance</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">26 Clientes</span>
+</div>
+<button class="text-primary text-[13px] font-medium hover:underline flex items-center gap-1">
+                            Expandir Todos <span class="material-symbols-outlined scale-75">expand_more</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Client Card 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm text-on-surface">Academia BioFit</h4>
+<p class="text-[11px] text-slate-500">ID: #82931-A</p>
+</div>
+<span class="bg-[#2e7d321a] text-[#2e7d32] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">ATIVO</span>
+</div>
+<div class="space-y-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Página do Facebook</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>BioFit Health Club</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Conta de Anúncios</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>AD_ACC_BIOFIT_MAIN</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">WhatsApp API Instance</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>BIOFIT_ZAPPY_01</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Client Card 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm text-on-surface">Solar Energy Tech</h4>
+<p class="text-[11px] text-slate-500">ID: #91022-S</p>
+</div>
+<span class="bg-[#2e7d321a] text-[#2e7d32] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">ATIVO</span>
+</div>
+<div class="space-y-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Página do Facebook</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>SolarTech Oficial</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Conta de Anúncios</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>SOLAR_PROD_BM</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">WhatsApp API Instance</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>SOLAR_WA_PRIMARY</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Client Card 3 (Inactive Example) -->
+<div class="bg-surface-container-low opacity-75 rounded-xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm text-on-surface">Urban Coffee Co.</h4>
+<p class="text-[11px] text-slate-500">ID: #11203-U</p>
+</div>
+<span class="bg-[#d32f2f1a] text-[#d32f2f] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">INATIVO</span>
+</div>
+<div class="space-y-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Página do Facebook</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-[12px] py-2 italic text-slate-400" disabled="">
+<option>Nenhuma página selecionada</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Conta de Anúncios</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-[12px] py-2 italic text-slate-400" disabled="">
+<option>Vincular conta...</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">WhatsApp API Instance</label>
+<select class="w-full bg-surface-container-lowest border-none rounded-lg text-[12px] py-2 italic text-slate-400" disabled="">
+<option>Instância não configurada</option>
+</select>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- GROUP 2: Alpha Assessoria -->
+<div class="space-y-6">
+<div class="flex items-center justify-between border-b border-outline-variant/15 pb-4">
+<div class="flex items-center gap-3">
+<h3 class="text-lg font-bold text-on-surface">Alpha Assessoria</h3>
+<span class="bg-surface-container-high text-on-surface-variant text-[11px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">10 Clientes</span>
+</div>
+<button class="text-primary text-[13px] font-medium hover:underline flex items-center gap-1">
+                            Expandir Todos <span class="material-symbols-outlined scale-75">expand_more</span>
+</button>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+<!-- Client Card 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm text-on-surface">Alpha Corporate</h4>
+<p class="text-[11px] text-slate-500">ID: #44910-Z</p>
+</div>
+<span class="bg-[#2e7d321a] text-[#2e7d32] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">ATIVO</span>
+</div>
+<div class="space-y-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Página do Facebook</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>Alpha Assessoria LTDA</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Conta de Anúncios</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>ALPHA_ADS_01</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">WhatsApp API Instance</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>ALPHA_WHATSAPP_CORP</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Client Card 5 -->
+<div class="bg-surface-container-lowest rounded-xl p-5 border border-outline-variant/15 flex flex-col gap-4">
+<div class="flex justify-between items-start">
+<div>
+<h4 class="font-bold text-sm text-on-surface">Prime Logistics</h4>
+<p class="text-[11px] text-slate-500">ID: #55021-P</p>
+</div>
+<span class="bg-[#2e7d321a] text-[#2e7d32] text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded">ATIVO</span>
+</div>
+<div class="space-y-3">
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Página do Facebook</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>Prime Logistics Global</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">Conta de Anúncios</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>PRIME_ACC_BRAZIL</option>
+</select>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] font-bold uppercase tracking-[0.5px] text-slate-500">WhatsApp API Instance</label>
+<select class="w-full bg-surface-container-low border-none rounded-lg text-[12px] py-2 focus:ring-1 focus:ring-primary/10">
+<option>PRIME_API_OPS</option>
+</select>
+</div>
+</div>
+</div>
+<!-- Card Placeholder -->
+<div class="border-2 border-dashed border-outline-variant/30 rounded-xl p-5 flex flex-col items-center justify-center text-slate-400 gap-3">
+<span class="material-symbols-outlined scale-150">add_circle</span>
+<span class="text-[11px] font-bold uppercase tracking-widest">Adicionar Cliente Alpha</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- FLOATING ACTIONS -->
+<div class="fixed bottom-8 right-8 flex flex-col gap-3">
+<button class="bg-surface-container-lowest text-on-surface p-4 rounded-xl shadow-xl border border-outline-variant/20 hover:bg-surface-container-low transition-all">
+<span class="material-symbols-outlined" data-icon="refresh">refresh</span>
+</button>
+<button class="bg-primary text-white p-4 rounded-xl shadow-xl hover:brightness-110 transition-all flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="save" style="font-variation-settings: 'FILL' 1;">save</span>
+</button>
+</div>
+</body></html>
