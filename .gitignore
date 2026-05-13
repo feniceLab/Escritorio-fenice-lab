@@ -57,3 +57,4 @@ escritorio/.next/
 escritorio/logs/
 escritorio/.env.local
 storybook/storybook-static/
+.gitignore.pre-*
