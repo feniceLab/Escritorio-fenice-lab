@@ -34907,41 +34907,29 @@ function ctOnFormatPublishModeChange(fmt) {
 }
 
 function ctColPublish(fmt) {
-  var plats = _ctColPlats[fmt] || [];
+  var plats = (_ctColPlats[fmt] || []).slice();
   if (plats.length === 0) return alert('Selecione pelo menos uma plataforma (Facebook ou Instagram)');
-  // Set the active format and platforms, then delegate to ctPublishFormat
-  _ctActiveFormatTab = fmt;
-  _ctFmtPlatforms = plats.slice();
-  // Set mode and datetime from column controls
+
   var modeEl = document.getElementById('ctColPubMode_' + fmt);
   var dateEl = document.getElementById('ctColPubDate_' + fmt);
-  var fmtModeEl = document.getElementById('ctFmtPubMode');
-  var fmtDateEl = document.getElementById('ctFmtPubDatetime');
-  if (fmtModeEl && modeEl) fmtModeEl.value = modeEl.value;
-  if (fmtDateEl && dateEl) {
-    fmtDateEl.value = dateEl.value;
-    // Also sync to split date/time inputs
-    if (dateEl.value) {
-      var parts = dateEl.value.split('T');
-      var dEl = document.getElementById('ctFmtPubDate');
-      var tEl = document.getElementById('ctFmtPubTime');
-      if (dEl) dEl.value = parts[0] || '';
-      if (tEl) tEl.value = parts[1] || '10:00';
-    }
+  var mode = modeEl ? modeEl.value : 'now';
+  var datetime = dateEl ? dateEl.value : '';
+
+  if (mode === 'schedule') {
+    if (!datetime) return alert('Selecione data e hora para agendamento');
+    var scheduleDate = new Date(datetime);
+    if (isNaN(scheduleDate.getTime())) return alert('Data e hora de agendamento inválidas');
   }
-  // If publish section controls don't exist, create temporary hidden ones
-  if (!fmtModeEl) {
-    var tmp = document.createElement('select'); tmp.id = 'ctFmtPubMode'; tmp.value = modeEl ? modeEl.value : 'now'; tmp.style.display = 'none'; document.body.appendChild(tmp);
-  }
-  if (!fmtDateEl) {
-    var tmp2 = document.createElement('input'); tmp2.id = 'ctFmtPubDatetime'; tmp2.value = dateEl ? dateEl.value : ''; tmp2.style.display = 'none'; document.body.appendChild(tmp2);
-  }
-  ctPublishFormat();
-  // Clean up temporary elements
-  var tmpMode = document.getElementById('ctFmtPubMode');
-  var tmpDate = document.getElementById('ctFmtPubDatetime');
-  if (tmpMode && tmpMode.parentNode === document.body) tmpMode.remove();
-  if (tmpDate && tmpDate.parentNode === document.body) tmpDate.remove();
+
+  _ctActiveFormatTab = fmt;
+  _ctFmtPlatforms = plats.slice();
+  ctPublishFormat({
+    fmt: fmt,
+    mode: mode,
+    datetime: datetime,
+    platforms: plats,
+    source: 'column',
+  });
 }
 
 function ctSaveFormatCopyCol(fmt, value) {
@@ -35409,7 +35397,9 @@ async function ctCancelFormatEntry(fmt, entryIdx, postId, historyId) {
   }
 }
 
-async function ctPublishFormat() {
+async function ctPublishFormat(options) {
+  var publishOptions = options || {};
+  if (publishOptions.fmt) _ctActiveFormatTab = publishOptions.fmt;
   if (!ctModalTask || !_ctActiveFormatTab) return;
 
   // Ensure ctCurrentClient is set (may be empty when opened from Minhas Tasks)
@@ -35418,7 +35408,10 @@ async function ctPublishFormat() {
   }
   if (!ctCurrentClient) return alert('Cliente não identificado. Feche e reabra a task.');
 
-  var fmt = _ctActiveFormatTab;
+  var fmt = publishOptions.fmt || _ctActiveFormatTab;
+  if (Array.isArray(publishOptions.platforms)) {
+    _ctFmtPlatforms = publishOptions.platforms.slice();
+  }
   // Auto-select both platforms if platform buttons aren't in the DOM or publish section is hidden
   if (_ctFmtPlatforms.length === 0) {
     var _pubSec = document.getElementById('ctFormatPublishSection');
@@ -35455,23 +35448,37 @@ async function ctPublishFormat() {
   if (fmt === 'reels' && videos.length === 0) return alert('Reels precisa de pelo menos 1 vídeo');
   if (fmt === 'carrossel' && images.length < 2) return alert('Carrossel precisa de pelo menos 2 imagens');
 
-  var mode = document.getElementById('ctFmtPubMode').value;
-  // Sync date+time pickers to hidden datetime field (with fallback)
-  _syncDateTimePicker('ctFmtPubDate', 'ctFmtPubTime', 'ctFmtPubDatetime');
-  var datetime = document.getElementById('ctFmtPubDatetime').value;
-  // Fallback: read directly from date+time inputs if hidden is still empty
-  if (!datetime) {
-    var _d = document.getElementById('ctFmtPubDate');
-    var _t = document.getElementById('ctFmtPubTime');
-    if (_d && _d.value) datetime = _d.value + 'T' + (_t && _t.value ? _t.value : '10:00');
+  var mode = publishOptions.mode || '';
+  if (!mode) {
+    var fmtModeControl = document.getElementById('ctFmtPubMode');
+    mode = fmtModeControl ? fmtModeControl.value : 'now';
   }
-  // Last fallback: try the old datetime-local input (may exist in some views)
-  if (!datetime) {
-    var _old = document.querySelector('#ctFmtPubDateWrap input[type="datetime-local"]');
-    if (_old) datetime = _old.value;
+
+  var datetime = publishOptions.datetime || '';
+  if (!datetime && !publishOptions.datetime) {
+    // Sync date+time pickers to hidden datetime field (with fallback)
+    _syncDateTimePicker('ctFmtPubDate', 'ctFmtPubTime', 'ctFmtPubDatetime');
+    var fmtDateControl = document.getElementById('ctFmtPubDatetime');
+    datetime = fmtDateControl ? fmtDateControl.value : '';
+    // Fallback: read directly from date+time inputs if hidden is still empty
+    if (!datetime) {
+      var _d = document.getElementById('ctFmtPubDate');
+      var _t = document.getElementById('ctFmtPubTime');
+      if (_d && _d.value) datetime = _d.value + 'T' + (_t && _t.value ? _t.value : '10:00');
+    }
+    // Last fallback: try the old datetime-local input (may exist in some views)
+    if (!datetime) {
+      var _old = document.querySelector('#ctFmtPubDateWrap input[type="datetime-local"]');
+      if (_old) datetime = _old.value;
+    }
   }
   var isSchedule = mode === 'schedule';
-  if (isSchedule && !datetime) return alert('Selecione data e hora para agendamento');
+  if (isSchedule) {
+    if (!datetime) return alert('Selecione data e hora para agendamento');
+    var scheduleDate = new Date(datetime);
+    if (isNaN(scheduleDate.getTime())) return alert('Data e hora de agendamento inválidas');
+  }
+  console.log('[ctPublishFormat]', { fmt: fmt, mode: mode, datetime: datetime, source: publishOptions.source || 'main' });
 
   // Show loading (btn/statusEl may not exist in two-column view)
   var btn = document.getElementById('ctFmtPubBtn');
@@ -35668,6 +35675,7 @@ async function ctPublishFormat() {
 
   // Refresh history
   ctRenderFormatPublishHistory();
+  if (typeof ctRenderTwoColumnContent === 'function' && publishOptions.source === 'column') ctRenderTwoColumnContent();
   // Also refresh legacy history
   if (typeof ctRenderPublishHistory === 'function') ctRenderPublishHistory(config);
   // Refresh calendar so the new scheduled/published post appears immediately
