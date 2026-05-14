@@ -9262,6 +9262,81 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
         </div>
       </div><!-- end #tab-minhas-tasks -->
 
+      <div id="tab-paid-traffic" class="tab-content">
+        <div style="padding:20px">
+          <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:18px">
+            <div>
+              <div style="font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--accent,#46eecd);margin-bottom:6px">Central de performance</div>
+              <h2 style="font-size:1.35rem;font-weight:850;margin:0;color:var(--text)">Gerenciamento de Tráfego Pago</h2>
+              <p style="margin:7px 0 0;color:var(--text-secondary);font-size:.9rem;max-width:760px;line-height:1.45">Unifique Meta Ads, Google Ads, operação e tasks em uma visão única por cliente e por campanha.</p>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+              <button onclick="paidTrafficRefresh()" style="padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:var(--card);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit"><span class="mso">sync</span> Atualizar</button>
+              <button onclick="paidTrafficCreateCampaignPlan()" style="padding:11px 16px;border:0;border-radius:10px;background:linear-gradient(135deg,#22c7a4,#46eecd);color:#061313;font-weight:900;cursor:pointer;font-family:inherit;box-shadow:0 12px 28px rgba(70,238,205,.16)"><span class="mso">add</span> Plano de campanha</button>
+            </div>
+          </div>
+
+          <div style="display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:16px;align-items:start" class="paid-traffic-layout">
+            <div style="min-width:0">
+              <div style="display:grid;grid-template-columns:repeat(5,minmax(120px,1fr));gap:12px;margin-bottom:16px" id="paidTrafficKpis"></div>
+
+              <div style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow)">
+                <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+                  <strong style="font-size:1rem;color:var(--text)"><span class="mso">workspaces</span> Clientes & campanhas</strong>
+                  <div style="flex:1"></div>
+                  <select id="paidTrafficClientFilter" onchange="paidTrafficRender()" style="min-width:240px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:inherit">
+                    <option value="">Todos os clientes</option>
+                  </select>
+                  <select id="paidTrafficStatusFilter" onchange="paidTrafficRender()" style="padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-family:inherit">
+                    <option value="">Todos os status</option>
+                  </select>
+                </div>
+                <div id="paidTrafficClientList" style="display:grid;gap:10px"></div>
+              </div>
+
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+                <section style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                    <strong style="font-size:1rem;color:var(--text)"><span class="mso">assignment_late</span> Próximas tasks</strong>
+                    <button onclick="switchTab('traffic')" style="border:0;background:transparent;color:#60a5fa;font-weight:800;cursor:pointer;font-family:inherit">Abrir operação</button>
+                  </div>
+                  <div id="paidTrafficTaskList" style="display:grid;gap:8px"></div>
+                </section>
+                <section style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)">
+                  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+                    <strong style="font-size:1rem;color:var(--text)"><span class="mso">campaign</span> Campanhas vinculadas</strong>
+                    <button onclick="switchTab('meta-bi')" style="border:0;background:transparent;color:#60a5fa;font-weight:800;cursor:pointer;font-family:inherit">Ver BI</button>
+                  </div>
+                  <div id="paidTrafficCampaignList" style="display:grid;gap:8px"></div>
+                </section>
+              </div>
+            </div>
+
+            <aside style="display:grid;gap:16px">
+              <section style="background:linear-gradient(135deg,rgba(70,238,205,.12),rgba(12,18,31,.8));border:1px solid rgba(70,238,205,.28);border-radius:16px;padding:16px;box-shadow:var(--shadow)">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px">
+                  <strong style="font-size:1rem;color:var(--text)"><span class="mso">psychology_alt</span> Lurdinha</strong>
+                  <span style="font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:#46eecd;font-weight:900">ativa</span>
+                </div>
+                <p style="margin:0 0 12px;color:var(--text-secondary);font-size:.82rem;line-height:1.45">Sugestões operacionais geradas a partir das tasks, campanhas vinculadas e métricas salvas.</p>
+                <div id="paidTrafficSuggestions" style="display:grid;gap:9px"></div>
+              </section>
+
+              <section style="background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;box-shadow:var(--shadow)">
+                <strong style="font-size:1rem;color:var(--text)"><span class="mso">hub</span> Atalhos</strong>
+                <div style="display:grid;gap:9px;margin-top:12px">
+                  <button onclick="switchTab('meta-config')" style="text-align:left;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit"><span class="mso">settings</span> Configurações Meta</button>
+                  <button onclick="switchTab('meta-balance')" style="text-align:left;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit"><span class="mso">payments</span> Contas & saldos</button>
+                  <button onclick="switchTab('google-ads')" style="text-align:left;padding:11px 12px;border:1px solid var(--border);border-radius:10px;background:var(--bg);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit"><span class="mso">trending_up</span> Google Ads</button>
+                </div>
+              </section>
+            </aside>
+          </div>
+
+          <div id="paidTrafficLoading" style="display:none;text-align:center;padding:34px;color:var(--text-secondary)">Carregando operação de tráfego...</div>
+        </div>
+      </div><!-- end #tab-paid-traffic -->
+
       <div id="tab-traffic" class="tab-content">
         <div style="padding:20px">
           <h2 style="font-size:1.2rem;font-weight:700;margin-bottom:16px"><span class="mso">campaign</span> Gestão de Tráfego</h2>
@@ -10766,16 +10841,13 @@ let SIDEBAR_MENU = [
     { type: 'item', id: 'weekly', label: 'Semanal', icon: '<span class="mso">calendar_today</span>', tab: 'weekly' },
     { type: 'item', id: 'monthly', label: 'Mensal', icon: '<span class="mso">calendar_month</span>', tab: 'monthly' },
   ]},
-  { type: 'category', id: 'cat-meta', label: 'Meta Ads', items: [
-    { type: 'item', id: 'meta-config', label: 'Configuração', icon: '<span class="mso">settings</span>', tab: 'meta-config' },
-    { type: 'item', id: 'meta-balance', label: 'Saldo Contas', icon: '<span class="mso">payments</span>', tab: 'meta-balance' },
-    { type: 'item', id: 'meta-bi', label: 'BI Campanhas', icon: '<span class="mso">bar_chart</span>', tab: 'meta-bi' },
-  ]},
-  { type: 'category', id: 'cat-trafego', label: 'Gestão de Tráfego', items: [
-    { type: 'item', id: 'traffic', label: 'Campanhas', icon: '<span class="mso">campaign</span>', tab: 'traffic' },
-  ]},
-  { type: 'category', id: 'cat-google-ads', label: 'Google Ads', items: [
-    { type: 'item', id: 'google-ads', label: 'Mortadella', icon: '<span class="mso">trending_up</span>', tab: 'google-ads' },
+  { type: 'category', id: 'cat-paid-traffic', label: 'Tráfego Pago', items: [
+    { type: 'item', id: 'paid-traffic', label: 'Visão Geral', icon: '<span class="mso">query_stats</span>', tab: 'paid-traffic' },
+    { type: 'item', id: 'traffic', label: 'Operação', icon: '<span class="mso">campaign</span>', tab: 'traffic' },
+    { type: 'item', id: 'meta-bi', label: 'BI Meta Ads', icon: '<span class="mso">bar_chart</span>', tab: 'meta-bi' },
+    { type: 'item', id: 'meta-balance', label: 'Contas & Saldos', icon: '<span class="mso">payments</span>', tab: 'meta-balance' },
+    { type: 'item', id: 'meta-config', label: 'Configurações Meta', icon: '<span class="mso">settings</span>', tab: 'meta-config' },
+    { type: 'item', id: 'google-ads', label: 'Google Ads', icon: '<span class="mso">trending_up</span>', tab: 'google-ads' },
   ]},
   { type: 'category', id: 'cat-geral', label: 'Geral', items: [
     { type: 'item', id: 'clients', label: 'Clientes', icon: '<span class="mso">group</span>', tab: 'client-central' },
@@ -10909,6 +10981,7 @@ var SIDEBAR_ICON_EM = {
   'meta-config':  'settings',
   'meta-balance': 'dollar',
   'meta-bi':      'chart',
+  'paid-traffic': 'trending-up',
   'traffic':      'campaign',
   'google-ads':   'trending-up',
   'client-central': 'users',
@@ -10922,9 +10995,7 @@ var SIDEBAR_ICON_EM = {
 var SIDEBAR_CATEGORY_ICONS = {
   'cat-conteudo': '<span class="mso">folder</span>',
   'cat-relatorios': '<span class="mso">monitoring</span>',
-  'cat-meta': '<span class="mso">ads_click</span>',
-  'cat-trafego': '<span class="mso">campaign</span>',
-  'cat-google-ads': '<span class="mso">trending_up</span>',
+  'cat-paid-traffic': '<span class="mso">ads_click</span>',
   'cat-geral': '<span class="mso">apps</span>',
   'cat-agents': '<span class="mso">smart_toy</span>'
 };
@@ -12369,6 +12440,8 @@ const TAB_TITLES = {
   'meta-config':       'Configuração Meta',
   'meta-balance':      'Saldo das Contas',
   'meta-bi':           'BI de Campanhas',
+  'paid-traffic':      'Gerenciamento de Tráfego Pago',
+  'google-ads':        'Google Ads',
   'meta-publish':      'Histórico de Agendamentos',
   'calendario':        'Calendário de Posts',
   'client-central':    'Clientes de Conteúdo',
@@ -12420,6 +12493,8 @@ function switchTab(tabName) {
   else if (tabName === 'meta-config') metaConfigInit();
   else if (tabName === 'meta-balance') metaBalanceInit();
   else if (tabName === 'meta-bi') metaBiInit();
+  else if (tabName === 'paid-traffic') paidTrafficInit();
+  else if (tabName === 'google-ads') { if (typeof gadsLoad === 'function') gadsLoad(); }
   else if (tabName === 'meta-publish') metaPublishInit();
   else if (tabName === 'content') ctInit();
   else if (tabName === 'traffic') tfInit();
@@ -36299,6 +36374,390 @@ async function tfApi(action, params) {
     body: JSON.stringify(Object.assign({ action: action }, params))
   });
   return r.json();
+}
+
+const paidTrafficState = {
+  loaded: false,
+  loading: false,
+  clients: [],
+  rows: [],
+  tasks: [],
+  suggestions: [],
+};
+
+function paidTrafficCurrentUser() {
+  try {
+    if (gpState && gpState.user) return gpState.user.name || gpState.user.username || gpState.user.initials || 'Sistema';
+  } catch(e) {}
+  return 'Sistema';
+}
+
+function paidTrafficClients() {
+  var clients = _metaClients || {};
+  return Object.entries(clients).filter(function(entry) {
+    var key = entry[0];
+    if (typeof ctIsClientOperational === 'function' && !ctIsClientOperational(key)) return false;
+    return true;
+  }).map(function(entry) {
+    var key = entry[0], c = entry[1] || {};
+    return Object.assign({ key: key }, c);
+  }).sort(function(a, b) {
+    return (a.name || a.key).localeCompare(b.name || b.key);
+  });
+}
+
+function paidTrafficFlattenTasks(tasks, clientKey, clientName, groupMap) {
+  var out = [];
+  function walk(task, parentName) {
+    if (!task) return;
+    var row = Object.assign({}, task);
+    row.client_key = clientKey;
+    row.client_name = clientName;
+    row.group_name = groupMap && groupMap[row.group_id] ? groupMap[row.group_id] : (row.group_name || '');
+    row.parent_name = parentName || '';
+    out.push(row);
+    (task.subtasks || []).forEach(function(child) { walk(child, task.name || parentName); });
+  }
+  (tasks || []).forEach(function(task) { walk(task, ''); });
+  return out;
+}
+
+function paidTrafficMetric(task, key) {
+  var m = task && task.metrics;
+  if (!m) return 0;
+  if (typeof m === 'string') {
+    try { m = JSON.parse(m); } catch(e) { return 0; }
+  }
+  var v = m[key];
+  return typeof v === 'number' ? v : parseFloat(v || 0) || 0;
+}
+
+function paidTrafficIsOpen(task) {
+  return task && ['finalizado'].indexOf(task.status) === -1;
+}
+
+function paidTrafficIsOverdue(task) {
+  if (!task || !task.due_date || !paidTrafficIsOpen(task)) return false;
+  var due = new Date(task.due_date + 'T23:59:59');
+  return due.getTime() < Date.now();
+}
+
+function paidTrafficStatusLabel(key) {
+  return (tfGetStatus(key) || {}).label || key || 'Sem status';
+}
+
+function paidTrafficObjectiveLabel(key) {
+  return (tfGetObjective(key) || {}).label || key || 'Sem objetivo';
+}
+
+function paidTrafficMoney(v) {
+  return (parseFloat(v || 0) || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function paidTrafficNumber(v) {
+  return (parseFloat(v || 0) || 0).toLocaleString('pt-BR', { maximumFractionDigits: 1 });
+}
+
+function paidTrafficDate(v) {
+  if (!v) return 'sem prazo';
+  try {
+    var d = new Date(v + 'T12:00:00');
+    return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+  } catch(e) { return v; }
+}
+
+function paidTrafficKpiCard(icon, label, value, sub, color) {
+  return '<div style="background:var(--card);border:1px solid var(--border);border-radius:14px;padding:15px;min-height:104px;box-shadow:var(--shadow);position:relative;overflow:hidden">'
+    + '<div style="width:34px;height:34px;border-radius:10px;background:' + (color || 'rgba(70,238,205,.14)') + ';display:flex;align-items:center;justify-content:center;color:#46eecd;margin-bottom:12px">' + icon + '</div>'
+    + '<div style="font-size:1.35rem;font-weight:900;color:var(--text);line-height:1">' + value + '</div>'
+    + '<div style="font-size:.72rem;font-weight:900;letter-spacing:.06em;text-transform:uppercase;color:var(--text-secondary);margin-top:7px">' + label + '</div>'
+    + (sub ? '<div style="font-size:.72rem;color:var(--text-secondary);margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + sub + '</div>' : '')
+    + '</div>';
+}
+
+function paidTrafficPopulateControls() {
+  var clientSel = document.getElementById('paidTrafficClientFilter');
+  if (clientSel) {
+    var current = clientSel.value;
+    clientSel.innerHTML = '<option value="">Todos os clientes</option>' + paidTrafficClients().map(function(c) {
+      return '<option value="' + c.key + '">' + esc(c.name || c.key) + '</option>';
+    }).join('');
+    clientSel.value = current || '';
+  }
+  var statusSel = document.getElementById('paidTrafficStatusFilter');
+  if (statusSel && !statusSel.dataset.ready) {
+    statusSel.innerHTML = '<option value="">Todos os status</option>' + TF_STATUSES.map(function(s) {
+      return '<option value="' + s.key + '">' + esc(s.label) + '</option>';
+    }).join('');
+    statusSel.dataset.ready = '1';
+  }
+}
+
+async function paidTrafficInit(force) {
+  paidTrafficPopulateControls();
+  if (paidTrafficState.loaded && !force) {
+    paidTrafficRender();
+    return;
+  }
+  await paidTrafficLoad();
+}
+
+async function paidTrafficRefresh() {
+  await paidTrafficLoad(true);
+}
+
+async function paidTrafficLoad() {
+  var loading = document.getElementById('paidTrafficLoading');
+  if (loading) loading.style.display = 'block';
+  paidTrafficState.loading = true;
+  paidTrafficPopulateControls();
+
+  var clients = paidTrafficClients();
+  var rows = [];
+  var batchSize = 6;
+
+  for (var i = 0; i < clients.length; i += batchSize) {
+    var batch = clients.slice(i, i + batchSize);
+    var results = await Promise.all(batch.map(async function(client) {
+      try {
+        var groupsRes = await tfApi('list_groups', { client_id: client.key });
+        var tasksRes = await tfApi('list_tasks', { client_id: client.key });
+        var groups = Array.isArray(groupsRes) ? groupsRes : [];
+        var groupMap = {};
+        groups.forEach(function(g) { groupMap[g.id] = g.name; });
+        return {
+          client: client,
+          groups: groups,
+          tasks: paidTrafficFlattenTasks(Array.isArray(tasksRes) ? tasksRes : [], client.key, client.name || client.key, groupMap),
+        };
+      } catch(e) {
+        return { client: client, groups: [], tasks: [], error: e.message || 'Erro' };
+      }
+    }));
+    rows = rows.concat(results);
+  }
+
+  paidTrafficState.clients = clients;
+  paidTrafficState.rows = rows;
+  paidTrafficState.tasks = rows.reduce(function(acc, row) { return acc.concat(row.tasks || []); }, []);
+  paidTrafficState.loaded = true;
+  paidTrafficState.loading = false;
+  if (loading) loading.style.display = 'none';
+  paidTrafficRender();
+}
+
+function paidTrafficBuildSuggestions(tasks) {
+  var suggestions = [];
+  var overdue = tasks.filter(paidTrafficIsOverdue);
+  var noAssignee = tasks.filter(function(t) { return paidTrafficIsOpen(t) && !t.assignee; });
+  var activeNoCampaign = tasks.filter(function(t) {
+    return ['ativo','otimizando','subindo'].indexOf(t.status) !== -1 && !t.campaign_id;
+  });
+  var staleMetrics = tasks.filter(function(t) {
+    if (!t.campaign_id || !t.metrics_updated_at) return false;
+    return (Date.now() - new Date(t.metrics_updated_at).getTime()) > 7 * 24 * 60 * 60 * 1000;
+  });
+  var lowCtr = tasks.filter(function(t) {
+    var spend = paidTrafficMetric(t, 'spend');
+    var ctr = paidTrafficMetric(t, 'ctr');
+    return spend >= 20 && ctr > 0 && ctr < 1;
+  });
+
+  if (overdue.length) suggestions.push({ icon:'priority_high', tone:'#ef4444', title: overdue.length + ' task(s) atrasada(s)', text:'Priorizar cobrança de prazo e responsável hoje.' });
+  if (noAssignee.length) suggestions.push({ icon:'person_off', tone:'#f59e0b', title: noAssignee.length + ' task(s) sem responsável', text:'Distribuir dono antes de iniciar otimização.' });
+  if (activeNoCampaign.length) suggestions.push({ icon:'link_off', tone:'#60a5fa', title: activeNoCampaign.length + ' campanha(s) sem ID Meta', text:'Vincular campaign_id para puxar métricas reais.' });
+  if (staleMetrics.length) suggestions.push({ icon:'sync_problem', tone:'#8b5cf6', title: staleMetrics.length + ' métrica(s) antigas', text:'Atualizar métricas para evitar decisão em dado velho.' });
+  if (lowCtr.length) suggestions.push({ icon:'ads_click', tone:'#fb7185', title: lowCtr.length + ' campanha(s) com CTR baixo', text:'Revisar criativo, copy e segmentação.' });
+  if (!suggestions.length) suggestions.push({ icon:'verified', tone:'#46eecd', title:'Operação sem alertas críticos', text:'Continue acompanhando métricas e prazos por cliente.' });
+  return suggestions.slice(0, 6);
+}
+
+function paidTrafficRender() {
+  var clientFilter = document.getElementById('paidTrafficClientFilter') ? document.getElementById('paidTrafficClientFilter').value : '';
+  var statusFilter = document.getElementById('paidTrafficStatusFilter') ? document.getElementById('paidTrafficStatusFilter').value : '';
+  var rows = paidTrafficState.rows || [];
+  var tasks = paidTrafficState.tasks || [];
+  var filteredTasks = tasks.filter(function(t) {
+    if (clientFilter && t.client_key !== clientFilter) return false;
+    if (statusFilter && t.status !== statusFilter) return false;
+    return true;
+  });
+  var openTasks = filteredTasks.filter(paidTrafficIsOpen);
+  var linked = filteredTasks.filter(function(t) { return !!t.campaign_id; });
+  var overdue = filteredTasks.filter(paidTrafficIsOverdue);
+  var noAssignee = filteredTasks.filter(function(t) { return paidTrafficIsOpen(t) && !t.assignee; });
+  var spend = filteredTasks.reduce(function(sum, t) { return sum + paidTrafficMetric(t, 'spend'); }, 0);
+
+  var kpis = document.getElementById('paidTrafficKpis');
+  if (kpis) {
+    kpis.innerHTML = [
+      paidTrafficKpiCard('<span class="mso">groups</span>', 'Clientes com operação', rows.filter(function(r) { return (r.tasks || []).length; }).length, 'de ' + paidTrafficState.clients.length + ' ativos', 'rgba(70,238,205,.14)'),
+      paidTrafficKpiCard('<span class="mso">assignment</span>', 'Tasks abertas', openTasks.length, filteredTasks.length + ' no total', 'rgba(96,165,250,.14)'),
+      paidTrafficKpiCard('<span class="mso">link</span>', 'Campanhas vinculadas', linked.length, 'com campaign_id', 'rgba(34,197,94,.14)'),
+      paidTrafficKpiCard('<span class="mso">warning</span>', 'Atrasos', overdue.length, noAssignee.length + ' sem responsável', 'rgba(239,68,68,.14)'),
+      paidTrafficKpiCard('<span class="mso">payments</span>', 'Gasto rastreado', paidTrafficMoney(spend), 'via métricas salvas', 'rgba(245,158,11,.14)'),
+    ].join('');
+  }
+
+  paidTrafficRenderClients(rows, clientFilter, statusFilter);
+  paidTrafficRenderTasks(filteredTasks);
+  paidTrafficRenderCampaigns(linked);
+  paidTrafficRenderSuggestions(paidTrafficBuildSuggestions(filteredTasks));
+}
+
+function paidTrafficRenderClients(rows, clientFilter, statusFilter) {
+  var el = document.getElementById('paidTrafficClientList');
+  if (!el) return;
+  var visibleRows = rows.filter(function(row) {
+    if (clientFilter && row.client.key !== clientFilter) return false;
+    return true;
+  }).map(function(row) {
+    var tasks = (row.tasks || []).filter(function(t) { return !statusFilter || t.status === statusFilter; });
+    var open = tasks.filter(paidTrafficIsOpen);
+    var linked = tasks.filter(function(t) { return !!t.campaign_id; });
+    var overdue = tasks.filter(paidTrafficIsOverdue);
+    var spend = tasks.reduce(function(sum, t) { return sum + paidTrafficMetric(t, 'spend'); }, 0);
+    return Object.assign({}, row, { visibleTasks: tasks, openCount: open.length, linkedCount: linked.length, overdueCount: overdue.length, spend: spend });
+  }).filter(function(row) { return row.visibleTasks.length || !clientFilter; });
+
+  visibleRows.sort(function(a, b) {
+    return (b.overdueCount - a.overdueCount) || (b.openCount - a.openCount) || (a.client.name || a.client.key).localeCompare(b.client.name || b.client.key);
+  });
+
+  if (!visibleRows.length) {
+    el.innerHTML = '<div style="text-align:center;padding:32px;color:var(--text-secondary)">Nenhuma campanha ou task de tráfego encontrada para este filtro.</div>';
+    return;
+  }
+
+  el.innerHTML = visibleRows.slice(0, 18).map(function(row) {
+    var c = row.client;
+    var logo = typeof clientLogoAvatarHtml === 'function'
+      ? clientLogoAvatarHtml({ slug: c.key, name: c.name || c.key, logo_url: c.logo_url || c.logoUrl || c.logo }, 'sidebar-client-logo')
+      : '<span>' + esc((c.name || c.key).slice(0,2).toUpperCase()) + '</span>';
+    return '<div style="display:grid;grid-template-columns:minmax(220px,1fr) repeat(4,minmax(90px,auto)) 250px;gap:12px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--bg)">'
+      + '<div style="display:flex;align-items:center;gap:10px;min-width:0">' + logo + '<div style="min-width:0"><div style="font-weight:850;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(c.name || c.key) + '</div><div style="font-size:.72rem;color:var(--text-secondary)">' + esc(c.tenant || 'sem tenant') + '</div></div></div>'
+      + '<div style="font-size:.8rem;color:var(--text-secondary)"><strong style="color:var(--text)">' + row.openCount + '</strong><br>abertas</div>'
+      + '<div style="font-size:.8rem;color:var(--text-secondary)"><strong style="color:#46eecd">' + row.linkedCount + '</strong><br>vinc.</div>'
+      + '<div style="font-size:.8rem;color:var(--text-secondary)"><strong style="color:' + (row.overdueCount ? '#ef4444' : 'var(--text)') + '">' + row.overdueCount + '</strong><br>atrasos</div>'
+      + '<div style="font-size:.8rem;color:var(--text-secondary)"><strong style="color:var(--text)">' + paidTrafficMoney(row.spend) + '</strong><br>gasto</div>'
+      + '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">'
+        + '<button onclick="paidTrafficOpenTraffic(\'' + c.key + '\')" style="padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit">Operação</button>'
+        + '<button onclick="paidTrafficOpenBi(\'' + c.key + '\')" style="padding:8px 10px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--text);font-weight:800;cursor:pointer;font-family:inherit">BI</button>'
+        + '<button onclick="paidTrafficCreateCampaignPlan(\'' + c.key + '\')" style="padding:8px 10px;border:0;border-radius:9px;background:#46eecd;color:#061313;font-weight:900;cursor:pointer;font-family:inherit">Plano</button>'
+      + '</div></div>';
+  }).join('');
+}
+
+function paidTrafficRenderTasks(tasks) {
+  var el = document.getElementById('paidTrafficTaskList');
+  if (!el) return;
+  var list = tasks.filter(paidTrafficIsOpen).sort(function(a, b) {
+    if (paidTrafficIsOverdue(a) !== paidTrafficIsOverdue(b)) return paidTrafficIsOverdue(a) ? -1 : 1;
+    return (a.due_date || '9999-12-31').localeCompare(b.due_date || '9999-12-31');
+  }).slice(0, 8);
+  if (!list.length) {
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-secondary)">Nenhuma task aberta neste filtro.</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(t) {
+    var st = tfGetStatus(t.status);
+    return '<button onclick="paidTrafficOpenTraffic(\'' + t.client_key + '\')" style="text-align:left;width:100%;padding:11px;border:1px solid var(--border);border-radius:11px;background:var(--bg);color:var(--text);cursor:pointer;font-family:inherit">'
+      + '<div style="display:flex;justify-content:space-between;gap:8px"><strong style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(t.name || 'Sem nome') + '</strong><span style="font-size:.72rem;color:' + (paidTrafficIsOverdue(t) ? '#ef4444' : 'var(--text-secondary)') + '">' + paidTrafficDate(t.due_date) + '</span></div>'
+      + '<div style="font-size:.74rem;color:var(--text-secondary);margin-top:5px">' + esc(t.client_name || '') + ' · ' + esc(t.assignee || 'sem responsável') + '</div>'
+      + '<div style="margin-top:7px;display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:.68rem;font-weight:900;padding:3px 7px;border-radius:999px;background:' + ((st && st.bg) || 'var(--card)') + ';color:' + ((st && st.color) || 'var(--text)') + '">' + esc(paidTrafficStatusLabel(t.status)) + '</span>'
+      + (t.campaign_id ? '<span style="font-size:.68rem;font-weight:900;padding:3px 7px;border-radius:999px;background:rgba(70,238,205,.12);color:#46eecd">Meta vinculada</span>' : '')
+      + '</div></button>';
+  }).join('');
+}
+
+function paidTrafficRenderCampaigns(tasks) {
+  var el = document.getElementById('paidTrafficCampaignList');
+  if (!el) return;
+  var list = tasks.slice().sort(function(a, b) {
+    return paidTrafficMetric(b, 'spend') - paidTrafficMetric(a, 'spend');
+  }).slice(0, 8);
+  if (!list.length) {
+    el.innerHTML = '<div style="text-align:center;padding:24px;color:var(--text-secondary)">Nenhuma task com campaign_id vinculada.</div>';
+    return;
+  }
+  el.innerHTML = list.map(function(t) {
+    var spend = paidTrafficMetric(t, 'spend');
+    var clicks = paidTrafficMetric(t, 'clicks');
+    var ctr = paidTrafficMetric(t, 'ctr');
+    return '<div style="padding:11px;border:1px solid var(--border);border-radius:11px;background:var(--bg)">'
+      + '<div style="display:flex;justify-content:space-between;gap:8px"><strong style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + esc(t.name || t.campaign_id) + '</strong><span style="font-size:.72rem;color:#46eecd">' + paidTrafficMoney(spend) + '</span></div>'
+      + '<div style="font-size:.74rem;color:var(--text-secondary);margin-top:5px">' + esc(t.client_name || '') + ' · ' + esc(paidTrafficObjectiveLabel(t.campaign_objective)) + '</div>'
+      + '<div style="display:flex;gap:8px;margin-top:8px;font-size:.7rem;color:var(--text-secondary)"><span>' + paidTrafficNumber(clicks) + ' cliques</span><span>CTR ' + paidTrafficNumber(ctr) + '%</span></div>'
+      + '</div>';
+  }).join('');
+}
+
+function paidTrafficRenderSuggestions(suggestions) {
+  var el = document.getElementById('paidTrafficSuggestions');
+  if (!el) return;
+  el.innerHTML = suggestions.map(function(s) {
+    return '<div style="display:flex;gap:10px;padding:11px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(0,0,0,.14)">'
+      + '<div style="width:32px;height:32px;border-radius:10px;background:' + s.tone + '22;color:' + s.tone + ';display:flex;align-items:center;justify-content:center;flex:0 0 auto"><span class="mso">' + s.icon + '</span></div>'
+      + '<div><div style="font-weight:900;color:var(--text);font-size:.84rem">' + esc(s.title) + '</div><div style="font-size:.75rem;color:var(--text-secondary);line-height:1.35;margin-top:3px">' + esc(s.text) + '</div></div>'
+      + '</div>';
+  }).join('');
+}
+
+function paidTrafficOpenTraffic(clientKey) {
+  switchTab('traffic');
+  setTimeout(function() {
+    var sel = document.getElementById('tfClientFilter');
+    if (sel) {
+      sel.value = clientKey || '';
+      tfCurrentClient = clientKey || '';
+      tfLoadGroups();
+    }
+  }, 220);
+}
+
+function paidTrafficOpenBi(clientKey) {
+  var client = (_metaClients && _metaClients[clientKey]) ? _metaClients[clientKey] : null;
+  if (client && typeof metaBiOpenFromReport === 'function') {
+    metaBiOpenFromReport(clientKey, client.tenant || 'starken');
+  } else {
+    switchTab('meta-bi');
+  }
+}
+
+async function paidTrafficCreateCampaignPlan(clientKey) {
+  clientKey = clientKey || (document.getElementById('paidTrafficClientFilter') ? document.getElementById('paidTrafficClientFilter').value : '');
+  if (!clientKey) {
+    alert('Escolha um cliente para criar o plano de campanha.');
+    return;
+  }
+  var campaignName = prompt('Nome do plano/campanha:', 'Nova campanha de tráfego');
+  if (!campaignName) return;
+  var objective = prompt('Objetivo Meta (ex: OUTCOME_LEADS, OUTCOME_SALES, OUTCOME_TRAFFIC):', 'OUTCOME_LEADS') || 'OUTCOME_LEADS';
+  var user = paidTrafficCurrentUser();
+  try {
+    var groups = await tfApi('list_groups', { client_id: clientKey });
+    if (!Array.isArray(groups)) groups = [];
+    var group = groups.find(function(g) { return /campanha|tr[aá]fego|opera/i.test(g.name || ''); });
+    if (!group) {
+      var created = await tfApi('upsert_group', { client_id: clientKey, name: 'Campanhas de Tráfego', position: groups.length + 1, user: user });
+      group = Array.isArray(created) ? created[0] : created;
+    }
+    if (!group || !group.id) throw new Error('Não foi possível criar grupo de campanhas');
+    await tfApi('upsert_task', {
+      group_id: group.id,
+      client_id: clientKey,
+      name: campaignName,
+      campaign_objective: objective,
+      status: 'planejamento',
+      priority: 'alta',
+      platform: 'Meta Ads',
+      user: user,
+    });
+    showToast('<span class="mso">check_circle</span> Plano de campanha criado');
+    paidTrafficOpenTraffic(clientKey);
+  } catch(e) {
+    alert('Erro ao criar plano: ' + (e.message || e));
+  }
 }
 
 function tfInit() {
