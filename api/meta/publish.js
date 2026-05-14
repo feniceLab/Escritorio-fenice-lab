@@ -373,11 +373,15 @@ async function saveToHistory(record) {
   const url = SUPABASE_URL();
   if (!url) return; // Silently skip if no Supabase
   try {
-    await fetch(`${url}/rest/v1/publish_history`, {
+    const safeRecord = { ...record };
+    // publish_history does not have task_id; task sync lives in publish_queue/content_tasks.
+    delete safeRecord.task_id;
+    const res = await fetch(`${url}/rest/v1/publish_history`, {
       method: 'POST',
       headers: supabaseHeaders(),
-      body: JSON.stringify(record),
+      body: JSON.stringify(safeRecord),
     });
+    if (!res.ok) console.warn('History save failed:', await res.text());
   } catch (e) {
     console.warn('History save failed:', e.message);
   }
