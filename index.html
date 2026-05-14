@@ -11,7 +11,7 @@
 (function() {
   var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=4';
   window.STARKEN_OFFICE_GAME_PATH = OFFICE_GAME_PATH;
-  window.STARKEN_OS_BUILD = '20260514-0115-publish-alert-guard';
+  window.STARKEN_OS_BUILD = '20260514-1535-content-ops-view';
 
   // Se por qualquer cache/clique antigo o Starken OS for carregado dentro do proprio iframe,
   // troca imediatamente para o escritorio real. Isso evita o efeito "menu dentro de menu".
@@ -2373,7 +2373,7 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .ct-add-btn:hover { background:var(--brand-dark); }
 
 /* List */
-.ct-list { border:1px solid var(--border);border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 1px 4px rgba(0,0,0,0.04);scroll-behavior:smooth; }
+	.ct-list { border:1px solid var(--border);border-radius:12px;overflow-x:auto;overflow-y:visible;box-shadow:0 1px 4px rgba(0,0,0,0.04);scroll-behavior:smooth; }
 .ct-list::-webkit-scrollbar { height:5px; }
 .ct-list::-webkit-scrollbar-track { background:transparent; }
 .ct-list::-webkit-scrollbar-thumb { background:var(--border);border-radius:3px; }
@@ -2382,15 +2382,35 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .ct-row .ct-name,.ct-row .ct-assignee { padding-top:0; }
 .ct-row:hover { background:rgba(59,130,246,0.03); }
 .ct-row:hover::before { content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--brand,#3b82f6);border-radius:0 2px 2px 0;opacity:0.6;z-index:4; }
-.ct-row.group { background:var(--surface-container-low);font-weight:700;font-size:var(--text-md);height:40px;border-bottom:1px solid var(--outline-variant); }
-.ct-row.subtask { font-size:var(--text-sm);color:var(--text-secondary); }
+	.ct-row.group { background:var(--surface-container-low);font-weight:700;font-size:var(--text-md);height:40px;border-bottom:1px solid var(--outline-variant); }
+	.ct-row.group.current-week { background:linear-gradient(90deg,rgba(70,238,205,0.12),var(--surface-container-low));box-shadow:inset 3px 0 0 var(--brand,#46eecd); }
+	.ct-current-week-pill { display:inline-flex;align-items:center;gap:3px;margin-left:8px;padding:2px 7px;border-radius:999px;background:rgba(70,238,205,0.14);color:var(--brand,#46eecd);font-size:0.66rem;font-weight:800;text-transform:uppercase;letter-spacing:0.04em; }
+	.ct-row.subtask { font-size:var(--text-sm);color:var(--text-secondary); }
 .ct-row .ct-name { display:flex;align-items:center;gap:8px;min-width:0;position:sticky;left:0;z-index:2;padding-left:20px;padding-right:8px;background:var(--bg-app,#fff);transition:background 0.12s; }
 .ct-row:hover .ct-name { background:var(--surface-container-low,#f8fafc); }
 .ct-row.group .ct-name { background:var(--surface-container-low);padding-left:20px; }
 .ct-header-row > div:first-child { position:sticky;left:0;z-index:3;background:var(--surface-container-low);padding-left:20px;padding-right:8px; }
 .ct-row .ct-name span { white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;font-size:0.9rem;color:var(--text-primary); }
 .ct-chevron { cursor:pointer;transition:transform 0.2s;font-size:0.7rem;flex-shrink:0;width:20px;text-align:center; }
-.ct-chevron.open { transform:rotate(90deg); }
+	.ct-chevron.open { transform:rotate(90deg); }
+	.ct-view-controls { display:flex;align-items:center;gap:6px;padding:3px;border:1px solid var(--border);border-radius:9px;background:var(--surface-container-low); }
+	.ct-density-btn,.ct-scroll-btn { border:none;background:transparent;color:var(--text-secondary);border-radius:7px;padding:5px 8px;font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap; }
+	.ct-density-btn:hover,.ct-scroll-btn:hover { background:rgba(148,163,184,0.12);color:var(--text-primary); }
+	.ct-density-btn.active { background:var(--brand,#3b82f6);color:#fff; }
+	.ct-list.ct-density-compact .ct-header-row { height:32px;font-size:9px; }
+	.ct-list.ct-density-compact .ct-row { min-height:38px;padding-top:4px;padding-bottom:4px;font-size:0.78rem; }
+	.ct-list.ct-density-compact .ct-row.group { height:34px;font-size:0.82rem; }
+	.ct-list.ct-density-compact .ct-row .ct-name span { font-size:0.8rem; }
+	.ct-list.ct-density-comfort .ct-header-row { height:44px; }
+	.ct-list.ct-density-comfort .ct-row { min-height:64px;padding-top:14px;padding-bottom:14px; }
+	.ct-list.ct-density-comfort .ct-row.group { height:48px; }
+	.ct-modal-client-badge { display:flex;align-items:center;gap:10px;margin-bottom:10px;padding:8px 10px;border:1px solid rgba(148,163,184,0.16);border-radius:10px;background:rgba(148,163,184,0.07);width:max-content;max-width:100%; }
+	.ct-modal-client-avatar { width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.72rem;color:#fff;background:linear-gradient(135deg,#14b8a6,#3b82f6);overflow:hidden;flex-shrink:0; }
+	.ct-modal-client-avatar.has-logo { background:transparent; }
+	.ct-modal-client-info { min-width:0;display:flex;flex-direction:column;gap:1px; }
+	.ct-modal-client-label { font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);font-weight:800; }
+	.ct-modal-client-name { font-size:0.86rem;color:var(--text-primary);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(520px,50vw); }
+	.ct-modal-client-group { font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(520px,50vw); }
 
 /* Status badges */
 .ct-status { padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:inherit;text-align:center;white-space:nowrap;transition:all 0.12s ease;letter-spacing:0.02em;box-shadow:0 1px 2px rgba(0,0,0,0.06); }
@@ -7633,9 +7653,17 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             <button class="ct-add-btn" onclick="ctShowMonthWizard()" id="ctMonthWizardBtn" style="display:none;background:#6366f1;color:#fff;border-color:#6366f1"><span class="mso">calendar_today</span> Criar Semanas do Mês</button>
             <!-- Cronograma PDF removido da toolbar do client -->
             <span id="ctCronoBtn" style="display:none"></span>
-            <span id="ctCronoStatus" style="display:none"></span>
-            <span id="ctCronoSendBtn" style="display:none"></span>
-            <div style="flex:1"></div>
+	            <span id="ctCronoStatus" style="display:none"></span>
+	            <span id="ctCronoSendBtn" style="display:none"></span>
+	            <div class="ct-view-controls" id="ctViewControls" title="Ajustes rápidos da tabela">
+	              <button class="ct-density-btn" data-density="compact" onclick="ctSetDensity('compact')" title="Linhas mais baixas"><span class="mso">density_small</span> Compacto</button>
+	              <button class="ct-density-btn" data-density="normal" onclick="ctSetDensity('normal')" title="Altura padrão"><span class="mso">density_medium</span> Normal</button>
+	              <button class="ct-density-btn" data-density="comfort" onclick="ctSetDensity('comfort')" title="Linhas mais altas"><span class="mso">density_large</span> Conforto</button>
+	              <span style="width:1px;height:18px;background:var(--border);margin:0 2px"></span>
+	              <button class="ct-scroll-btn" onclick="ctScrollList(-1)" title="Rolar colunas para a esquerda"><span class="mso">chevron_left</span></button>
+	              <button class="ct-scroll-btn" onclick="ctScrollList(1)" title="Rolar colunas para a direita"><span class="mso">chevron_right</span></button>
+	            </div>
+	            <div style="flex:1"></div>
             <select id="ctStatusFilter" onchange="ctRenderList()">
               <option value="">Todos os status</option>
             </select>
@@ -7758,9 +7786,10 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             <div id="ctModalTree"></div>
           </div>
 
-          <!-- Main Content -->
-          <div class="ct-modal-main">
-            <div style="display:flex;align-items:center;gap:10px">
+	          <!-- Main Content -->
+	          <div class="ct-modal-main">
+	            <div id="ctModalClientBadge" class="ct-modal-client-badge" style="display:none"></div>
+	            <div style="display:flex;align-items:center;gap:10px">
               <input type="text" class="ct-modal-title" id="ctModalTitle" placeholder="Nome da tarefa..." style="flex:1" onchange="ctSaveTaskField('name',this.value)">
               <button id="ctModalSaveBtn" onclick="ctSaveAllFields()" style="padding:8px 20px;background:#10b981;color:#fff;border:none;border-radius:8px;font-family:inherit;font-size:0.85rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s"><span class="mso">save</span> Salvar</button>
               <span id="ctModalSaveStatus" style="font-size:0.75rem;color:#6b7280;min-width:60px;text-align:center"></span>
@@ -22361,8 +22390,134 @@ let ctCurrentTab = 'general'; // 'general' or 'stories'
 let ctModalTask = null;
 let ctExpandedGroups = {};
 let ctExpandedTasks = {};
+let _ctLastLoadedClient = '';
+const CT_DENSITY_KEY = 'starken_ct_density';
 
 function ctApiBase() { return metaApiBase(); }
+
+function ctGetDensity() {
+  try { return localStorage.getItem(CT_DENSITY_KEY) || 'normal'; } catch(e) { return 'normal'; }
+}
+
+function ctApplyDensity() {
+  var list = document.getElementById('ctList');
+  var density = ctGetDensity();
+  if (list) {
+    list.classList.remove('ct-density-compact', 'ct-density-comfort');
+    if (density === 'compact') list.classList.add('ct-density-compact');
+    if (density === 'comfort') list.classList.add('ct-density-comfort');
+  }
+  document.querySelectorAll('.ct-density-btn').forEach(function(btn) {
+    btn.classList.toggle('active', btn.getAttribute('data-density') === density);
+  });
+}
+
+function ctSetDensity(density) {
+  density = ['compact', 'normal', 'comfort'].indexOf(density) >= 0 ? density : 'normal';
+  try { localStorage.setItem(CT_DENSITY_KEY, density); } catch(e) {}
+  ctApplyDensity();
+}
+
+function ctScrollList(direction) {
+  var list = document.getElementById('ctList');
+  if (!list) return;
+  var amount = Math.max(260, Math.floor(list.clientWidth * 0.55));
+  list.scrollBy({ left: direction * amount, behavior: 'smooth' });
+}
+
+function ctCollapseAllGroups(groups) {
+  ctExpandedGroups = {};
+  (groups || []).forEach(function(g) { if (g && g.id) ctExpandedGroups[g.id] = false; });
+}
+
+function ctNormalizeText(value) {
+  return String(value || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function ctWeekOfMonth(date) {
+  return Math.max(1, Math.ceil(date.getDate() / 7));
+}
+
+function ctGroupScheduleInfo(group) {
+  var raw = ctNormalizeText(group && group.name);
+  var months = {
+    janeiro: 0, fevereiro: 1, marco: 2, abril: 3, maio: 4, junho: 5,
+    julho: 6, agosto: 7, setembro: 8, outubro: 9, novembro: 10, dezembro: 11
+  };
+  var month = null;
+  Object.keys(months).some(function(name) {
+    if (raw.indexOf(name) >= 0) { month = months[name]; return true; }
+    return false;
+  });
+  var weekMatch = raw.match(/semana\s*(\d+)/);
+  var week = weekMatch ? parseInt(weekMatch[1], 10) : null;
+  if (month === null || !week) return { known: false, position: group && Number.isFinite(Number(group.position)) ? Number(group.position) : 9999 };
+  return { known: true, month: month, week: week, key: month * 10 + week };
+}
+
+function ctIsCurrentWeekGroup(group) {
+  var info = ctGroupScheduleInfo(group);
+  var now = new Date();
+  return info.known && info.month === now.getMonth() && info.week === ctWeekOfMonth(now);
+}
+
+function ctSortOperationalGroups(groups) {
+  var now = new Date();
+  var currentKey = now.getMonth() * 10 + ctWeekOfMonth(now);
+  return (groups || []).slice().sort(function(a, b) {
+    function rank(g) {
+      var info = ctGroupScheduleInfo(g);
+      if (!info.known) return { bucket: 3, order: info.position || 9999 };
+      if (info.key === currentKey) return { bucket: 0, order: 0 };
+      if (info.key < currentKey) return { bucket: 1, order: -info.key };
+      return { bucket: 2, order: info.key };
+    }
+    var ra = rank(a), rb = rank(b);
+    if (ra.bucket !== rb.bucket) return ra.bucket - rb.bucket;
+    if (ra.order !== rb.order) return ra.order - rb.order;
+    return ((a.position || 0) - (b.position || 0));
+  });
+}
+
+function ctFindTaskGroup(taskId) {
+  for (var i = 0; i < ctGroups.length; i++) {
+    var group = ctGroups[i];
+    var tasks = group.tasks || [];
+    for (var t = 0; t < tasks.length; t++) {
+      if (tasks[t].id === taskId) return group;
+      var subs = tasks[t].subtasks || [];
+      for (var s = 0; s < subs.length; s++) {
+        if (subs[s].id === taskId) return group;
+      }
+    }
+  }
+  return null;
+}
+
+function ctResolveModalClient(task) {
+  var key = (task && (task.client_id || task.client_key)) || ctCurrentClient || '';
+  var meta = key && _metaClients ? (_metaClients[key] || null) : null;
+  var name = (meta && meta.name) || (task && (task.client_name || task.client)) || key || 'Cliente';
+  return { key: key, name: name, logo_url: meta && (meta.logo_url || meta.logoUrl || meta.logo), tenant: meta && meta.tenant };
+}
+
+function ctRenderModalClientBadge(task) {
+  var el = document.getElementById('ctModalClientBadge');
+  if (!el) return;
+  var client = ctResolveModalClient(task);
+  var group = ctFindTaskGroup(task && task.id);
+  var groupLabel = group && group.name ? group.name : '';
+  var avatar = typeof clientLogoAvatarHtml === 'function'
+    ? clientLogoAvatarHtml({ slug: client.key, name: client.name, logo_url: client.logo_url }, 'ct-modal-client-avatar')
+    : '<div class="ct-modal-client-avatar">' + esc((client.name || '?').substring(0, 2).toUpperCase()) + '</div>';
+  el.innerHTML = avatar
+    + '<div class="ct-modal-client-info">'
+    + '<div class="ct-modal-client-label">Cliente</div>'
+    + '<div class="ct-modal-client-name">' + esc(client.name || 'Cliente') + '</div>'
+    + (groupLabel ? '<div class="ct-modal-client-group"><span class="mso">folder</span> ' + esc(groupLabel) + '</div>' : '')
+    + '</div>';
+  el.style.display = 'flex';
+}
 
 async function ctApi(action, params = {}) {
   const ctrl = new AbortController();
@@ -22398,6 +22553,7 @@ function ctSafeClientPath(name) {
 function ctInit() {
   ctLoadClientDropdown();
   ctLoadStatusFilter();
+  ctApplyDensity();
   // Prewarm: fire a lightweight request to wake up the serverless function
   fetch(ctApiBase() + '/api/content', { method: 'OPTIONS' }).catch(() => {});
   // Auto-promote agendado → publicado for past dates
@@ -22565,6 +22721,7 @@ function ctSwitchTab(tab) {
 
 async function ctLoadGroups() {
   const clientId = document.getElementById('ctClientFilter').value;
+  const clientChanged = clientId !== _ctLastLoadedClient;
   ctCurrentClient = clientId;
   // Persist selected client for F5 restore
   if (clientId) { try { localStorage.setItem('starken_last_client', clientId); } catch(e) {} }
@@ -22637,7 +22794,13 @@ async function ctLoadGroups() {
   }
 
   ctGroups = groups;
-  ctLoadGroupsState(); // restore collapse state from localStorage (sync)
+  if (clientChanged) {
+    ctCollapseAllGroups(groups);
+    ctSaveGroupsState();
+  } else {
+    ctLoadGroupsState(); // preserve state while realtime refreshes the same client
+  }
+  _ctLastLoadedClient = clientId;
   ctRenderList();
   cronogramaUpdateButton();
 }
@@ -23043,7 +23206,8 @@ function ctRenderList() {
     if (ctCurrentTab === 'stories') return isRecurring;
     if (ctCurrentTab === 'general') return !isRecurring;
     return true;
-  });
+	  });
+  filteredGroups = ctSortOperationalGroups(filteredGroups);
 
   // ─── STORIES RECORRENTES: render specialized thumbnail view ───
   if (ctCurrentTab === 'stories') {
@@ -23053,7 +23217,7 @@ function ctRenderList() {
 
   let html = '';
   filteredGroups.forEach(group => {
-    const expanded = ctExpandedGroups[group.id] !== false;
+	    const expanded = ctExpandedGroups[group.id] === true;
     const tasks = group.tasks || [];
     const taskCount = tasks.length;
 
@@ -23074,8 +23238,10 @@ function ctRenderList() {
         + '<span style="font-size:0.7rem;font-weight:700;color:' + pctColor + '">' + pct + '%</span>'
         + '</span>'
       : '';
-    html += '<div class="ct-row group" onclick="ctToggleGroup(\'' + group.id + '\')">'
-      + '<div class="ct-name"><span class="ct-chevron ' + (expanded ? 'open' : '') + '">▶</span><span><span class="mso">folder</span> ' + group.name + ' <span style="font-weight:400;color:var(--text-secondary);font-size:0.78rem">(' + taskCount + ')</span>' + progressHtml + '</span></div>'
+	    var isCurrentWeek = ctIsCurrentWeekGroup(group);
+	    var currentWeekBadge = isCurrentWeek ? '<span class="ct-current-week-pill"><span class="mso">today</span> Semana atual</span>' : '';
+	    html += '<div class="ct-row group' + (isCurrentWeek ? ' current-week' : '') + '" onclick="ctToggleGroup(\'' + group.id + '\')">'
+	      + '<div class="ct-name"><span class="ct-chevron ' + (expanded ? 'open' : '') + '">▶</span><span><span class="mso">folder</span> ' + group.name + ' <span style="font-weight:400;color:var(--text-secondary);font-size:0.78rem">(' + taskCount + ')</span>' + progressHtml + currentWeekBadge + '</span></div>'
       + '<div></div><div></div><div></div><div></div>'
       + '<div style="text-align:center;display:flex;gap:2px;justify-content:center;align-items:center">'
       + '<button onclick="event.stopPropagation();ctMoveGroup(\'' + group.id + '\',\'up\')" title="Mover grupo para cima" class="ct-grp-btn">▲</button>'
@@ -23159,7 +23325,8 @@ function ctRenderList() {
     }
   });
 
-  body.innerHTML = html;
+	  body.innerHTML = html;
+	  ctApplyDensity();
 
   // Attach drag events to all task rows
   body.querySelectorAll('.ct-row[data-task-id]').forEach(row => {
@@ -24258,6 +24425,7 @@ async function ctOpenModal(taskId) {
   const task = ctModalTask;
 
   // Populate fields
+  ctRenderModalClientBadge(task);
   document.getElementById('ctModalTitle').value = task.name || '';
   document.getElementById('ctModalBriefing').value = task.briefing || '';
   document.getElementById('ctModalCopy').value = task.copy_text || '';
