@@ -11,7 +11,7 @@
 (function() {
   var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=4';
   window.STARKEN_OFFICE_GAME_PATH = OFFICE_GAME_PATH;
-  window.STARKEN_OS_BUILD = '20260514-1608-client-header-logo';
+  window.STARKEN_OS_BUILD = '20260514-1626-sidebar-scroll-alpha-hidden';
 
   // Se por qualquer cache/clique antigo o Starken OS for carregado dentro do proprio iframe,
   // troca imediatamente para o escritorio real. Isso evita o efeito "menu dentro de menu".
@@ -1241,6 +1241,27 @@ body {
 .sidebar-submenu::-webkit-scrollbar { width: 5px; }
 .sidebar-submenu::-webkit-scrollbar-track { background: transparent; }
 .sidebar-submenu::-webkit-scrollbar-thumb { background: rgba(70,238,205,0.25); border-radius: 999px; }
+.sidebar-menu-category[data-sidebar-cat-id="cat-conteudo"] > .sidebar-submenu {
+  position: fixed;
+  top: 84px;
+  left: 216px;
+  bottom: 86px;
+  max-height: none;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 10px 8px 14px;
+}
+.sidebar-menu-category[data-sidebar-cat-id="cat-conteudo"] > .sidebar-submenu::-webkit-scrollbar { width: 8px; }
+.sidebar-menu-category[data-sidebar-cat-id="cat-conteudo"] > .sidebar-submenu::-webkit-scrollbar-thumb {
+  background: rgba(70,238,205,0.48);
+  border: 2px solid #111821;
+}
+@media (max-height: 760px) {
+  .sidebar-menu-category[data-sidebar-cat-id="cat-conteudo"] > .sidebar-submenu {
+    top: 64px;
+    bottom: 66px;
+  }
+}
 .sidebar-nav { overflow: visible; }
 
 
@@ -10889,7 +10910,6 @@ let SIDEBAR_MENU = [
   { type: 'item', id: 'meta-publish', label: 'Histórico de Agendamentos', icon: '<span class="mso">upload</span>', tab: 'meta-publish' },
   { type: 'category', id: 'cat-conteudo', label: 'Conteúdo', items: [
     { type: 'folder', id: 'folder-starken' },
-    { type: 'folder', id: 'folder-alpha' },
     { type: 'folder', id: 'folder-processo' },
     { type: 'folder', id: 'folder-arquivados' },
   ]},
@@ -12575,7 +12595,7 @@ function populateSidebarClients() {
   const starkenItems = document.getElementById('itemsStarken');
   const alphaItems = document.getElementById('itemsAlpha');
   const arquivadosItems = document.getElementById('itemsArquivados');
-  if (!starkenItems || !alphaItems) return;
+  if (!starkenItems) return;
 
   var clientStatuses = ctGetClientStatuses();
   var contextMenuAttr = ' oncontextmenu="ctShowClientStatusMenu(event,\'__KEY__\')"';
@@ -12626,9 +12646,10 @@ function populateSidebarClients() {
   let processoHtml = processoClients.map(buildProcessoBtn).join('');
 
   starkenItems.innerHTML = starkenHtml || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 20px">Nenhum cliente</div>';
-  alphaItems.innerHTML = alphaHtml || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 20px">Nenhum cliente</div>';
+  if (alphaItems) alphaItems.innerHTML = alphaHtml || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 20px">Nenhum cliente</div>';
   document.getElementById('countStarken').textContent = starkenClients.length;
-  document.getElementById('countAlpha').textContent = alphaClients.length;
+  var countAlphaEl = document.getElementById('countAlpha');
+  if (countAlphaEl) countAlphaEl.textContent = alphaClients.length;
 
   // EM PROCESSO section
   var processoContainer = document.getElementById('sidebarProcesso');
