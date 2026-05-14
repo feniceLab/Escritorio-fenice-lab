@@ -11,7 +11,7 @@
 (function() {
   var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=4';
   window.STARKEN_OFFICE_GAME_PATH = OFFICE_GAME_PATH;
-  window.STARKEN_OS_BUILD = '20260514-1535-content-ops-view';
+  window.STARKEN_OS_BUILD = '20260514-1548-content-archive-scroll';
 
   // Se por qualquer cache/clique antigo o Starken OS for carregado dentro do proprio iframe,
   // troca imediatamente para o escritorio real. Isso evita o efeito "menu dentro de menu".
@@ -2397,6 +2397,15 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 	.ct-density-btn,.ct-scroll-btn { border:none;background:transparent;color:var(--text-secondary);border-radius:7px;padding:5px 8px;font-family:inherit;font-size:0.74rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:4px;white-space:nowrap; }
 	.ct-density-btn:hover,.ct-scroll-btn:hover { background:rgba(148,163,184,0.12);color:var(--text-primary); }
 	.ct-density-btn.active { background:var(--brand,#3b82f6);color:#fff; }
+	.ct-archive-toggle { display:flex;align-items:center;gap:4px;padding:3px;border:1px solid var(--border);border-radius:9px;background:var(--surface-container-low); }
+	.ct-archive-toggle button { border:none;background:transparent;color:var(--text-secondary);border-radius:7px;padding:6px 10px;font-family:inherit;font-size:0.76rem;font-weight:800;cursor:pointer;display:inline-flex;align-items:center;gap:5px;white-space:nowrap; }
+	.ct-archive-toggle button:hover { background:rgba(148,163,184,0.12);color:var(--text-primary); }
+	.ct-archive-toggle button.active { background:rgba(70,238,205,0.16);color:var(--brand,#46eecd);box-shadow:inset 0 0 0 1px rgba(70,238,205,0.28); }
+	.ct-scroll-stage { display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 8px 0;padding:8px 10px;border:1px solid rgba(70,238,205,0.28);border-radius:12px;background:linear-gradient(90deg,rgba(70,238,205,0.12),rgba(59,130,246,0.08)); }
+	.ct-scroll-hint { display:flex;align-items:center;gap:7px;color:var(--text-secondary);font-size:0.78rem;font-weight:700;min-width:0; }
+	.ct-scroll-actions { display:flex;gap:8px;flex-shrink:0; }
+	.ct-scroll-hero { border:1px solid rgba(70,238,205,0.5);background:var(--brand,#46eecd);color:#06111f;border-radius:10px;padding:7px 13px;font-family:inherit;font-size:0.78rem;font-weight:900;cursor:pointer;display:inline-flex;align-items:center;gap:5px;box-shadow:0 8px 24px rgba(70,238,205,0.18); }
+	.ct-scroll-hero:hover { filter:brightness(1.08);transform:translateY(-1px); }
 	.ct-list.ct-density-compact .ct-header-row { height:32px;font-size:9px; }
 	.ct-list.ct-density-compact .ct-row { min-height:38px;padding-top:4px;padding-bottom:4px;font-size:0.78rem; }
 	.ct-list.ct-density-compact .ct-row.group { height:34px;font-size:0.82rem; }
@@ -2411,6 +2420,8 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 	.ct-modal-client-label { font-size:0.62rem;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-tertiary);font-weight:800; }
 	.ct-modal-client-name { font-size:0.86rem;color:var(--text-primary);font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(520px,50vw); }
 	.ct-modal-client-group { font-size:0.72rem;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:min(520px,50vw); }
+	.ct-grp-btn.archive:hover { background:rgba(70,238,205,0.14);color:var(--brand,#46eecd); }
+	.ct-grp-btn.restore:hover { background:rgba(59,130,246,0.14);color:#60a5fa; }
 
 /* Status badges */
 .ct-status { padding:4px 10px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:inherit;text-align:center;white-space:nowrap;transition:all 0.12s ease;letter-spacing:0.02em;box-shadow:0 1px 2px rgba(0,0,0,0.06); }
@@ -2811,8 +2822,8 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .rs-week-actions { display:flex;gap:8px;align-items:center; }
 .rs-btn-sched { background:var(--brand,#3b82f6);color:#fff;border:none;border-radius:8px;padding:7px 14px;font-size:0.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:background 0.15s; }
 .rs-btn-sched:hover { background:#2563eb; }
-.rs-btn-delete-grp { background:none;border:1px solid var(--border);color:var(--text-secondary);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:0.85rem;transition:all 0.12s; }
-.rs-btn-delete-grp:hover { background:#fee2e2;border-color:#fca5a5;color:#dc2626; }
+.rs-btn-delete-grp archive { background:none;border:1px solid var(--border);color:var(--text-secondary);border-radius:8px;padding:6px 10px;cursor:pointer;font-size:0.85rem;transition:all 0.12s; }
+.rs-btn-delete-grp archive:hover { background:#fee2e2;border-color:#fca5a5;color:#dc2626; }
 .rs-days-scroll { display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory; }
 .rs-days-scroll::-webkit-scrollbar { height:5px; }
 .rs-days-scroll::-webkit-scrollbar-track { background:transparent; }
@@ -7653,17 +7664,18 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             <button class="ct-add-btn" onclick="ctShowMonthWizard()" id="ctMonthWizardBtn" style="display:none;background:#6366f1;color:#fff;border-color:#6366f1"><span class="mso">calendar_today</span> Criar Semanas do Mês</button>
             <!-- Cronograma PDF removido da toolbar do client -->
             <span id="ctCronoBtn" style="display:none"></span>
-	            <span id="ctCronoStatus" style="display:none"></span>
-	            <span id="ctCronoSendBtn" style="display:none"></span>
-	            <div class="ct-view-controls" id="ctViewControls" title="Ajustes rápidos da tabela">
-	              <button class="ct-density-btn" data-density="compact" onclick="ctSetDensity('compact')" title="Linhas mais baixas"><span class="mso">density_small</span> Compacto</button>
-	              <button class="ct-density-btn" data-density="normal" onclick="ctSetDensity('normal')" title="Altura padrão"><span class="mso">density_medium</span> Normal</button>
-	              <button class="ct-density-btn" data-density="comfort" onclick="ctSetDensity('comfort')" title="Linhas mais altas"><span class="mso">density_large</span> Conforto</button>
-	              <span style="width:1px;height:18px;background:var(--border);margin:0 2px"></span>
-	              <button class="ct-scroll-btn" onclick="ctScrollList(-1)" title="Rolar colunas para a esquerda"><span class="mso">chevron_left</span></button>
-	              <button class="ct-scroll-btn" onclick="ctScrollList(1)" title="Rolar colunas para a direita"><span class="mso">chevron_right</span></button>
-	            </div>
-	            <div style="flex:1"></div>
+            <span id="ctCronoStatus" style="display:none"></span>
+            <span id="ctCronoSendBtn" style="display:none"></span>
+            <div class="ct-archive-toggle" id="ctArchiveToggle" title="Alternar semanas ativas e arquivadas">
+              <button id="ctActiveGroupsBtn" class="active" onclick="ctSetArchiveView(false)"><span class="mso">folder_open</span> Ativas</button>
+              <button id="ctArchivedGroupsBtn" onclick="ctSetArchiveView(true)"><span class="mso">inventory_2</span> Arquivadas</button>
+            </div>
+            <div class="ct-view-controls" id="ctViewControls" title="Ajustes rápidos da tabela">
+              <button class="ct-density-btn" data-density="compact" onclick="ctSetDensity('compact')" title="Linhas mais baixas"><span class="mso">density_small</span> Compacto</button>
+              <button class="ct-density-btn" data-density="normal" onclick="ctSetDensity('normal')" title="Altura padrão"><span class="mso">density_medium</span> Normal</button>
+              <button class="ct-density-btn" data-density="comfort" onclick="ctSetDensity('comfort')" title="Linhas mais altas"><span class="mso">density_large</span> Conforto</button>
+            </div>
+            <div style="flex:1"></div>
             <select id="ctStatusFilter" onchange="ctRenderList()">
               <option value="">Todos os status</option>
             </select>
@@ -7684,6 +7696,13 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
           </div>
 
           <!-- Task List -->
+          <div class="ct-scroll-stage" id="ctScrollStage">
+            <div class="ct-scroll-hint"><span class="mso">swipe</span> Colunas laterais: use os botões para ver Publicação e Prioridade</div>
+            <div class="ct-scroll-actions">
+              <button class="ct-scroll-hero" onclick="ctScrollList(-1)" title="Rolar colunas para a esquerda"><span class="mso">arrow_back</span> Esquerda</button>
+              <button class="ct-scroll-hero" onclick="ctScrollList(1)" title="Rolar colunas para a direita">Direita <span class="mso">arrow_forward</span></button>
+            </div>
+          </div>
           <div class="ct-list" id="ctList">
             <div class="ct-header-row">
               <div><input type="checkbox" id="ctSelectAll" onclick="ctToggleSelectAll()" style="margin-right:6px;cursor:pointer;accent-color:var(--accent,#3b82f6)">Nome</div>
@@ -22391,6 +22410,7 @@ let ctModalTask = null;
 let ctExpandedGroups = {};
 let ctExpandedTasks = {};
 let _ctLastLoadedClient = '';
+let ctShowArchivedGroups = false;
 const CT_DENSITY_KEY = 'starken_ct_density';
 
 function ctApiBase() { return metaApiBase(); }
@@ -22423,6 +22443,15 @@ function ctScrollList(direction) {
   if (!list) return;
   var amount = Math.max(260, Math.floor(list.clientWidth * 0.55));
   list.scrollBy({ left: direction * amount, behavior: 'smooth' });
+}
+
+function ctSetArchiveView(showArchived) {
+  ctShowArchivedGroups = !!showArchived;
+  var activeBtn = document.getElementById('ctActiveGroupsBtn');
+  var archivedBtn = document.getElementById('ctArchivedGroupsBtn');
+  if (activeBtn) activeBtn.classList.toggle('active', !ctShowArchivedGroups);
+  if (archivedBtn) archivedBtn.classList.toggle('active', ctShowArchivedGroups);
+  ctLoadGroups();
 }
 
 function ctCollapseAllGroups(groups) {
@@ -22742,7 +22771,7 @@ async function ctLoadGroups() {
     document.getElementById('ctListBody').innerHTML = '<div style="text-align:center;padding:30px;color:var(--text-secondary)">⏳ Carregando...</div>';
   }
 
-  const data = await ctApi('list_groups', { client_id: clientId });
+  const data = await ctApi('list_groups', { client_id: clientId, archived: ctShowArchivedGroups });
   if (data.error) {
     document.getElementById('ctListBody').innerHTML = '<div style="text-align:center;padding:30px;color:#dc2626"><span class="mso">cancel</span> ' + data.error + '</div>';
     return;
@@ -23196,7 +23225,9 @@ function ctRenderList() {
   const priorityFilter = document.getElementById('ctPriorityFilter') ? document.getElementById('ctPriorityFilter').value : '';
 
   if (ctGroups.length === 0) {
-    body.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-secondary)"><div style="font-size:2rem;margin-bottom:8px"><span class="mso">outgoing_mail</span></div>Nenhum grupo criado. Clique em "+ Novo Grupo" para começar.</div>';
+    body.innerHTML = ctShowArchivedGroups
+      ? '<div style="text-align:center;padding:40px;color:var(--text-secondary)"><div style="font-size:2rem;margin-bottom:8px"><span class="mso">inventory_2</span></div>Nenhuma semana arquivada para este cliente.</div>'
+      : '<div style="text-align:center;padding:40px;color:var(--text-secondary)"><div style="font-size:2rem;margin-bottom:8px"><span class="mso">outgoing_mail</span></div>Nenhum grupo criado. Clique em "+ Novo Grupo" para começar.</div>';
     return;
   }
 
@@ -23246,9 +23277,11 @@ function ctRenderList() {
       + '<div style="text-align:center;display:flex;gap:2px;justify-content:center;align-items:center">'
       + '<button onclick="event.stopPropagation();ctMoveGroup(\'' + group.id + '\',\'up\')" title="Mover grupo para cima" class="ct-grp-btn">▲</button>'
       + '<button onclick="event.stopPropagation();ctMoveGroup(\'' + group.id + '\',\'down\')" title="Mover grupo para baixo" class="ct-grp-btn">▼</button>'
-      + '<button onclick="event.stopPropagation();ctRenameGroup(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Renomear grupo" class="ct-grp-btn"><span class="mso">edit</span></button>'
-      + '<button onclick="event.stopPropagation();ctShowDuplicateGroupModal(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Duplicar grupo" class="ct-grp-btn"><span class="mso">assignment</span></button>'
-      + '<button onclick="event.stopPropagation();ctDeleteGroup(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Excluir grupo" class="ct-grp-btn del"><span class="mso">delete</span></button>'
+      + (ctShowArchivedGroups
+        ? '<button onclick="event.stopPropagation();ctRestoreGroup(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Restaurar semana" class="ct-grp-btn restore"><span class="mso">unarchive</span></button>'
+        : '<button onclick="event.stopPropagation();ctRenameGroup(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Renomear grupo" class="ct-grp-btn"><span class="mso">edit</span></button>'
+          + '<button onclick="event.stopPropagation();ctShowDuplicateGroupModal(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Duplicar grupo" class="ct-grp-btn"><span class="mso">assignment</span></button>'
+          + '<button onclick="event.stopPropagation();ctDeleteGroup(\'' + group.id + '\',\'' + safeGroupName + '\')" title="Arquivar semana" class="ct-grp-btn archive"><span class="mso">inventory_2</span></button>')
       + '</div>'
       + '</div>';
 
@@ -23411,7 +23444,7 @@ function ctRenderStoriesView(groups) {
       + '<div class="rs-week-title"><span class="mso">calendar_today</span> ' + weekLabel + '</div>'
       + '<div class="rs-week-actions">'
       + '<button class="rs-btn-sched" onclick="ctRsOpenScheduleModal(\'' + safeGId + '\')"><span class="mso">rocket_launch</span> Agendar Semana</button>'
-      + '<button class="rs-btn-delete-grp" onclick="ctDeleteGroup(\'' + safeGId + '\',\'' + group.name.replace(/'/g,"\\'") + '\')" title="Excluir semana"><span class="mso">delete</span></button>'
+      + '<button class="rs-btn-delete-grp archive" onclick="ctDeleteGroup(\'' + safeGId + '\',\'' + group.name.replace(/'/g,"\\'") + '\')" title="Arquivar semana"><span class="mso">delete</span></button>'
       + '</div>'
       + '</div>';
 
@@ -23869,11 +23902,20 @@ async function ctMoveGroup(groupId, direction) {
 
 async function ctDeleteGroup(groupId, groupName) {
   event.stopPropagation();
-  if (!confirm('Excluir o grupo "' + groupName + '" e todas as suas tarefas?\n\nEssa ação não pode ser desfeita.')) return;
-  const res = await ctApi('delete_group', { id: groupId, user: gpState.user });
-  if (res.error) { alert('Erro ao excluir: ' + res.error); return; }
+  if (!confirm('Arquivar a semana "' + groupName + '"?\n\nAs tarefas não serão apagadas. A semana ficará disponível em Arquivadas.')) return;
+  const res = await ctApi('delete_group', { id: groupId, user: ctGetUser() });
+  if (res.error) { alert('Erro ao arquivar: ' + res.error); return; }
   ctGroups = ctGroups.filter(g => g.id !== groupId);
   ctRenderList();
+}
+
+async function ctRestoreGroup(groupId, groupName) {
+  event.stopPropagation();
+  const res = await ctApi('restore_group', { id: groupId, user: ctGetUser() });
+  if (res.error) { alert('Erro ao restaurar: ' + res.error); return; }
+  ctGroups = ctGroups.filter(g => g.id !== groupId);
+  ctRenderList();
+  if (typeof showToast === 'function') showToast('Semana restaurada: ' + groupName);
 }
 
 function ctToggleTask(taskId) {

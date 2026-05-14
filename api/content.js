@@ -273,12 +273,15 @@ async function notifyAssignees(task, assignees, input) {
 // Group Actions
 // =============================================================================
 
-async function listGroups({ client_id }) {
+async function listGroups({ client_id, archived, include_archived }) {
   if (!client_id) return fail('client_id is required');
+  const showArchived = archived === true || archived === 'true' || archived === '1';
+  const includeArchived = include_archived === true || include_archived === 'true' || include_archived === '1';
+  const archivedFilter = includeArchived ? '' : `&archived=eq.${showArchived ? 'true' : 'false'}`;
 
   const groups = await supaSelect(
     'content_groups',
-    `select=*&client_id=eq.${client_id}&archived=eq.false&order=position.asc`
+    `select=*&client_id=eq.${client_id}${archivedFilter}&order=position.asc`
   );
 
   const tasks = await supaSelect(
@@ -332,6 +335,17 @@ async function deleteGroup({ id, user }) {
 
   const data = await supaUpdate('content_groups', id, {
     archived: true,
+    updated_at: new Date().toISOString(),
+  });
+  return ok(data);
+}
+
+async function restoreGroup({ id, user }) {
+  if (!id) return fail('id is required');
+  if (!user) return fail('user is required');
+
+  const data = await supaUpdate('content_groups', id, {
+    archived: false,
     updated_at: new Date().toISOString(),
   });
   return ok(data);
@@ -1315,6 +1329,7 @@ const ACTIONS = {
   list_groups: listGroups,
   upsert_group: upsertGroup,
   delete_group: deleteGroup,
+  restore_group: restoreGroup,
   duplicate_group: duplicateGroup,
   // Tasks
   list_tasks: listTasks,
