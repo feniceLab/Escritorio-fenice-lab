@@ -20247,7 +20247,8 @@ var _metaBiState = {
 	  charts: {},
 	  fetchSeq: 0,
 	  lastFetchMeta: null,
-	  creativeCache: {}
+	  creativeCache: {},
+	  campaignDeepCache: {}
 	};
 
 function metaBiInit() {
@@ -21042,6 +21043,7 @@ function metaBiGetInterpretation(row, badge) {
 	    var roasColor = row.roas >= 5 ? '#22c55e' : row.roas >= 2 ? '#f59e0b' : row.roas > 0 ? '#ef4444' : 'var(--text-secondary)';
 	    var roasText = row.roas > 0 ? row.roas.toFixed(2) + 'x' : '—';
 	    var creativeDomId = 'metaBiCreative_' + metaBiSafeDomId(row.campaign_id || row.campaign_name);
+	    var hierarchyDomId = 'metaBiHierarchy_' + metaBiSafeDomId(row.campaign_id || row.campaign_name);
 
 	    html += '<div style="padding:18px;background:var(--card);border-radius:10px;box-shadow:var(--shadow);border-left:4px solid ' + badgeInfo.color + '">'
 	      + '<div style="display:flex;justify-content:space-between;align-items:start;margin-bottom:14px">'
@@ -21051,6 +21053,8 @@ function metaBiGetInterpretation(row, badge) {
 	    html += '<div id="' + creativeDomId + '" style="min-height:58px;margin:-4px 0 12px;display:flex;align-items:center;gap:8px;overflow-x:auto;color:var(--text-secondary);font-size:0.72rem">'
 	      + '<span class="mso" style="font-size:16px">image_search</span> Buscando criativos dos anúncios...'
 	      + '</div>';
+	    html += '<div id="' + hierarchyDomId + '" style="margin-bottom:2px"></div>'
+	      + '<div style="font-size:0.7rem;text-transform:uppercase;letter-spacing:.45px;color:var(--text-secondary);font-weight:800;margin:2px 0 10px"><span class="mso">analytics</span> Consolidado da campanha</div>';
 
     if (template === 'gastronomia') {
       html += '<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:10px;font-size:0.78rem">'
@@ -21099,10 +21103,53 @@ function metaBiGetInterpretation(row, badge) {
 
 	  container.innerHTML = html;
 	  metaBiLoadCampaignCreatives(data);
+	  metaBiLoadCampaignHierarchy(data);
 	}
 
 	function metaBiSafeDomId(value) {
 	  return String(value || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+	}
+
+	function metaBiMapInsightRow(row) {
+	  var purchases = metaBiExtractAction(row.actions, ['omni_purchase','purchase','offsite_conversion.fb_pixel_purchase']);
+	  var revenue = metaBiExtractAction(row.action_values, ['omni_purchase','purchase','offsite_conversion.fb_pixel_purchase']);
+	  var spend = parseFloat(row.spend || 0);
+	  var impressions = parseInt(row.impressions || 0);
+	  var clicks = parseInt(row.clicks || 0);
+	  var reach = parseInt(row.reach || 0);
+	  var addToCart = metaBiExtractAction(row.actions, ['add_to_cart','offsite_conversion.fb_pixel_add_to_cart']);
+	  var initiateCheckout = metaBiExtractAction(row.actions, ['initiate_checkout','offsite_conversion.fb_pixel_initiate_checkout']);
+	  var landingPageViews = metaBiExtractAction(row.actions, ['landing_page_view']);
+	  var linkClicks = metaBiExtractAction(row.actions, ['link_click']);
+	  var badge = metaBiGetCampaignBadge(row.campaign_name || '');
+	  var visits = badge.badge === 'AUDIÊNCIA' ? clicks : landingPageViews;
+
+	  return {
+	    campaign_id: row.campaign_id || '',
+	    campaign_name: row.campaign_name || '—',
+	    adset_id: row.adset_id || '',
+	    adset_name: row.adset_name || '',
+	    ad_id: row.ad_id || '',
+	    ad_name: row.ad_name || '',
+	    spend: spend,
+	    impressions: impressions,
+	    reach: reach,
+	    clicks: clicks,
+	    cpc: parseFloat(row.cpc || 0),
+	    cpm: parseFloat(row.cpm || 0),
+	    ctr: parseFloat(row.ctr || 0),
+	    purchases: purchases,
+	    revenue: revenue,
+	    conversions: purchases,
+	    cpa: purchases > 0 ? spend / purchases : 0,
+	    roas: spend > 0 ? revenue / spend : 0,
+	    ticket: purchases > 0 ? revenue / purchases : 0,
+	    addToCart: addToCart,
+	    initiateCheckout: initiateCheckout,
+	    landingPageViews: visits,
+	    linkClicks: linkClicks,
+	    costPerVisit: visits > 0 ? spend / visits : 0
+	  };
 	}
 
 	function metaBiCreativeUrlFromCreative(creative) {
@@ -21110,10 +21157,10 @@ function metaBiGetInterpretation(row, badge) {
 	  var spec = creative.object_story_spec || {};
 	  var feed = creative.asset_feed_spec || {};
 	  var candidates = [
-	    creative.thumbnail_url,
 	    creative.image_url,
 	    spec.link_data && spec.link_data.picture,
 	    spec.video_data && (spec.video_data.image_url || spec.video_data.thumbnail_url),
+	    creative.thumbnail_url,
 	    feed.images && feed.images[0] && (feed.images[0].url || feed.images[0].hash),
 	    feed.videos && feed.videos[0] && (feed.videos[0].thumbnail_url || feed.videos[0].image_url)
 	  ];
@@ -21158,6 +21205,185 @@ function metaBiGetInterpretation(row, badge) {
 	  return html;
 	}
 
+	async function metaBiFetchCampaignDeep(clientKey, campaignId) {
+	  var cacheKey = clientKey + '|' + campaignId;
+	  if (_metaBiState.campaignDeepCache[cacheKey]) return _metaBiState.campaignDeepCache[cacheKey];
+	  var res = await fetch(metaApiBase() + '/api/meta/campaigns?client=' + encodeURIComponent(clientKey) + '&campaign_id=' + encodeURIComponent(campaignId) + '&deep=true');
+	  var json = await res.json();
+	  if (!res.ok || json.error) throw new Error(json.message || json.error || res.statusText);
+	  _metaBiState.campaignDeepCache[cacheKey] = json;
+	  return json;
+	}
+
+	function metaBiCampaignAdMap(payload) {
+	  var map = {};
+	  (payload.adsets || []).forEach(function(adset) {
+	    (adset.ads || []).forEach(function(ad) {
+	      var creative = ad.creative || {};
+	      map[String(ad.id || '')] = {
+	        id: ad.id || '',
+	        name: ad.name || creative.name || 'Anúncio',
+	        status: ad.status || '',
+	        adset_id: adset.id || '',
+	        adset_name: adset.name || '',
+	        creativeName: creative.name || '',
+	        creativeUrl: metaBiCreativeUrlFromCreative(creative),
+	        type: creative.video_id ? 'video' : 'image'
+	      };
+	    });
+	  });
+	  return map;
+	}
+
+	function metaBiHierarchyMetric(label, value, strongColor) {
+	  return '<div style="min-width:78px;text-align:right"><div style="font-size:0.78rem;font-weight:800;color:' + (strongColor || 'var(--text)') + '">' + value + '</div><div style="font-size:0.63rem;color:var(--text-secondary);text-transform:uppercase;letter-spacing:.25px">' + label + '</div></div>';
+	}
+
+	function metaBiRenderCampaignHierarchy(campaignRow, adRows, deepPayload) {
+	  var adMeta = metaBiCampaignAdMap(deepPayload || {});
+	  var grouped = {};
+	  adRows.forEach(function(row) {
+	    var meta = adMeta[String(row.ad_id || '')] || {};
+	    var adsetId = row.adset_id || meta.adset_id || row.adset_name || meta.adset_name || 'sem-conjunto';
+	    if (!grouped[adsetId]) {
+	      grouped[adsetId] = {
+	        id: adsetId,
+	        name: row.adset_name || meta.adset_name || 'Conjunto sem nome',
+	        rows: []
+	      };
+	    }
+	    grouped[adsetId].rows.push(row);
+	  });
+
+	  Object.keys(adMeta).forEach(function(adId) {
+	    var exists = adRows.some(function(row) { return String(row.ad_id || '') === adId; });
+	    if (exists) return;
+	    var meta = adMeta[adId];
+	    var adsetId = meta.adset_id || meta.adset_name || 'sem-conjunto';
+	    if (!grouped[adsetId]) grouped[adsetId] = { id: adsetId, name: meta.adset_name || 'Conjunto sem nome', rows: [] };
+	    grouped[adsetId].rows.push({
+	      campaign_id: campaignRow.campaign_id,
+	      campaign_name: campaignRow.campaign_name,
+	      adset_id: meta.adset_id || '',
+	      adset_name: meta.adset_name || '',
+	      ad_id: adId,
+	      ad_name: meta.name || 'Anúncio',
+	      spend: 0,
+	      reach: 0,
+	      impressions: 0,
+	      landingPageViews: 0,
+	      conversions: 0,
+	      revenue: 0,
+	      cpa: 0,
+	      roas: 0
+	    });
+	  });
+
+	  var keys = Object.keys(grouped);
+	  if (!keys.length) {
+	    return '<div style="border:1px dashed var(--border);border-radius:10px;padding:12px;color:var(--text-secondary);font-size:0.78rem;margin-bottom:14px"><span class="mso">account_tree</span> Nenhum conjunto ou anúncio retornou para esta campanha.</div>';
+	  }
+
+	  var html = '<div style="border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:0 0 14px;background:rgba(15,23,42,.22)">'
+	    + '<div style="padding:10px 12px;border-bottom:1px solid var(--border);font-size:0.72rem;text-transform:uppercase;letter-spacing:.45px;color:var(--text-secondary);font-weight:800"><span class="mso">account_tree</span> Campanha > Conjuntos > Anúncios</div>';
+	  keys.forEach(function(key) {
+	    var group = grouped[key];
+	    var totalSpend = group.rows.reduce(function(sum, row) { return sum + (row.spend || 0); }, 0);
+	    var totalPurchases = group.rows.reduce(function(sum, row) { return sum + (row.conversions || 0); }, 0);
+	    html += '<div style="padding:10px 12px;background:rgba(148,163,184,.06);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px">'
+	      + '<div style="font-weight:800;color:var(--text);font-size:0.82rem"><span class="mso" style="font-size:16px;color:var(--text-secondary)">layers</span> ' + esc(group.name) + '</div>'
+	      + '<div style="display:flex;gap:12px;color:var(--text-secondary);font-size:0.72rem"><span>' + group.rows.length + ' anúncios</span><span>' + metaFormatBRL(totalSpend) + '</span><span>' + metaFormatNumber(totalPurchases) + ' compras</span></div>'
+	      + '</div>';
+	    group.rows.forEach(function(row) {
+	      var meta = adMeta[String(row.ad_id || '')] || {};
+	      var image = meta.creativeUrl;
+	      var roasColor = row.roas >= 5 ? '#22c55e' : row.roas >= 2 ? '#f59e0b' : row.roas > 0 ? '#ef4444' : 'var(--text-secondary)';
+	      html += '<div style="display:grid;grid-template-columns:96px minmax(180px,1fr) auto;gap:12px;align-items:center;padding:12px;border-bottom:1px solid var(--border)">'
+	        + '<a href="' + esc(image || '#') + '" target="_blank" style="width:96px;height:96px;border-radius:10px;border:1px solid var(--border);background:var(--bg);overflow:hidden;display:flex;align-items:center;justify-content:center;position:relative">'
+	        + (image ? '<img src="' + esc(image) + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block" onerror="this.style.display=&quot;none&quot;">' : '<span class="mso" style="color:var(--text-secondary)">hide_image</span>')
+	        + (meta.type === 'video' ? '<span class="mso" style="position:absolute;right:5px;bottom:5px;font-size:15px;color:#fff;background:rgba(0,0,0,.55);border-radius:999px;padding:2px">play_circle</span>' : '')
+	        + '</a>'
+	        + '<div style="min-width:0"><div style="font-size:0.86rem;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="' + esc(row.ad_name || meta.name || 'Anúncio') + '">' + esc(row.ad_name || meta.name || 'Anúncio') + '</div>'
+	        + '<div style="margin-top:5px;display:flex;gap:6px;flex-wrap:wrap;color:var(--text-secondary);font-size:0.7rem">'
+	        + '<span style="border:1px solid var(--border);border-radius:999px;padding:2px 7px">' + esc(meta.status || 'sem status') + '</span>'
+	        + (meta.creativeName ? '<span style="border:1px solid var(--border);border-radius:999px;padding:2px 7px">Criativo: ' + esc(meta.creativeName) + '</span>' : '')
+	        + '</div></div>'
+	        + '<div style="display:flex;gap:12px;align-items:center;justify-content:flex-end;flex-wrap:wrap">'
+	        + metaBiHierarchyMetric('Invest.', metaFormatBRL(row.spend || 0))
+	        + metaBiHierarchyMetric('Alcance', metaFormatNumber(row.reach || 0))
+	        + metaBiHierarchyMetric('Impress.', metaFormatNumber(row.impressions || 0))
+	        + metaBiHierarchyMetric('Visitas', metaFormatNumber(row.landingPageViews || 0))
+	        + metaBiHierarchyMetric('Compras', metaFormatNumber(row.conversions || 0))
+	        + metaBiHierarchyMetric('Receita', metaFormatBRL(row.revenue || 0))
+	        + metaBiHierarchyMetric('CPA', metaFormatBRL(row.cpa || 0))
+	        + metaBiHierarchyMetric('ROAS', row.roas > 0 ? row.roas.toFixed(2) + 'x' : '—', roasColor)
+	        + '</div></div>';
+	    });
+	  });
+	  html += '</div>';
+	  return html;
+	}
+
+	async function metaBiLoadCampaignHierarchy(rows) {
+	  var clientKey = _metaBiState.currentClient;
+	  var client = _metaBiState.allClients[clientKey];
+	  var requestSeq = _metaBiState.fetchSeq;
+	  if (!clientKey || !client || !rows || !rows.length) return;
+
+	  var unique = [];
+	  var seen = {};
+	  rows.forEach(function(row) {
+	    var cid = row.campaign_id || '';
+	    if (!cid || seen[cid]) return;
+	    seen[cid] = true;
+	    unique.push(row);
+	  });
+	  unique.forEach(function(row) {
+	    var el = document.getElementById('metaBiHierarchy_' + metaBiSafeDomId(row.campaign_id || row.campaign_name));
+	    if (el) el.innerHTML = '<div style="border:1px dashed var(--border);border-radius:10px;padding:12px;color:var(--text-secondary);font-size:0.78rem;margin-bottom:14px"><span class="mso">sync</span> Buscando conjuntos, anúncios e métricas por linha...</div>';
+	  });
+
+	  try {
+	    var url = metaApiBase() + '/api/meta/insights?client=' + encodeURIComponent(clientKey)
+	      + '&tenant=' + encodeURIComponent(client.tenant || '')
+	      + '&preset=' + encodeURIComponent(_metaBiState.currentPeriod || 'last_7d')
+	      + '&level=ad';
+	    if (_metaBiState.currentPeriod === 'custom' && _metaBiState.customDateStart && _metaBiState.customDateEnd) {
+	      url += '&date_start=' + encodeURIComponent(_metaBiState.customDateStart) + '&date_end=' + encodeURIComponent(_metaBiState.customDateEnd);
+	    }
+	    var res = await fetch(url);
+	    var json = await res.json();
+	    if (!res.ok || json.error) throw new Error(json.message || json.error || res.statusText);
+	    if (requestSeq !== _metaBiState.fetchSeq) return;
+	    var clientAdAccount = client.adAccountId || '';
+	    var adRows = (json.data || []).filter(function(row) {
+	      return !clientAdAccount || row.ad_account_id === clientAdAccount;
+	    }).map(metaBiMapInsightRow);
+
+	    for (var i = 0; i < unique.length; i++) {
+	      if (requestSeq !== _metaBiState.fetchSeq) return;
+	      var campaignRow = unique[i];
+	      var el = document.getElementById('metaBiHierarchy_' + metaBiSafeDomId(campaignRow.campaign_id || campaignRow.campaign_name));
+	      if (!el) continue;
+	      try {
+	        var deep = campaignRow.campaign_id ? await metaBiFetchCampaignDeep(clientKey, campaignRow.campaign_id) : { adsets: [] };
+	        var campaignAds = adRows.filter(function(row) {
+	          return campaignRow.campaign_id ? row.campaign_id === campaignRow.campaign_id : row.campaign_name === campaignRow.campaign_name;
+	        });
+	        if (requestSeq !== _metaBiState.fetchSeq) return;
+	        el.innerHTML = metaBiRenderCampaignHierarchy(campaignRow, campaignAds, deep);
+	      } catch(e) {
+	        el.innerHTML = '<div style="border:1px dashed var(--border);border-radius:10px;padding:12px;color:#f59e0b;font-size:0.78rem;margin-bottom:14px"><span class="mso">warning</span> Não foi possível montar a hierarquia desta campanha.</div>';
+	      }
+	    }
+	  } catch(e) {
+	    unique.forEach(function(row) {
+	      var el = document.getElementById('metaBiHierarchy_' + metaBiSafeDomId(row.campaign_id || row.campaign_name));
+	      if (el) el.innerHTML = '<div style="border:1px dashed var(--border);border-radius:10px;padding:12px;color:#f59e0b;font-size:0.78rem;margin-bottom:14px"><span class="mso">warning</span> Métricas por anúncio indisponíveis no momento.</div>';
+	    });
+	  }
+	}
+
 	async function metaBiLoadCampaignCreatives(rows) {
 	  var clientKey = _metaBiState.currentClient;
 	  var requestSeq = _metaBiState.fetchSeq;
@@ -21189,9 +21415,7 @@ function metaBiGetInterpretation(row, badge) {
 	      continue;
 	    }
 	    try {
-	      var res = await fetch(metaApiBase() + '/api/meta/campaigns?client=' + encodeURIComponent(clientKey) + '&campaign_id=' + encodeURIComponent(campaign.id) + '&deep=true');
-	      var json = await res.json();
-	      if (!res.ok || json.error) throw new Error(json.message || json.error || res.statusText);
+	      var json = await metaBiFetchCampaignDeep(clientKey, campaign.id);
 	      var items = metaBiCreativeExtractItems(json);
 	      _metaBiState.creativeCache[cacheKey] = items;
 	      if (requestSeq !== _metaBiState.fetchSeq) return;

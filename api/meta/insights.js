@@ -88,8 +88,20 @@ module.exports = async function handler(req, res) {
 
     // Consulta cada ad account do tenant
     for (const adAccountId of tenant.adAccountIds) {
+      const identityFields = ['campaign_id', 'campaign_name'];
+      if (level === 'adset' || level === 'ad') {
+        identityFields.push('adset_id', 'adset_name');
+      } else {
+        identityFields.push('adset_name');
+      }
+      if (level === 'ad') {
+        identityFields.push('ad_id', 'ad_name');
+      } else {
+        identityFields.push('ad_name');
+      }
+
       let params = {
-        fields: 'campaign_id,campaign_name,adset_name,ad_name,spend,impressions,reach,clicks,cpc,cpm,ctr,actions,action_values,cost_per_action_type',
+        fields: identityFields.concat(['spend','impressions','reach','clicks','cpc','cpm','ctr','actions','action_values','cost_per_action_type']).join(','),
         time_range: JSON.stringify(dateRange),
         level: level,
         limit: '500',
