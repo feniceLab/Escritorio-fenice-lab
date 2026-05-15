@@ -39086,13 +39086,487 @@ function _doRenderTable() {
 
 // ═══ NPC CENTER / GLOBAL DRAWER ═══
 const NPC_PROFILES = [
-  { id:'lurdinha', name:'Lurdinha', initials:'LU', role:'Gerente operacional da timeline', runtime:'Codex', model:'Padrão', tone:'direta, cuidadosa e operacional', domains:['Operação','Timeline','Cobrança','Aprovações'], tools:['Analisar fluxo','Criar follow-up','Gerar relatório','Notificar responsáveis'], color:'#46eecd' },
-  { id:'lord-stanken', name:'Lord Stanken', initials:'LS', role:'Estratégia e direção executiva', runtime:'Codex', model:'Padrão', tone:'estratégico, objetivo e exigente', domains:['Estratégia','Prioridades','Reuniões','Decisão'], tools:['Resumo executivo','Mapa de risco','Plano de ação'], color:'#60a5fa' },
-  { id:'npc-designer', name:'NPC Designer', initials:'DS', role:'Design, identidade e aprovações visuais', runtime:'Codex', model:'Padrão', tone:'visual, criterioso e prático', domains:['Design','Galeria','Referências','Identidade'], tools:['Revisar criativo','Organizar referências','Sugerir ajuste'], color:'#a78bfa' },
-  { id:'npc-trafego', name:'NPC Tráfego', initials:'TR', role:'Meta Ads, Google Ads e performance', runtime:'Codex', model:'Padrão', tone:'analítico e focado em ação', domains:['Meta Ads','Google Ads','Campanhas','Saldo'], tools:['Ler métricas','Sugerir otimização','Criar plano'], color:'#22c55e' },
-  { id:'npc-atendimento', name:'NPC Atendimento', initials:'AT', role:'Cliente, Telegram e aprovações', runtime:'Codex', model:'Padrão', tone:'cordial, claro e responsável', domains:['Telegram','Aprovação','Reclamações','Sugestões'], tools:['Rascunhar resposta','Registrar reclamação','Criar proposta'], color:'#f59e0b' },
-  { id:'npc-relatorios', name:'NPC Relatórios', initials:'RP', role:'Relatórios semanais, mensais e insights', runtime:'Codex', model:'Padrão', tone:'editorial, preciso e sintético', domains:['Relatórios','BI','Insights','Entrega'], tools:['Gerar resumo','Comparar períodos','Criar recomendação'], color:'#38bdf8' }
+  {
+    "id": "lord-stanken",
+    "name": "Lord Stanken",
+    "initials": "LS",
+    "officeNpcId": "b56d2862-0bc4-4a0c-8510-46ff39d9cb35",
+    "agentId": "gael-ceo",
+    "memorySlug": "lord-stanken",
+    "role": "Direção estratégica e decisões executivas",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "estratégico, direto e exigente",
+    "color": "#60a5fa",
+    "domains": [
+      "Estratégia",
+      "Prioridade",
+      "Decisão",
+      "Reuniões"
+    ],
+    "menus": [
+      "Escritório Virtual",
+      "Visão Geral",
+      "Operação",
+      "Configurações"
+    ],
+    "tools": [
+      "Resumo executivo",
+      "Mapa de risco",
+      "Plano de ação",
+      "Decisão de prioridade"
+    ],
+    "actions": [
+      "Priorizar iniciativas",
+      "Validar decisões críticas",
+      "Converter reunião em plano executivo",
+      "Avaliar risco da operação"
+    ],
+    "seed": "Diretor do escritório virtual. Deve olhar a operação inteira, decidir prioridade, remover ruído e garantir dono, prazo e critério de pronto."
+  },
+  {
+    "id": "lurdinha",
+    "name": "Lurdinha",
+    "initials": "LU",
+    "officeNpcId": "8522db81-c1a2-4705-af18-e71227544b40",
+    "agentId": "gerente-operacional",
+    "memorySlug": "lurdinha",
+    "role": "Chief of Staff e coordenadora operacional",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "direta, cuidadosa e operacional",
+    "color": "#46eecd",
+    "domains": [
+      "Operação",
+      "Timeline",
+      "Cobrança",
+      "Aprovações"
+    ],
+    "menus": [
+      "Escritório Virtual",
+      "Timeline Cliente",
+      "Cronograma",
+      "Tarefas",
+      "Operação"
+    ],
+    "tools": [
+      "Analisar fluxo",
+      "Criar follow-up",
+      "Gerar relatório operacional",
+      "Notificar responsáveis"
+    ],
+    "actions": [
+      "Distribuir dono e prazo",
+      "Cobrar retorno",
+      "Gerar análise operacional",
+      "Criar próximos passos"
+    ],
+    "seed": "Ponto de convergência entre estratégia e execução. Deve transformar direção em tarefas, proteger o tempo do time e impedir que pendências fiquem soltas."
+  },
+  {
+    "id": "maria-onboarding-clientes",
+    "name": "Maria - Onboarding de clientes",
+    "initials": "MA",
+    "officeNpcId": "dc617446-be18-447a-b361-0c11ac24545a",
+    "agentId": "maria-onboarding-clientes",
+    "memorySlug": "maria-onboarding-de-clientes",
+    "role": "Onboarding, briefing e entrada de clientes",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "acolhedora, estruturada e objetiva",
+    "color": "#f472b6",
+    "domains": [
+      "Onboarding",
+      "Briefing",
+      "Acessos",
+      "Handoff"
+    ],
+    "menus": [
+      "Portal do Cliente",
+      "Visão Geral",
+      "Operação",
+      "Identidade Visual",
+      "Meta Ads"
+    ],
+    "tools": [
+      "Checklist de onboarding",
+      "Mapear acessos",
+      "Criar briefing",
+      "Preparar handoff"
+    ],
+    "actions": [
+      "Verificar dados iniciais",
+      "Criar task de acesso",
+      "Registrar contexto do cliente",
+      "Preparar primeira semana"
+    ],
+    "seed": "Primeira voz do cliente. Deve garantir descoberta, documentação viva, acessos e passagem correta para design, tráfego, relatórios e operação."
+  },
+  {
+    "id": "joao-relatorios-analise",
+    "name": "João - Relatórios/análise de dados",
+    "initials": "JO",
+    "officeNpcId": "d51c5eab-b060-4bbd-8862-2b79dbb92310",
+    "agentId": "joao-relatorios-analise",
+    "memorySlug": "joao-relatorios-analise-de-dados",
+    "role": "Dados, BI, relatórios e insights acionáveis",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "analítico, claro e voltado para decisão",
+    "color": "#38bdf8",
+    "domains": [
+      "Relatórios",
+      "Meta Ads",
+      "Google Ads",
+      "BI"
+    ],
+    "menus": [
+      "Dashboard",
+      "Redes Sociais",
+      "Meta Ads",
+      "Relatórios",
+      "Visão Geral"
+    ],
+    "tools": [
+      "Comparar períodos",
+      "Gerar insight",
+      "Ler métricas",
+      "Montar relatório"
+    ],
+    "actions": [
+      "Analisar 7/30/90 dias",
+      "Explicar queda ou alta",
+      "Criar recomendação",
+      "Validar dados do cliente"
+    ],
+    "seed": "Transforma números em decisão. Deve cruzar Meta Ads, Google Ads, redes sociais, GA4 e histórico para explicar desempenho e sugerir ação."
+  },
+  {
+    "id": "zezin-monitoramento-proativo",
+    "name": "Zezin - Monitoramento proativo",
+    "initials": "ZE",
+    "officeNpcId": "",
+    "agentId": "zezin-monitoramento-proativo",
+    "memorySlug": "zezin-monitoramento-proativo",
+    "role": "Monitoramento, alertas e anomalias",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "vigilante, objetivo e preventivo",
+    "color": "#f59e0b",
+    "domains": [
+      "Alertas",
+      "Saldo",
+      "APIs",
+      "Anomalias"
+    ],
+    "menus": [
+      "Meta Ads",
+      "Google Ads",
+      "Calendário",
+      "Publicações",
+      "Operação"
+    ],
+    "tools": [
+      "Detectar anomalia",
+      "Checar saldo",
+      "Criar alerta",
+      "Abrir incidente"
+    ],
+    "actions": [
+      "Avisar campanha sem gastar",
+      "Alertar token/API quebrada",
+      "Monitorar fila de publicação",
+      "Escalar risco operacional"
+    ],
+    "seed": "Vigia 24/7. Deve avisar antes que saldo, API, webhook, fila, publicação ou métrica crítica vire problema para cliente."
+  },
+  {
+    "id": "josy-integracoes-ferramentas",
+    "name": "Josy - Int c/ ferramentas",
+    "initials": "JY",
+    "officeNpcId": "",
+    "agentId": "josy-integracoes-ferramentas",
+    "memorySlug": "josy-int-c-ferramentas",
+    "role": "Integrações, APIs, tokens e automações",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "técnica, precisa e segura",
+    "color": "#22c55e",
+    "domains": [
+      "Meta API",
+      "Google API",
+      "Webhooks",
+      "Tokens"
+    ],
+    "menus": [
+      "Meta Ads",
+      "Google Ads",
+      "Configurações",
+      "Publicações",
+      "Operação"
+    ],
+    "tools": [
+      "Validar token",
+      "Diagnosticar API",
+      "Criar integração",
+      "Auditar permissão"
+    ],
+    "actions": [
+      "Conferir token Meta",
+      "Mapear conta de anúncio",
+      "Corrigir webhook",
+      "Liberar acesso técnico"
+    ],
+    "seed": "Conectora de sistemas. Deve fazer ferramentas conversarem com segurança e rastreabilidade, sem prometer integração invisível sem validar permissão."
+  },
+  {
+    "id": "sneider-design",
+    "name": "Sneider - Design",
+    "initials": "SN",
+    "officeNpcId": "e1d05ec3-6c54-4c42-834f-e06f1d469c79",
+    "agentId": "sneider-design",
+    "memorySlug": "sneider-design",
+    "role": "Design, identidade visual e revisão criativa",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "visual, criterioso e prático",
+    "color": "#a78bfa",
+    "domains": [
+      "Design",
+      "Identidade",
+      "Galeria",
+      "Criativos"
+    ],
+    "menus": [
+      "Identidade Visual",
+      "Conteúdos",
+      "Cronograma",
+      "Galeria",
+      "Portal do Cliente"
+    ],
+    "tools": [
+      "Revisar criativo",
+      "Organizar referências",
+      "Sugerir ajuste visual",
+      "Validar identidade"
+    ],
+    "actions": [
+      "Avaliar arte final",
+      "Comparar com brandbook",
+      "Sugerir melhoria visual",
+      "Criar briefing de design"
+    ],
+    "seed": "Designer oficial. Deve procurar assets internos, storybook, biblioteca e referências do cliente antes de dizer que falta material."
+  },
+  {
+    "id": "ravi-engenharia-plataforma",
+    "name": "Ravi - Engenharia de Plataforma",
+    "initials": "RA",
+    "officeNpcId": "",
+    "agentId": "ravi-engenharia-plataforma",
+    "memorySlug": "ravi-engenharia-de-plataforma",
+    "role": "Engenharia, estabilidade e incidentes técnicos",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "técnico, cauteloso e resolutivo",
+    "color": "#14b8a6",
+    "domains": [
+      "Plataforma",
+      "Deploy",
+      "Bugs",
+      "Segurança"
+    ],
+    "menus": [
+      "Configurações",
+      "Operação",
+      "Publicações",
+      "Integrações",
+      "Escritório Virtual"
+    ],
+    "tools": [
+      "Diagnosticar bug",
+      "Validar deploy",
+      "Criar runbook",
+      "Corrigir incidente"
+    ],
+    "actions": [
+      "Investigar erro de botão",
+      "Validar popup/API",
+      "Mapear causa raiz",
+      "Evitar recorrência"
+    ],
+    "seed": "Guardião técnico do Starken OS e do escritório. Deve proteger estabilidade, diagnosticar falhas e validar correções antes de considerar resolvido."
+  },
+  {
+    "id": "nina-qa-publicacoes",
+    "name": "Nina - QA de Publicações",
+    "initials": "NI",
+    "officeNpcId": "",
+    "agentId": "nina-qa-publicacoes",
+    "memorySlug": "nina-qa-de-publicacoes",
+    "role": "QA de publicações e conferência final",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "criteriosa, objetiva e preventiva",
+    "color": "#fb7185",
+    "domains": [
+      "QA",
+      "Publicações",
+      "Calendário",
+      "Aprovação"
+    ],
+    "menus": [
+      "Conteúdos",
+      "Calendário",
+      "Cronograma",
+      "Publicações",
+      "Portal do Cliente"
+    ],
+    "tools": [
+      "Conferir post",
+      "Validar copy",
+      "Auditar calendário",
+      "Sinalizar divergência"
+    ],
+    "actions": [
+      "Verificar imagem/copy/horário",
+      "Checar formato por canal",
+      "Aprovar ou pedir ajuste",
+      "Criar task de correção"
+    ],
+    "seed": "Responsável por garantir que posts, legendas, mídias, horários e formatos foram executados exatamente como planejado."
+  },
+  {
+    "id": "teo-eficiencia-operacional",
+    "name": "Téo - Eficiência Operacional",
+    "initials": "TE",
+    "officeNpcId": "47a9c89a-739d-4d0c-9df1-66a03a15e8cc",
+    "agentId": "teo-eficiencia-operacional",
+    "memorySlug": "teo-eficiencia-operacional",
+    "role": "Gargalos, retrabalho e melhoria de processo",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "simples, operacional e franco",
+    "color": "#f97316",
+    "domains": [
+      "Processos",
+      "Gargalos",
+      "Retrabalho",
+      "Fluxo"
+    ],
+    "menus": [
+      "Timeline Cliente",
+      "Tarefas",
+      "Operação",
+      "Cronograma",
+      "Dashboard"
+    ],
+    "tools": [
+      "Mapear gargalo",
+      "Reduzir retrabalho",
+      "Criar processo",
+      "Revisar fluxo"
+    ],
+    "actions": [
+      "Encontrar duplicidade",
+      "Definir dono/prazo",
+      "Simplificar processo",
+      "Organizar rotina"
+    ],
+    "seed": "Enxerga desperdício operacional. Deve transformar confusão em fluxo claro, com prioridade, dono, prazo e bloqueio."
+  },
+  {
+    "id": "gaia-produto-e-evolucao",
+    "name": "Gaia - Produto & Evolução",
+    "initials": "GA",
+    "officeNpcId": "",
+    "agentId": "gaia-produto-e-evolucao",
+    "memorySlug": "gaia-produto-evolucao",
+    "role": "Produto, roadmap e evolução do sistema",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "estratégica, curiosa e orientada a produto",
+    "color": "#84cc16",
+    "domains": [
+      "Produto",
+      "Roadmap",
+      "Melhorias",
+      "Features"
+    ],
+    "menus": [
+      "Operação",
+      "Configurações",
+      "Portal do Cliente",
+      "Visão Geral",
+      "Escritório Virtual"
+    ],
+    "tools": [
+      "Priorizar melhoria",
+      "Transformar dor em feature",
+      "Escrever requisito",
+      "Avaliar impacto"
+    ],
+    "actions": [
+      "Registrar oportunidade",
+      "Priorizar melhoria",
+      "Criar proposta de feature",
+      "Conectar dor recorrente ao roadmap"
+    ],
+    "seed": "Transforma dores operacionais e oportunidades em evolução real de produto, separando urgência de melhoria estrutural."
+  },
+  {
+    "id": "maya-memoria-e-conhecimento",
+    "name": "Maya - Memória & Conhecimento",
+    "initials": "MY",
+    "officeNpcId": "",
+    "agentId": "maya-memoria-e-conhecimento",
+    "memorySlug": "maya-memoria-conhecimento",
+    "role": "Memória, conhecimento e contexto operacional",
+    "runtime": "Codex",
+    "model": "Padrão",
+    "tone": "organizada, contextual e precisa",
+    "color": "#c084fc",
+    "domains": [
+      "Memória",
+      "Biblioteca",
+      "Reuniões",
+      "Contexto"
+    ],
+    "menus": [
+      "Central de NPCs",
+      "Operação",
+      "Visão Geral",
+      "Reuniões",
+      "Todos os menus"
+    ],
+    "tools": [
+      "Salvar memória",
+      "Resumir reunião",
+      "Organizar biblioteca",
+      "Recuperar contexto"
+    ],
+    "actions": [
+      "Registrar decisão",
+      "Criar memória por cliente",
+      "Consolidar reunião",
+      "Recuperar histórico"
+    ],
+    "seed": "Guardiã da memória. Deve impedir que o escritório redescubra informações, consolidando decisões, reuniões e aprendizados por cliente e por operação."
+  }
 ];
+
+const NPC_MENU_MAP = {
+  'visao-geral':['lord-stanken','lurdinha','joao-relatorios-analise','zezin-monitoramento-proativo'],
+  'redes-sociais':['joao-relatorios-analise','nina-qa-publicacoes','sneider-design','zezin-monitoramento-proativo'],
+  'meta-ads':['joao-relatorios-analise','josy-integracoes-ferramentas','zezin-monitoramento-proativo'],
+  'identidade-visual':['sneider-design','nina-qa-publicacoes','maya-memoria-e-conhecimento'],
+  'cronograma':['lurdinha','sneider-design','nina-qa-publicacoes','teo-eficiencia-operacional','maya-memoria-e-conhecimento'],
+  'conteudos':['sneider-design','nina-qa-publicacoes','maria-onboarding-clientes','lurdinha'],
+  'calendario':['lurdinha','nina-qa-publicacoes','zezin-monitoramento-proativo'],
+  'tarefas':['lurdinha','teo-eficiencia-operacional','maya-memoria-e-conhecimento'],
+  'operacao':['lurdinha','teo-eficiencia-operacional','zezin-monitoramento-proativo','ravi-engenharia-plataforma','gaia-produto-e-evolucao','maya-memoria-e-conhecimento'],
+  'escritorio':['lord-stanken','lurdinha','maria-onboarding-clientes','joao-relatorios-analise','zezin-monitoramento-proativo','josy-integracoes-ferramentas','sneider-design','ravi-engenharia-plataforma','nina-qa-publicacoes','teo-eficiencia-operacional','gaia-produto-e-evolucao','maya-memoria-e-conhecimento']
+};
 
 var _npcState = { activeNpc:'lurdinha', activeTab:'resumo', context:{ scope:'global', section:'npc-center' } };
 
@@ -39107,8 +39581,8 @@ function npcProfile(id) {
 }
 
 function npcCreateDraft() {
-  showToast('Novo NPC: estrutura pronta. A criação persistente entra na próxima etapa segura.');
-  npcOpenDrawer('lord-stanken', { scope:'global', section:'npc-center', title:'Configuração de NPCs' });
+  showToast('Contratação de NPC: primeiro usamos os NPCs reais do Escritório. Criação persistente entra na etapa de configurações.');
+  npcOpenDrawer('lord-stanken', { scope:'global', section:'escritorio', title:'Contratação e estratégia de NPCs' });
 }
 
 function npcInit() {
@@ -39197,16 +39671,25 @@ function npcContextSnapshot(ctx) {
   return parts.join(' ');
 }
 
+function npcMenuBadges(npc) {
+  return (npc.menus || []).slice(0, 4).map(function(m){ return '<span class="npc-pill">' + npcEsc(m) + '</span>'; }).join('');
+}
+
+function npcOpenFromCard(npcId) {
+  npcRenderDetail(npcId);
+  npcOpenDrawer(npcId, { scope:'global', section:'escritorio', title:'Escritório Virtual' });
+}
+
 function npcRenderCards() {
   var el = document.getElementById('npcCards');
   if (!el) return;
   el.innerHTML = NPC_PROFILES.map(function(n) {
-    return '<button class="npc-card ' + (_npcState.activeNpc === n.id ? 'active' : '') + '" onclick="npcRenderDetail(\'' + npcEsc(n.id) + '\')">' +
+    return '<button class="npc-card ' + (_npcState.activeNpc === n.id ? 'active' : '') + '" onclick="npcOpenFromCard(\'' + npcEsc(n.id) + '\')">' +
       '<div class="npc-card-top"><div class="npc-avatar" style="background:linear-gradient(135deg,rgba(255,255,255,.08),' + n.color + ')">' + npcEsc(n.initials) + '</div>' +
       '<div><div class="npc-name">' + npcEsc(n.name) + '</div><div class="npc-role">' + npcEsc(n.role) + '</div></div></div>' +
       '<div class="npc-pill-row">' + n.domains.slice(0,3).map(function(d){ return '<span class="npc-pill">' + npcEsc(d) + '</span>'; }).join('') + '</div>' +
-      '<small>' + npcEsc('Memória global + memória por cliente. Runtime: ' + n.runtime + ' · ' + n.model) + '</small>' +
-      '<div style="margin-top:auto;display:flex;gap:8px"><span class="npc-pill">Ativo</span><span class="npc-pill">' + npcEsc(n.tools.length) + ' ferramentas</span></div>' +
+      '<small>' + npcEsc(n.seed || 'NPC real do Escritório Virtual conectado ao Starken OS.') + '</small>' +
+      '<div style="margin-top:auto;display:flex;gap:8px;flex-wrap:wrap"><span class="npc-pill">Escritório</span><span class="npc-pill">' + npcEsc(n.tools.length) + ' ações</span></div>' +
     '</button>';
   }).join('');
 }
@@ -39222,19 +39705,21 @@ function npcRenderDetail(npcId) {
   detail.innerHTML = '<div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:14px">' +
     '<div class="npc-avatar" style="background:linear-gradient(135deg,rgba(255,255,255,.08),' + npc.color + ')">' + npcEsc(npc.initials) + '</div>' +
     '<div style="min-width:0"><h3 style="margin:0 0 4px">' + npcEsc(npc.name) + '</h3><div style="color:var(--text-secondary);font-size:.86rem;line-height:1.45">' + npcEsc(npc.role) + '</div></div>' +
-    '<button class="npc-btn primary" style="margin-left:auto" onclick="npcOpenDrawer(\'' + npcEsc(npc.id) + '\',{scope:\'global\',section:\'npc-center\',title:\'Central de NPCs\'})"><span class="mso">chat</span> Conversar</button>' +
+    '<button class="npc-btn primary" style="margin-left:auto" onclick="npcOpenDrawer(\'' + npcEsc(npc.id) + '\',{scope:\'global\',section:\'escritorio\',title:\'Escritório Virtual\'})"><span class="mso">chat</span> Conversar</button>' +
   '</div>' +
-  '<div class="npc-tabs"><button class="npc-tab-btn active">Resumo</button><button class="npc-tab-btn">Tarefas</button><button class="npc-tab-btn">Biblioteca</button><button class="npc-tab-btn">Relatórios</button><button class="npc-tab-btn">Configuração</button></div>' +
+  '<div class="npc-tabs"><button class="npc-tab-btn active">Resumo</button><button class="npc-tab-btn">Menus</button><button class="npc-tab-btn">Ações</button><button class="npc-tab-btn">Memória</button><button class="npc-tab-btn">Configuração</button></div>' +
   '<div class="npc-list">' +
-    '<div class="npc-list-item"><strong>Função</strong>' + npcEsc(npc.role) + '</div>' +
-    '<div class="npc-list-item"><strong>Ferramentas permitidas</strong>' + npc.tools.map(npcEsc).join(' · ') + '</div>' +
-    '<div class="npc-list-item"><strong>Tom de trabalho</strong>' + npcEsc(npc.tone) + '</div>' +
-    '<div class="npc-list-item"><strong>Escopo de memória</strong>Global no escritório, por cliente dentro de cada cliente, por setor dentro das páginas do sistema.</div>' +
+    '<div class="npc-list-item"><strong>Função no aplicativo</strong>' + npcEsc(npc.role) + '</div>' +
+    '<div class="npc-list-item"><strong>Onde aparece</strong><div class="npc-pill-row">' + npcMenuBadges(npc) + '</div></div>' +
+    '<div class="npc-list-item"><strong>Ações que pode executar</strong>' + npc.actions.map(npcEsc).join(' · ') + '</div>' +
+    '<div class="npc-list-item"><strong>Base real</strong>' + npcEsc('agentId: ' + npc.agentId + ' · memória: agent-memory/' + npc.memorySlug) + '</div>' +
+    '<div class="npc-list-item"><strong>Escopo de memória</strong>Global no escritório, por cliente dentro do Portal, por menu dentro do aplicativo e por conversa no drawer.</div>' +
   '</div>';
   var globalRows = memories.global.slice(0, 5);
-  mem.innerHTML = globalRows.length ? globalRows.map(function(m) {
+  var seedHtml = '<div class="npc-list-item"><strong>Memória base do Escritório</strong>' + npcEsc(npc.seed || '') + '</div>';
+  mem.innerHTML = seedHtml + (globalRows.length ? globalRows.map(function(m) {
     return '<div class="npc-list-item"><strong>' + new Date(m.at).toLocaleString('pt-BR') + '</strong>' + npcEsc(m.text) + '</div>';
-  }).join('') : '<div class="npc-empty"><span class="mso">memory</span><br>Sem memórias globais salvas para este NPC ainda.<br>Abra o chat e use <strong>lembrar:</strong> para registrar uma memória.</div>';
+  }).join('') : '<div class="npc-empty"><span class="mso">memory</span><br>Nenhuma memória manual salva neste navegador para este NPC.<br>A base real fica em <strong>agent-memory/' + npcEsc(npc.memorySlug) + '</strong>.</div>');
 }
 
 function npcOpenDrawer(npcId, ctx) {
@@ -39248,7 +39733,7 @@ function npcOpenDrawer(npcId, ctx) {
   document.getElementById('npcDrawerAvatar').style.background = 'linear-gradient(135deg,rgba(255,255,255,.08),' + npc.color + ')';
   document.getElementById('npcDrawerName').textContent = npc.name;
   document.getElementById('npcDrawerRole').textContent = npc.role;
-  document.getElementById('npcDrawerSub').textContent = npcContextSnapshot(_npcState.context);
+  document.getElementById('npcDrawerSub').textContent = npcContextSnapshot(_npcState.context) + ' ' + (npc.seed || '');
   npcRenderDrawerContext();
   npcRenderChat();
   backdrop.classList.add('open');
@@ -39266,15 +39751,16 @@ function npcCloseDrawer() {
 function npcRenderDrawerContext() {
   var ctx = _npcState.context || {};
   var npcId = _npcState.activeNpc;
+  var npc = npcProfile(npcId);
   var box = document.getElementById('npcDrawerContext');
   var mem = document.getElementById('npcDrawerMemory');
   if (!box || !mem) return;
   var memories = npcGetMemories(npcId, ctx);
-  box.innerHTML = '<span class="npc-pill">' + npcEsc(npcContextLabel(ctx)) + '</span><span class="npc-pill">' + npcEsc(ctx.section || 'geral') + '</span><span class="npc-pill">' + npcEsc(memories.bucket) + '</span>';
+  box.innerHTML = '<span class="npc-pill">' + npcEsc(npcContextLabel(ctx)) + '</span><span class="npc-pill">' + npcEsc(ctx.section || 'geral') + '</span><span class="npc-pill">' + npcEsc(memories.bucket) + '</span><span class="npc-pill">' + npcEsc(npc.agentId) + '</span>';
   var total = memories.global.length + memories.scoped.length;
-  mem.innerHTML = total
-    ? 'Memória carregada: ' + memories.global.length + ' global(is) + ' + memories.scoped.length + ' deste contexto.'
-    : 'Sem memória salva ainda neste contexto. Você pode registrar aprendizados com "lembrar: ...".';
+  mem.innerHTML = (npc.seed ? '<strong>Base:</strong> ' + npcEsc(npc.seed) + '<br>' : '') + (total
+    ? 'Memória manual carregada: ' + memories.global.length + ' global(is) + ' + memories.scoped.length + ' deste contexto.'
+    : 'Sem memória manual salva ainda neste contexto. Use "lembrar: ..." para registrar aprendizado.');
 }
 
 function npcRenderChat() {
@@ -39283,7 +39769,7 @@ function npcRenderChat() {
   var rows = npcGetConversation(_npcState.activeNpc, _npcState.context);
   if (!rows.length) {
     var npc = npcProfile(_npcState.activeNpc);
-    rows = [{ role:'assistant', text:'Oi, eu sou ' + npc.name + '. Estou aberta com o contexto: ' + npcContextLabel(_npcState.context) + '. Posso analisar, registrar memória, criar próximos passos e manter histórico desta conversa.' }];
+    rows = [{ role:'assistant', text:'Oi, eu sou ' + npc.name + '. Estou com o contexto: ' + npcContextLabel(_npcState.context) + '. Posso analisar, sugerir melhoria, registrar memória, criar próximos passos e apoiar este menu conforme minha função real no Escritório.' }];
     npcSaveConversation(_npcState.activeNpc, _npcState.context, rows);
   }
   el.innerHTML = rows.map(function(m) {
@@ -39295,13 +39781,15 @@ function npcRenderChat() {
 function npcAssistantReply(npc, ctx, text) {
   var memories = npcGetMemories(npc.id, ctx);
   var prefix = ctx && ctx.scope === 'client'
-    ? 'Estou considerando a memória deste cliente e as regras gerais do meu papel.'
-    : 'Estou considerando a memória global da operação e o panorama de todos os clientes.';
-  var action = 'Próximo passo sugerido: transformar isso em uma task, relatório ou follow-up antes de acionar o cliente.';
-  if (/cronograma|timeline/i.test(text)) action = 'Próximo passo sugerido: revisar gargalos da timeline, aprovações abertas e cronogramas pendentes.';
-  if (/tr[aá]fego|ads|campanha|roas/i.test(text)) action = 'Próximo passo sugerido: cruzar campanha, gasto, ROAS, saldo e task operacional antes de recomendar alteração.';
-  if (/reuni[aã]o|insight|mem[oó]ria/i.test(text)) action = 'Próximo passo sugerido: salvar como memória do contexto para reaproveitar nos próximos relatórios e atendimentos.';
-  return prefix + '\n\n' + action + '\n\nMemórias disponíveis agora: ' + memories.global.length + ' globais e ' + memories.scoped.length + ' deste contexto.';
+    ? 'Estou usando minha função de ' + npc.role + ' com a memória específica deste cliente.'
+    : 'Estou usando minha função de ' + npc.role + ' com a memória global da operação.';
+  var action = (npc.actions && npc.actions[0]) ? npc.actions[0] : 'criar próximo passo';
+  if (/cronograma|timeline/i.test(text)) action = npc.id === 'nina-qa-publicacoes' ? 'validar formato, copy, mídia e horário antes de aprovar' : 'revisar gargalos, aprovações abertas e cronogramas pendentes';
+  if (/design|criativo|arte|identidade/i.test(text)) action = npc.id === 'sneider-design' ? 'comparar a peça com identidade visual, referências e qualidade final' : 'acionar Sneider para revisão visual e Nina para QA de publicação';
+  if (/tr[aá]fego|ads|campanha|roas/i.test(text)) action = npc.id === 'joao-relatorios-analise' ? 'comparar métricas por período e gerar insight acionável' : 'cruzar campanha, gasto, ROAS, saldo e task operacional antes de recomendar alteração';
+  if (/token|api|erro|bug|webhook/i.test(text)) action = npc.id === 'josy-integracoes-ferramentas' ? 'validar token, permissão e resposta da API' : 'acionar Josy/Ravi para diagnóstico técnico';
+  if (/reuni[aã]o|insight|mem[oó]ria/i.test(text)) action = npc.id === 'maya-memoria-e-conhecimento' ? 'salvar decisão e consolidar contexto reutilizável' : 'registrar memória do contexto para reaproveitar nos próximos atendimentos';
+  return prefix + '\n\nAção recomendada agora: ' + action + '.\n\nMemórias disponíveis: ' + memories.global.length + ' globais e ' + memories.scoped.length + ' deste contexto. Menus onde eu atuo: ' + (npc.menus || []).join(', ') + '.';
 }
 
 function npcSendMessage() {
