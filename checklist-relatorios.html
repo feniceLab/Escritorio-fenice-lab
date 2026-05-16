@@ -4342,6 +4342,29 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
   scroll-snap-align: start;
   overflow: hidden;
 }
+.ctl-flow-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin: 0 0 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--card);
+}
+.ctl-flow-toolbar strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.86rem;
+}
+.ctl-flow-toolbar small {
+  display: block;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 750;
+}
 .ctl-stage-head {
   display: flex;
   align-items: center;
@@ -4350,6 +4373,23 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
   padding: 12px 14px;
   border-bottom: 1px solid var(--border);
   background: var(--bg);
+}
+.ctl-stage[data-stage="monthly"] { --ctl-accent: #a78bfa; }
+.ctl-stage[data-stage="weekly"] { --ctl-accent: #60a5fa; }
+.ctl-stage[data-stage="design"] { --ctl-accent: #f472b6; }
+.ctl-stage[data-stage="review"] { --ctl-accent: #fb923c; }
+.ctl-stage[data-stage="client"] { --ctl-accent: #fbbf24; }
+.ctl-stage[data-stage="changes"] { --ctl-accent: #f87171; }
+.ctl-stage[data-stage="schedule"] { --ctl-accent: #22d3ee; }
+.ctl-stage[data-stage="published"] { --ctl-accent: #46eecd; }
+.ctl-stage[data-stage] .ctl-stage-head {
+  border-top: 3px solid var(--ctl-accent);
+  background: linear-gradient(90deg, color-mix(in srgb, var(--ctl-accent) 14%, transparent), var(--bg) 48%);
+}
+.ctl-stage[data-stage] .ctl-stage-count {
+  color: var(--ctl-accent);
+  border: 1px solid color-mix(in srgb, var(--ctl-accent) 28%, transparent);
+  background: color-mix(in srgb, var(--ctl-accent) 13%, transparent);
 }
 .ctl-stage-title {
   display: flex;
@@ -4382,22 +4422,53 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 }
 .ctl-task {
   display: block;
+  position: relative;
   padding: 12px 14px;
+  border-left: 3px solid transparent;
   border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: background 0.15s, transform 0.15s;
 }
+.ctl-task[data-stage] { border-left-color: var(--ctl-task-accent, rgba(70,238,205,.25)); }
+.ctl-task[data-stage="monthly"] { --ctl-task-accent: #a78bfa; }
+.ctl-task[data-stage="weekly"] { --ctl-task-accent: #60a5fa; }
+.ctl-task[data-stage="design"] { --ctl-task-accent: #f472b6; }
+.ctl-task[data-stage="review"] { --ctl-task-accent: #fb923c; }
+.ctl-task[data-stage="client"] { --ctl-task-accent: #fbbf24; }
+.ctl-task[data-stage="changes"] { --ctl-task-accent: #f87171; }
+.ctl-task[data-stage="schedule"] { --ctl-task-accent: #22d3ee; }
+.ctl-task[data-stage="published"] { --ctl-task-accent: #46eecd; }
 .ctl-task:hover {
   background: rgba(70,238,205,0.06);
   transform: translateY(-1px);
 }
 .ctl-task:last-child { border-bottom: 0; }
+.ctl-task-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+  min-width: 0;
+}
 .ctl-task-name {
   font-weight: 850;
   color: var(--text);
+  min-width: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+.ctl-task-stage {
+  flex-shrink: 0;
+  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--ctl-task-accent) 32%, transparent);
+  background: color-mix(in srgb, var(--ctl-task-accent) 10%, transparent);
+  color: var(--ctl-task-accent);
+  padding: 2px 6px;
+  font-size: 0.58rem;
+  font-weight: 950;
+  text-transform: uppercase;
+  letter-spacing: .02em;
 }
 .ctl-task-meta {
   display: flex;
@@ -4417,6 +4488,9 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
   border: 1px solid var(--border);
   font-weight: 800;
 }
+.ctl-pill.bad { color:#f87171; border-color:rgba(239,68,68,.3); background:rgba(239,68,68,.08); }
+.ctl-pill.warn { color:#fbbf24; border-color:rgba(251,191,36,.3); background:rgba(251,191,36,.08); }
+.ctl-pill.ok { color:#46eecd; border-color:rgba(70,238,205,.3); background:rgba(70,238,205,.08); }
 .ctl-task-actions {
   display: flex;
   align-items: center;
@@ -8680,7 +8754,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
               <select id="ctlClientSelect" class="ctl-select" onchange="clientTimelineSelectClient(this.value)"></select>
               <select id="ctlRangeSelect" class="ctl-select" onchange="clientTimelineRender()">
                 <option value="all">Todo o fluxo</option>
-                <option value="week">Esta semana</option>
+                <option value="week">Semana selecionada</option>
                 <option value="next-week">Próxima semana</option>
                 <option value="month">Este mês</option>
               </select>
@@ -31292,6 +31366,8 @@ function clientTimelineSelectClient(slug) {
     clientTimelineRefreshHome();
     return;
   }
+  var rangeSel = document.getElementById('ctlRangeSelect');
+  if (rangeSel && rangeSel.value === 'all') rangeSel.value = 'week';
   clientTimelineRefresh();
 }
 
@@ -31340,10 +31416,16 @@ function clientTimelineInRange(task) {
   var now = new Date();
   var start, end;
   if (range === 'week') {
-    var day = now.getDay();
-    var diff = day === 0 ? -6 : 1 - day;
-    start = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
-    end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59);
+    var selectedWeek = clientTimelineHomeWeekInfo(clientTimelineHomeWeekKey());
+    if (selectedWeek.startISO && selectedWeek.endISO) {
+      start = new Date(selectedWeek.startISO + 'T00:00:00');
+      end = new Date(selectedWeek.endISO + 'T23:59:59');
+    } else {
+      var day = now.getDay();
+      var diff = day === 0 ? -6 : 1 - day;
+      start = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
+      end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6, 23, 59, 59);
+    }
   } else if (range === 'next-week') {
     var day2 = now.getDay();
     var diff2 = day2 === 0 ? 1 : 8 - day2;
@@ -31468,6 +31550,12 @@ function clientTimelineHomeNavWeek(delta) {
   var nextIdx = idx + delta;
   if (nextIdx < 0 || nextIdx >= all.length) return;
   _ctlHomeWeekKey = all[nextIdx];
+  var rangeSel = document.getElementById('ctlRangeSelect');
+  if (_ctlClientSlug && rangeSel) rangeSel.value = 'week';
+  if (_ctlClientSlug) {
+    clientTimelineRender();
+    return;
+  }
   _ctlHomeLoaded = false;
   _ctlHomeTasks = [];
   clientTimelineRefreshHome(true);
@@ -31475,6 +31563,12 @@ function clientTimelineHomeNavWeek(delta) {
 
 function clientTimelineHomeResetWeek() {
   _ctlHomeWeekKey = null;
+  var rangeSel = document.getElementById('ctlRangeSelect');
+  if (_ctlClientSlug && rangeSel) rangeSel.value = 'week';
+  if (_ctlClientSlug) {
+    clientTimelineRender();
+    return;
+  }
   _ctlHomeLoaded = false;
   _ctlHomeTasks = [];
   clientTimelineRefreshHome(true);
@@ -31840,6 +31934,48 @@ function clientTimelineRenderEmpty(message) {
   clientTimelineRenderNotes();
 }
 
+function clientTimelineWeekNavHtml() {
+  var weekKey = clientTimelineHomeWeekKey();
+  var weekInfo = clientTimelineHomeWeekInfo(weekKey);
+  var currentKey = (typeof _dashGetCurrentWeekKey === 'function') ? _dashGetCurrentWeekKey() : weekKey;
+  return '<div class="ctl-flow-toolbar">' +
+    '<div><strong>Fluxo semanal do cliente</strong><small>' + ctlEsc((weekInfo && weekInfo.label) || weekKey || 'Semana atual') + '</small></div>' +
+    '<div class="ctl-home-weeknav">' +
+      '<button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(-1)">‹</button>' +
+      '<span class="ctl-home-week-label">' + ctlEsc((weekInfo && weekInfo.label) || weekKey || 'Semana atual') + '</span>' +
+      '<button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(1)">›</button>' +
+      (weekKey !== currentKey ? '<button class="ctl-home-chip ok" onclick="event.stopPropagation();clientTimelineHomeResetWeek()">Atual</button>' : '') +
+    '</div>' +
+  '</div>';
+}
+
+function clientTimelineTaskTone(task) {
+  var state = (typeof mtTaskOperationalState === 'function') ? mtTaskOperationalState(task) : {};
+  if (state && state.overdue) return 'bad';
+  if (state && (state.noDeadline || state.neutral || state.draftLegacy)) return 'warn';
+  if (mtIsDoneStatus(task.status)) return 'ok';
+  return '';
+}
+
+function clientTimelineTaskActionLabel(task) {
+  var tone = clientTimelineTaskTone(task);
+  if (tone === 'bad') return 'Atraso';
+  if (!task.assignee || /sem responsável/i.test(String(task.assignee))) return 'Atribuir';
+  if (/aprovacao|aprovação|revisao|revisão/i.test(String(task.status || ''))) return 'Revisar';
+  if (/agendar|agendado/i.test(String(task.status || ''))) return 'Agenda';
+  return 'Abrir';
+}
+
+function clientTimelineNextActionHtml(item) {
+  var client = item.client || clientTimelineClientMeta(_ctlClientSlug);
+  var click = item.taskId ? 'ctOpenModal(' + ctlJsArg(item.taskId) + ')' : 'clientTimelineOpenClientContent(' + ctlJsArg(item.key || _ctlClientSlug) + ')';
+  return '<div class="ctl-next-card" onclick="' + click + '">' +
+    clientLogoAvatarHtml({ slug:item.key || _ctlClientSlug, name:client.name || item.title || item.key || _ctlClientSlug, logo_url:client.logo_url || client.logoUrl || client.logo }, 'ctl-home-logo') +
+    '<div class="ctl-next-main"><span class="ctl-next-kind ' + (item.tone || '') + '">' + ctlEsc(item.type || 'Ação') + '</span><strong>' + ctlEsc(item.title || 'Próxima ação') + '</strong><small>' + ctlEsc(item.text || '') + '</small></div>' +
+    '<div class="ctl-next-action">' + ctlEsc(item.action || 'Abrir') + '</div>' +
+  '</div>';
+}
+
 function clientTimelineRender() {
   var stagesEl = document.getElementById('ctlStages');
   var statsEl = document.getElementById('ctlStats');
@@ -31874,39 +32010,58 @@ function clientTimelineRender() {
     return '<div class="ctl-stat"><small>' + ctlEsc(item[2]) + '</small><strong>' + ctlEsc(item[1]) + '</strong><small>' + ctlEsc(item[0]) + '</small></div>';
   }).join('');
 
-  stagesEl.innerHTML = '<div class="ctl-board">' + CTL_STAGES.map(function(stage) {
+  stagesEl.innerHTML = clientTimelineWeekNavHtml() + '<div class="ctl-board">' + CTL_STAGES.map(function(stage) {
     var rows = byStage[stage.key] || [];
-    return '<section class="ctl-stage">' +
+    return '<section class="ctl-stage" data-stage="' + ctlEsc(stage.key) + '">' +
       '<div class="ctl-stage-head"><div class="ctl-stage-title"><span class="mso">' + stage.icon + '</span><div>' + ctlEsc(stage.title) + '<small>' + ctlEsc(stage.sub) + '</small></div></div><span class="ctl-stage-count">' + rows.length + '</span></div>' +
       '<div class="ctl-stage-body">' + (rows.length ? rows.map(clientTimelineTaskHtml).join('') : '<div class="ctl-empty">Sem itens nesta etapa.</div>') + '</div>' +
     '</section>';
   }).join('') + '</div>';
 
-  var nextItems = tasks.filter(function(t) { return !mtIsDoneStatus(t.status); })
-    .sort(function(a, b) { return String(clientTimelineDate(a) || 'zzzz').localeCompare(String(clientTimelineDate(b) || 'zzzz')); })
-    .slice(0, 8);
-  nextEl.innerHTML = nextItems.length ? nextItems.map(function(t) {
+  var clientMeta = clientTimelineClientMeta(_ctlClientSlug);
+  var openTasks = tasks.filter(function(t) { return !mtIsDoneStatus(t.status); });
+  var priorityTasks = openTasks.slice().sort(function(a, b) {
+    var toneA = clientTimelineTaskTone(a) === 'bad' ? 0 : (clientTimelineTaskTone(a) === 'warn' ? 1 : 2);
+    var toneB = clientTimelineTaskTone(b) === 'bad' ? 0 : (clientTimelineTaskTone(b) === 'warn' ? 1 : 2);
+    if (toneA !== toneB) return toneA - toneB;
+    return String(clientTimelineDate(a) || 'zzzz').localeCompare(String(clientTimelineDate(b) || 'zzzz'));
+  }).slice(0, 8);
+  nextEl.innerHTML = priorityTasks.length ? priorityTasks.map(function(t) {
     var stage = clientTimelineStageFor(t.status);
     var date = clientTimelineDate(t) || 'sem data';
-    return '<div class="ctl-next-item" onclick="ctOpenModal(\'' + ctlEsc(t.id) + '\')" style="cursor:pointer"><strong>' + ctlEsc(t.name || 'Task') + '</strong><small>' + ctlEsc(stage.title) + ' · ' + ctlEsc(t.assignee || 'Sem responsável') + ' · ' + ctlEsc(date) + '</small></div>';
-  }).join('') : '<div class="ctl-empty">Nenhuma próxima ação aberta.</div>';
+    var tone = clientTimelineTaskTone(t);
+    return clientTimelineNextActionHtml({
+      kind: 'task',
+      type: clientTimelineTaskActionLabel(t),
+      tone: tone,
+      action: 'Abrir',
+      taskId: t.id,
+      key: _ctlClientSlug,
+      client: clientMeta,
+      title: t.name || 'Task',
+      text: stage.title + ' · ' + (t.assignee || 'Sem responsável') + ' · ' + date
+    });
+  }).join('') : '<div class="ctl-empty">Nenhuma próxima ação aberta nesta semana.</div>';
   clientTimelineRenderLurdinha(tasks, byStage);
   clientTimelineRenderNotes();
 }
 
 function clientTimelineTaskHtml(task) {
   var status = clientTimelineStatusDef(task.status || 'a-fazer');
+  var stage = clientTimelineStageFor(status.key);
   var next = clientTimelineNextStatus(status.key);
   var date = clientTimelineDate(task) || 'sem data';
   var format = typeof ctRenderFormatBadge === 'function' ? ctRenderFormatBadge(task.publish_config) : '';
-  return '<div class="ctl-task" onclick="ctOpenModal(\'' + ctlEsc(task.id) + '\')">' +
+  var tone = clientTimelineTaskTone(task);
+  var actionLabel = clientTimelineTaskActionLabel(task);
+  return '<div class="ctl-task" data-stage="' + ctlEsc(stage.key) + '" onclick="ctOpenModal(\'' + ctlEsc(task.id) + '\')">' +
     '<div style="min-width:0">' +
-      '<div class="ctl-task-name" title="' + ctlEsc(task.name || '') + '">' + ctlEsc(task.name || 'Task') + '</div>' +
+      '<div class="ctl-task-top"><div class="ctl-task-name" title="' + ctlEsc(task.name || '') + '">' + ctlEsc(task.name || 'Task') + '</div><span class="ctl-task-stage">' + ctlEsc(actionLabel) + '</span></div>' +
       '<div class="ctl-task-meta">' +
         '<span class="ctl-pill" style="background:' + status.bg + ';color:' + status.color + '">' + ctlEsc(status.label) + '</span>' +
         (task._parentName ? '<span class="ctl-pill"><span class="mso">subdirectory_arrow_right</span>' + ctlEsc(task._parentName) + '</span>' : '') +
         '<span class="ctl-pill"><span class="mso">person</span>' + ctlEsc(task.assignee || 'Sem responsável') + '</span>' +
-        '<span class="ctl-pill"><span class="mso">event</span>' + ctlEsc(date) + '</span>' +
+        '<span class="ctl-pill ' + ctlEsc(tone) + '"><span class="mso">event</span>' + ctlEsc(date) + '</span>' +
         (format ? '<span class="ctl-pill">' + format + '</span>' : '') +
       '</div>' +
     '</div>' +
