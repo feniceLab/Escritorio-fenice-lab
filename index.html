@@ -1233,9 +1233,9 @@ body {
 .sidebar-menu-category.open .sidebar-menu-caret { transform: rotate(-90deg); color: #46eecd; }
 .sidebar-submenu {
   display: none;
-  position: absolute;
-  top: -6px;
-  left: calc(100% + 8px);
+  position: fixed;
+  top: var(--sidebar-submenu-top, 84px);
+  left: 216px;
   min-width: 245px;
   max-width: 320px;
   max-height: min(74vh, 620px);
@@ -1268,6 +1268,20 @@ body {
   text-transform: uppercase;
   color: #46eecd;
   border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-submenu-section {
+  padding: 10px 9px 5px;
+  margin-top: 6px;
+  font-size: 9px;
+  font-weight: 900;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(70,238,205,0.76);
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.sidebar-submenu-title + .sidebar-submenu-section {
+  margin-top: 0;
+  border-top: 0;
 }
 .sidebar-submenu button.sub {
   padding: 8px 10px;
@@ -11183,19 +11197,19 @@ let SIDEBAR_MENU = [
   { type: 'item', id: 'pub-history', label: 'Publicações', icon: '<span class="mso">assignment</span>', tab: 'pub-history' },
   { type: 'item', id: 'calendario', label: 'Calendário', icon: '<span class="mso">calendar_today</span>', tab: 'calendario' },
   { type: 'item', id: 'meta-publish', label: 'Histórico de Agendamentos', icon: '<span class="mso">upload</span>', tab: 'meta-publish' },
-  { type: 'category', id: 'cat-relatorios', label: 'Relatórios', items: [
-    { type: 'item', id: 'weekly', label: 'Semanal', icon: '<span class="mso">calendar_today</span>', tab: 'weekly' },
-    { type: 'item', id: 'monthly', label: 'Mensal', icon: '<span class="mso">calendar_month</span>', tab: 'monthly' },
-  ]},
   { type: 'category', id: 'cat-paid-traffic', label: 'Tráfego Pago', items: [
+    { type: 'section', label: 'Central' },
     { type: 'item', id: 'paid-traffic', label: 'Visão Geral', icon: '<span class="mso">query_stats</span>', tab: 'paid-traffic' },
     { type: 'item', id: 'traffic', label: 'Operação', icon: '<span class="mso">campaign</span>', tab: 'traffic' },
+    { type: 'section', label: 'Relatórios' },
+    { type: 'item', id: 'weekly', label: 'Semanal', icon: '<span class="mso">calendar_today</span>', tab: 'weekly' },
+    { type: 'item', id: 'monthly', label: 'Mensal', icon: '<span class="mso">calendar_month</span>', tab: 'monthly' },
     { type: 'item', id: 'meta-bi', label: 'BI Meta Ads', icon: '<span class="mso">bar_chart</span>', tab: 'meta-bi' },
+    { type: 'section', label: 'Contas e Canais' },
     { type: 'item', id: 'meta-balance', label: 'Contas & Saldos', icon: '<span class="mso">payments</span>', tab: 'meta-balance' },
     { type: 'item', id: 'meta-config', label: 'Configurações Meta', icon: '<span class="mso">settings</span>', tab: 'meta-config' },
     { type: 'item', id: 'google-ads', label: 'Google Ads', icon: '<span class="mso">trending_up</span>', tab: 'google-ads' },
-  ]},
-  { type: 'category', id: 'cat-geral', label: 'Geral', items: [
+    { type: 'section', label: 'Gestão' },
     { type: 'item', id: 'clients', label: 'Clientes', icon: '<span class="mso">group</span>', tab: 'client-central' },
     { type: 'item', id: 'history', label: 'Histórico', icon: '<span class="mso">assignment</span>', tab: 'history' },
     { type: 'item', id: 'system-logs', label: 'Logs do Sistema', icon: '<span class="mso">build</span>', tab: 'system-logs' },
@@ -11221,13 +11235,17 @@ function sidebarLoadOrder() {
       if (!byId[savedEntry.id]) return;
       const entry = byId[savedEntry.id];
       // Reorder items within categories if saved
-      if (entry.type === 'category' && Array.isArray(savedEntry.itemOrder) && savedEntry.itemOrder.length > 0) {
+      if (entry.id === 'cat-paid-traffic') {
+        reordered.push(entry);
+      } else if (entry.type === 'category' && Array.isArray(savedEntry.itemOrder) && savedEntry.itemOrder.length > 0) {
         const itemById = {};
-        entry.items.forEach(function(it) { itemById[it.id] = it; });
+        entry.items.forEach(function(it) { if (it.id) itemById[it.id] = it; });
         const reorderedItems = [];
         savedEntry.itemOrder.forEach(function(iid) { if (itemById[iid]) reorderedItems.push(itemById[iid]); });
         // Add any items not in saved order (newly added)
-        entry.items.forEach(function(it) { if (!savedEntry.itemOrder.includes(it.id)) reorderedItems.push(it); });
+        entry.items.forEach(function(it) {
+          if (it.type === 'section' || !it.id || !savedEntry.itemOrder.includes(it.id)) reorderedItems.push(it);
+        });
         reordered.push(Object.assign({}, entry, { items: reorderedItems }));
       } else {
         reordered.push(entry);
@@ -11245,7 +11263,7 @@ function sidebarSaveOrder() {
     const order = SIDEBAR_MENU.map(function(entry) {
       const out = { id: entry.id };
       if (entry.type === 'category' && Array.isArray(entry.items)) {
-        out.itemOrder = entry.items.map(function(it) { return it.id; });
+        out.itemOrder = entry.items.filter(function(it) { return !!it.id; }).map(function(it) { return it.id; });
       }
       return out;
     });
@@ -11342,11 +11360,19 @@ var SIDEBAR_ICON_EM = {
 
 var SIDEBAR_CATEGORY_ICONS = {
   'cat-conteudo': '<span class="mso">folder</span>',
-  'cat-relatorios': '<span class="mso">monitoring</span>',
   'cat-paid-traffic': '<span class="mso">ads_click</span>',
-  'cat-geral': '<span class="mso">apps</span>',
   'cat-agents': '<span class="mso">smart_toy</span>'
 };
+
+function sidebarPositionCompactMenu(categoryEl) {
+  if (!categoryEl) return;
+  var submenu = categoryEl.querySelector('.sidebar-submenu');
+  var trigger = categoryEl.querySelector('.sidebar-menu-trigger');
+  if (!submenu || !trigger) return;
+  var rect = trigger.getBoundingClientRect();
+  var top = Math.max(12, Math.min(rect.top - 6, window.innerHeight - 96));
+  submenu.style.setProperty('--sidebar-submenu-top', top + 'px');
+}
 
 function sidebarToggleCompactMenu(event, categoryId) {
   if (event) {
@@ -11357,7 +11383,10 @@ function sidebarToggleCompactMenu(event, categoryId) {
     if (el.getAttribute('data-sidebar-cat-id') !== categoryId) el.classList.remove('open');
   });
   var el = document.querySelector('.sidebar-menu-category[data-sidebar-cat-id="' + categoryId + '"]');
-  if (el) el.classList.toggle('open');
+  if (el) {
+    sidebarPositionCompactMenu(el);
+    el.classList.toggle('open');
+  }
 }
 
 document.addEventListener('click', function(event) {
@@ -11404,7 +11433,7 @@ function renderSidebarMenu() {
     } else if (entry.type === 'category') {
       const extraStyle = isFirstCategory ? ' style="margin-top:4px"' : '';
       isFirstCategory = false;
-      html += '<div class="sidebar-menu-category" data-sidebar-cat-id="' + entry.id + '" draggable="true"' + extraStyle + '>' +
+      html += '<div class="sidebar-menu-category" data-sidebar-cat-id="' + entry.id + '" draggable="true" onmouseenter="sidebarPositionCompactMenu(this)"' + extraStyle + '>' +
         '<button type="button" class="sidebar-menu-trigger" onclick="sidebarToggleCompactMenu(event,\'' + entry.id + '\')">' +
           '<span class="sidebar-drag-handle" title="Arrastar categoria"><span class="mso">more_vert</span><span class="mso">more_vert</span></span>' +
           '<span class="icon">' + (SIDEBAR_CATEGORY_ICONS[entry.id] || '<span class="mso">folder</span>') + '</span>' +
@@ -11414,7 +11443,8 @@ function renderSidebarMenu() {
         '<div class="sidebar-submenu" data-sidebar-submenu="' + entry.id + '">' +
           '<div class="sidebar-submenu-title">' + entry.label + '</div>';
       (entry.items || []).forEach(function(item) {
-        if (item.type === 'folder') html += renderSidebarFolder(item.id);
+        if (item.type === 'section') html += '<div class="sidebar-submenu-section">' + item.label + '</div>';
+        else if (item.type === 'folder') html += renderSidebarFolder(item.id);
         else if (item.type === 'item') html += renderSidebarItemButton(item, entry.id);
       });
       html += '</div></div>';
