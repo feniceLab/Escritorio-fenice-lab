@@ -157,10 +157,11 @@ function safeJson(value) {
   }
 }
 
-function taskPostDate(task) {
+function taskPostDate(task, { allowDueDateFallback = false } = {}) {
   if (!task) return '';
   const publishConfig = safeJson(task.publish_config) || {};
   const raw = (publishConfig && (publishConfig.post_date || publishConfig.publish_date || publishConfig.scheduled_date))
+    || (allowDueDateFallback ? task.due_date : '')
     || '';
   const datePart = String(raw || '').slice(0, 10);
   return /^\d{4}-\d{2}-\d{2}$/.test(datePart) ? datePart : '';
@@ -886,7 +887,7 @@ async function autoPublishOverdueScheduled({ dry_run = true, user = 'Sistema (au
   );
 
   const overdue = candidates
-    .map((task) => ({ ...task, post_date: taskPostDate(task) }))
+    .map((task) => ({ ...task, post_date: taskPostDate(task, { allowDueDateFallback: true }) }))
     .filter((task) => normalizeContentStatus(task.status) === 'agendado' && task.post_date && task.post_date < todayISO);
 
   const summary = {

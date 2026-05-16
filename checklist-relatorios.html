@@ -5724,6 +5724,8 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 .mt-client-section { margin-bottom:24px; }
 .mt-client-header { display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-container-low,#f2f4f7);border-radius:8px;margin-bottom:8px;cursor:pointer; }
 .mt-client-header:hover { background:var(--surface-container,#eceef1); }
+.mt-client-header .mt-client-chevron { margin-left:4px;color:var(--text-tertiary);transition:transform .18s ease;font-size:18px;line-height:1; }
+.mt-client-section.is-open .mt-client-chevron { transform:rotate(90deg); color:#46eecd; }
 .mt-client-avatar { width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:white;overflow:hidden; }
 .mt-client-name { font-size:14px;font-weight:600;flex:1; }
 .mt-client-count { font-size:11px;font-weight:700;color:var(--text-tertiary);background:var(--surface-container,#eceef1);padding:2px 8px;border-radius:4px; }
@@ -5735,6 +5737,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 .mt-header-col .mt-resize-handle:hover, .mt-header-col .mt-resize-handle.active { background:var(--brand,#2a4dd7);opacity:1; }
 .mt-header-col:last-child .mt-resize-handle { display:none; }
 .mt-row { display:grid;gap:0;padding:0 16px;height:42px;border-bottom:1px solid rgba(196,197,215,0.15);font-size:13px;align-items:center;transition:background 0.08s;cursor:pointer;min-width:max-content; }
+.mt-row.has-thumb { height:58px; }
 .mt-row:hover { background:#f8fafc; }
 .mt-row:last-child { border-bottom:none; }
 .mt-row.by-client, .mt-row.by-list { grid-template-columns:none; }
@@ -5815,6 +5818,14 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 .mt-nexus .mt-client-header:hover{background:rgba(255,255,255,0.07)}
 .mt-nexus .mt-client-name{color:#e2e8f0}
 .mt-nexus .mt-client-count{background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.4)}
+.mt-task-thumb { width:40px;height:40px;border-radius:8px;background:rgba(70,238,205,.08);border:1px solid rgba(70,238,205,.12);display:flex;align-items:center;justify-content:center;overflow:hidden;flex:0 0 auto;color:#46eecd; }
+.mt-task-thumb img,.mt-task-thumb video { width:100%;height:100%;object-fit:cover;display:block; }
+.mt-task-thumb.process { color:#93c5fd;border-color:rgba(147,197,253,.22);background:rgba(147,197,253,.08); }
+.mt-task-thumb.warn { color:#fbbf24;border-color:rgba(251,191,36,.28);background:rgba(251,191,36,.09); }
+.mt-task-name-wrap { min-width:0;display:flex;align-items:center;gap:8px; }
+.mt-task-title-stack { min-width:0;display:flex;flex-direction:column;gap:3px; }
+.mt-task-title-stack .mt-task-title { overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#e2e8f0; }
+.mt-task-title-stack small { color:rgba(255,255,255,.36);font-size:10px;font-weight:700;letter-spacing:.02em;text-transform:uppercase; }
 /* Bottom widgets */
 .mt-nx-bottom{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 24px 20px;flex-shrink:0}
 .mt-nx-widget{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.06);border-radius:10px;padding:14px 16px}
@@ -32078,8 +32089,11 @@ function clientTimelineLurdinhaFindings(tasks, byStage) {
   var now = new Date();
   var open = tasks.filter(function(t) { return !mtIsDoneStatus(t.status); });
   var overdue = open.filter(function(t) {
-    if (!t.due_date) return false;
-    var d = new Date(t.due_date + 'T23:59:59');
+    var state = typeof mtTaskOperationalState === 'function' ? mtTaskOperationalState(t) : null;
+    if (state) return !!state.overdue;
+    var postDate = (t.publish_config && t.publish_config.post_date) || '';
+    if (!postDate) return false;
+    var d = new Date(postDate + 'T23:59:59');
     return d < now;
   });
   if (overdue.length) findings.push({
@@ -35329,6 +35343,7 @@ let mtView = 'list'; // default: lista única para designers
 let mtOperationalFilter = '';
 let mtGroupFilter = { client: '', person: '', agent: '' };
 let mtGroupSort = { client: 'az', person: 'az', agent: 'az' };
+let mtAutoPromoteRan = false;
 
 async function mtInit() {
   if (!gpState.user) return;
@@ -35343,6 +35358,7 @@ async function mtInit() {
   if (mtStatusFilterEl) mtStatusFilterEl.style.display = '';
 
   try {
+    await mtAutoPromoteOverdueScheduled();
     const res = await ctApi('list_my_tasks', { assignee: gpState.user.name });
     mtTasks = Array.isArray(res) ? res : (res.data || []);
     mtAllContentTasks = [];
@@ -35433,10 +35449,62 @@ async function mtInit() {
       };
     });
 
+    await mtHydrateTaskCreatives([].concat(mtTasks, mtAllContentTasks, mtRecentTasks));
     mtRender();
   } catch (e) {
     el.innerHTML = '<div class="mt-empty">Erro ao carregar tasks: ' + e.message + '</div>';
   }
+}
+
+async function mtAutoPromoteOverdueScheduled() {
+  if (mtAutoPromoteRan) return null;
+  mtAutoPromoteRan = true;
+  try {
+    var result = await ctApi('auto_publish_overdue_scheduled', {
+      dry_run: false,
+      user: 'Sistema (auto minhas tasks)'
+    });
+    if (result && result.updated) console.info('Auto-publicadas ' + result.updated + ' tasks agendadas vencidas ao abrir Minhas Tasks');
+    return result;
+  } catch(e) {
+    console.warn('mtAutoPromoteOverdueScheduled error:', e);
+    return null;
+  }
+}
+
+async function mtHydrateTaskCreatives(taskLists) {
+  var rows = (taskLists || []).filter(function(t) { return t && t.id; });
+  if (!rows.length || typeof _sbQuery !== 'function') return;
+  var ids = Array.from(new Set(rows.map(function(t) { return t.id; })));
+  var byTask = {};
+  var priority = { final: 3, creative: 2, reference: 1 };
+  for (var i = 0; i < ids.length; i += 180) {
+    var batch = ids.slice(i, i + 180);
+    try {
+      var atts = await _sbQuery('content_attachments', {
+        select: 'id,task_id,file_url,file_type,file_name,category,format_type,created_at',
+        filters: ['task_id=in.(' + batch.join(',') + ')', 'category=in.(final,creative)'],
+        order: 'created_at.desc',
+        limit: 1000
+      }) || [];
+      atts.forEach(function(a) {
+        var current = byTask[a.task_id];
+        var score = priority[String(a.category || '').toLowerCase()] || 0;
+        var currentScore = current ? (priority[String(current.category || '').toLowerCase()] || 0) : -1;
+        if (!current || score > currentScore) byTask[a.task_id] = a;
+      });
+    } catch(e) {
+      console.warn('mt hydrate creatives failed:', e);
+    }
+  }
+  rows.forEach(function(t) {
+    var a = byTask[t.id];
+    if (!a) return;
+    t._creativeUrl = a.file_url || '';
+    t._creativeType = a.file_type || '';
+    t._creativeName = a.file_name || '';
+    t._creativeCategory = a.category || '';
+  });
 }
 
 function mtRenderNotifications() {
@@ -35534,13 +35602,27 @@ function mtTaskPostDate(task) {
   return cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || cfg.scheduled_at || cfg.scheduledAt || '';
 }
 
+function mtTaskPostDateISO(task) {
+  var raw = mtTaskPostDate(task) || '';
+  var datePart = String(raw || '').slice(0, 10);
+  return /^\d{4}-\d{2}-\d{2}$/.test(datePart) ? datePart : '';
+}
+
+function mtTaskOperationalDateISO(task) {
+  return mtTaskPostDateISO(task) || (task && task.post_date ? String(task.post_date).slice(0, 10) : '') || (task && task.due_date ? String(task.due_date).slice(0, 10) : '');
+}
+
+function mtTaskHasPostDate(task) {
+  return !!mtTaskPostDateISO(task);
+}
+
 function mtTaskHasDeliveryDesign(task) {
   var cfg = mtTaskPublishConfig(task);
   return !!(task && (task.due_date || cfg.delivery_design || cfg.design_delivery_date || cfg.entrega_design));
 }
 
 function mtTaskHasOperationalDate(task) {
-  return !!(mtTaskHasDeliveryDesign(task) || mtTaskPostDate(task));
+  return !!mtTaskOperationalDateISO(task);
 }
 
 function mtTaskHasCreative(task) {
@@ -35554,9 +35636,41 @@ function mtTaskHasCreative(task) {
   });
 }
 
+function mtTaskCreativeInfo(task) {
+  if (!task) return null;
+  var url = task._creativeUrl || task.thumbnail_url || '';
+  var type = task._creativeType || '';
+  var name = task._creativeName || '';
+  var cfg = mtTaskPublishConfig(task);
+  if (!url) {
+    url = cfg.thumbnail_url || cfg.media_url || cfg.file_url || '';
+    type = cfg.media_type || cfg.file_type || '';
+    name = cfg.file_name || '';
+  }
+  if (!url) return null;
+  return { url: url, type: type, name: name };
+}
+
+function mtTaskThumbHtml(task) {
+  var creative = mtTaskCreativeInfo(task);
+  if (creative && creative.url) {
+    var safeUrl = esc(creative.url);
+    var isVideo = /video/i.test(String(creative.type || '')) || /\.(mp4|mov|webm|m4v)$/i.test(String(creative.name || creative.url || ''));
+    return '<span class="mt-task-thumb" title="Criativo anexado">' + (isVideo
+      ? '<video src="' + safeUrl + '" muted playsinline preload="metadata"></video>'
+      : '<img src="' + safeUrl + '" loading="lazy" onerror="this.parentElement.classList.add(\'warn\');this.parentElement.innerHTML=\'<span class=&quot;mso&quot;>broken_image</span>\'">') + '</span>';
+  }
+  var st = mtNormalizeStatus(task && task.status);
+  if (['aprovacao-design','aprovacao','aprovado','agendar','agendado','publicado'].includes(st)) {
+    return '<span class="mt-task-thumb warn" title="Sem criativo encontrado"><span class="mso">image_not_supported</span></span>';
+  }
+  return '<span class="mt-task-thumb process" title="Criativo em processo"><span class="mso">hourglass_empty</span></span>';
+}
+
 function mtTaskOperationalState(task) {
   var status = mtNormalizeStatus(task && task.status);
   var hasDate = mtTaskHasOperationalDate(task);
+  var hasPostDate = mtTaskHasPostDate(task);
   var hasCreative = mtTaskHasCreative(task);
   var hasOwner = !!String(task && task.assignee || '').trim();
   var neutral = ['standby', 'nao-utilizado', 'nao-publicado', 'cancelado'].includes(status);
@@ -35565,9 +35679,10 @@ function mtTaskOperationalState(task) {
   var measurable = !neutral && !legacyDraft && hasDate;
   var open = measurable && !done;
   var overdue = false;
-  if (open && task && task.due_date) {
+  var opDate = mtTaskOperationalDateISO(task);
+  if (open && hasPostDate && opDate) {
     var today = new Date(); today.setHours(0, 0, 0, 0);
-    overdue = new Date(task.due_date + 'T00:00:00') < today;
+    overdue = new Date(opDate + 'T00:00:00') < today;
   }
   return {
     status: status,
@@ -35578,6 +35693,9 @@ function mtTaskOperationalState(task) {
     measurable: measurable,
     open: open,
     overdue: overdue,
+    operationalDate: opDate,
+    hasPostDate: hasPostDate,
+    internalDesignLate: !overdue && open && !hasPostDate && task && task.due_date ? (new Date(task.due_date + 'T00:00:00') < new Date(new Date().setHours(0,0,0,0))) : false,
     noOwnerReal: !hasOwner && !legacyDraft && (hasCreative || hasDate || !['a-fazer', 'backlog'].includes(status))
   };
 }
@@ -35719,12 +35837,7 @@ function mtClientName(taskOrClientId) {
 }
 
 function mtTaskReferenceDate(task) {
-  if (!task) return null;
-  var publishConfig = task.publish_config || {};
-  if (typeof publishConfig === 'string') {
-    try { publishConfig = JSON.parse(publishConfig); } catch(e) { publishConfig = {}; }
-  }
-  var raw = publishConfig.post_date || publishConfig.publish_date || publishConfig.scheduled_date || task.post_date || task.due_date || '';
+  var raw = mtTaskOperationalDateISO(task);
   if (!raw) return null;
   var datePart = String(raw).slice(0, 10);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(datePart)) return null;
@@ -35890,6 +36003,25 @@ function mtApplyAgentSearch(rows) {
   });
 }
 
+function mtClientOpenState() {
+  try {
+    var parsed = JSON.parse(localStorage.getItem('mt_client_open_groups') || '{}');
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch(e) { return {}; }
+}
+
+function mtIsClientGroupOpen(clientId) {
+  var state = mtClientOpenState();
+  return !!state[clientId];
+}
+
+function mtToggleClientGroup(clientId) {
+  var state = mtClientOpenState();
+  state[clientId] = !state[clientId];
+  try { localStorage.setItem('mt_client_open_groups', JSON.stringify(state)); } catch(e) {}
+  mtRender();
+}
+
 function mtSetGroupFilter(view, value) {
   mtView = view;
   mtGroupFilter[view] = value || '';
@@ -35938,13 +36070,30 @@ function mtSortTasks(tasks) {
   const statusOrder = { 'alteracao-design': 0, 'alteracao': 1, 'design': 2, 'em-andamento': 3, 'em-revisao': 4, 'revisao': 5, 'aprovacao-design': 6, 'aprovacao': 7, 'agendar': 8, 'agendado': 9, 'a-fazer': 10, 'backlog': 11, 'publicado': 12 };
   const prioOrder = { urgente: 0, alta: 1, normal: 2, baixa: 3, medium: 2 };
   return tasks.slice().sort(function(a, b) {
+    var todayISO = new Date().toISOString().slice(0, 10);
+    function bucket(t) {
+      var d = mtTaskOperationalDateISO(t);
+      var done = mtIsDoneStatus(t.status);
+      if (d && !done && d >= todayISO) return 0;
+      if (!d) return 1;
+      if (d && !done && d < todayISO) return 2;
+      return 3;
+    }
+    var bA = bucket(a), bB = bucket(b);
+    if (bA !== bB) return bA - bB;
+    var dA = mtTaskOperationalDateISO(a) || '9999-99-99';
+    var dB = mtTaskOperationalDateISO(b) || '9999-99-99';
+    if (bA === 3) {
+      if (dA !== dB) return dB.localeCompare(dA);
+    } else if (dA !== dB) {
+      return dA.localeCompare(dB);
+    }
     const sA = statusOrder[mtNormalizeStatus(a.status)] ?? 99;
     const sB = statusOrder[mtNormalizeStatus(b.status)] ?? 99;
     if (sA !== sB) return sA - sB;
     const pA = prioOrder[a.priority] ?? 2;
     const pB = prioOrder[b.priority] ?? 2;
     if (pA !== pB) return pA - pB;
-    if (a.due_date && b.due_date) return a.due_date.localeCompare(b.due_date);
     return String(a.name || '').localeCompare(String(b.name || ''));
   });
 }
@@ -36313,25 +36462,30 @@ function mtRenderByClient(el, tasks) {
     const color = client ? (client.tenant === 'starken' ? 'var(--brand)' : 'var(--brand-alpha)') : '#6b7280';
     const done = group.done;
     const open = group.open;
+    const isOpen = mtIsClientGroupOpen(cid);
 
-    html += '<div class="mt-client-section">';
-    html += '<div class="mt-client-header">';
+    html += '<div class="mt-client-section' + (isOpen ? ' is-open' : '') + '">';
+    html += '<div class="mt-client-header" onclick="mtToggleClientGroup(' + ctlJsArg(cid) + ')">';
+    html += '<span class="mso mt-client-chevron">chevron_right</span>';
     html += clientLogoAvatarHtml({ slug: cid, name: clientName, logo_url: client && client.logo_url }, 'mt-client-avatar', 'background:' + color);
     html += '<span class="mt-client-name">' + esc(clientName) + '</span>';
     html += '<div class="mt-nx-group-summary"><span class="mt-nx-mini-pill">' + open + ' abertas</span><span class="mt-nx-mini-pill">' + done + ' feitas</span><span class="mt-client-count">' + clientTasks.length + '</span></div>';
     html += '</div>';
-    var cols = _mtGetColWidths('by-client');
-    html += '<div class="mt-list">';
-    html += '<div class="mt-header-row by-client" style="grid-template-columns:' + cols.join(' ') + '">';
-    var hdrs = ['NOME','FORMATO','STATUS','RESPONSÁVEL','<span class="mso">design_services</span> ENTREGA','<span class="mso">calendar_today</span> POST','PUBLICAÇÃO','PRIO'];
-    hdrs.forEach(function(h, i) {
-      html += '<div class="mt-header-col" data-col="' + i + '">' + h + '<div class="mt-resize-handle" data-col="' + i + '"></div></div>';
-    });
+    if (isOpen) {
+      var cols = _mtGetColWidths('by-client');
+      html += '<div class="mt-list">';
+      html += '<div class="mt-header-row by-client" style="grid-template-columns:' + cols.join(' ') + '">';
+      var hdrs = ['NOME','FORMATO','STATUS','RESPONSÁVEL','<span class="mso">design_services</span> ENTREGA','<span class="mso">calendar_today</span> POST','PUBLICAÇÃO','PRIO'];
+      hdrs.forEach(function(h, i) {
+        html += '<div class="mt-header-col" data-col="' + i + '">' + h + '<div class="mt-resize-handle" data-col="' + i + '"></div></div>';
+      });
+      html += '</div>';
+      mtSortTasks(clientTasks).forEach(t => {
+        html += mtRenderRow(t, 'by-client');
+      });
+      html += '</div>';
+    }
     html += '</div>';
-    mtSortTasks(clientTasks).forEach(t => {
-      html += mtRenderRow(t, 'by-client');
-    });
-    html += '</div></div>';
   });
 
   el.innerHTML = html;
@@ -36505,7 +36659,7 @@ function mtRenderRow(task, mode) {
   const primaryAssignee = assignees[0] || '';
   const user = CT_USERS.find(u => u.name === primaryAssignee);
   const dueStr = task.due_date ? new Date(task.due_date + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : '—';
-  const _mtPostDate = (task.publish_config && task.publish_config.post_date) ? task.publish_config.post_date : null;
+  const _mtPostDate = mtTaskPostDateISO(task) || null;
   const mtPostStr = _mtPostDate ? new Date(_mtPostDate + 'T00:00:00').toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }) : '—';
 
   const clientName = mtClientName(task);
@@ -36565,14 +36719,18 @@ function mtRenderRow(task, mode) {
     }
   }
   var colStyle = 'grid-template-columns:' + _mtGetColWidths(mode).join(' ') + ';';
-  let html = '<div class="mt-row ' + mode + '" style="' + colStyle + rowStyle + '" onclick="ctOpenModal(\'' + task.id + '\')">';
+  var state = mtTaskOperationalState(task);
+  var subtitle = state.hasPostDate ? 'Postagem ' + mtPostStr : (task.due_date ? 'Prazo design ' + dueStr : 'Sem data de postagem');
+  var thumb = mtTaskThumbHtml(task);
+  let html = '<div class="mt-row ' + mode + ' has-thumb" style="' + colStyle + rowStyle + '" onclick="ctOpenModal(\'' + task.id + '\')">';
 
   if (mode === 'by-list') {
     html += '<div style="font-size:12px;font-weight:500;color:rgba(255,255,255,0.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis" title="' + clientName + '">' + clientName + '</div>';
   }
 
-  html += '<div style="font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;align-items:center;gap:8px;color:#e2e8f0">'
-    + '<span style="overflow:hidden;text-overflow:ellipsis">' + (task.name || '') + '</span>'
+  html += '<div class="mt-task-name-wrap">'
+    + thumb
+    + '<span class="mt-task-title-stack"><span class="mt-task-title">' + esc(task.name || '') + '</span><small>' + esc(subtitle) + '</small></span>'
     + quickAction
     + '</div>';
   html += formatBadge;
