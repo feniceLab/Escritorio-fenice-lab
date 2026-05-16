@@ -1117,6 +1117,41 @@ body {
 .sidebar-processo-badge-standby { background: rgba(156,163,175,0.2); color: #6b7280; }
 .sidebar-processo-badge-arquivado { background: rgba(239,68,68,0.14); color: #991b1b; }
 
+.sidebar-content-clients {
+  margin: 18px 10px 10px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(186,202,196,0.12);
+}
+.sidebar-content-title {
+  color: #46eecd;
+  font-size: 0.64rem;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  padding: 0 4px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-content-count {
+  letter-spacing: 0;
+  color: var(--sidebar-text-dim);
+  background: rgba(255,255,255,0.06);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+.sidebar-content-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  max-height: min(44vh, 430px);
+  overflow: auto;
+  padding-right: 2px;
+}
+.sidebar-content-clients .sidebar-client-btn {
+  padding-left: 8px;
+}
+
 .nav-category {
   font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
   color: rgba(255,255,255,0.34); padding: 8px 12px 7px; margin-bottom: 0;
@@ -4526,6 +4561,27 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .ctl-home-filterbar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
 .ctl-home-filterbar .ctl-home-chip.active { color:#46eecd; border-color:rgba(70,238,205,.42); background:rgba(70,238,205,.12); box-shadow:0 0 0 1px rgba(70,238,205,.08) inset; }
 .ctl-home-empty { padding: 18px; color: var(--text-muted); text-align:center; border:1px dashed var(--border); border-radius:10px; background:var(--bg); }
+.ctl-next-card {
+  display:grid;
+  grid-template-columns:42px minmax(0,1fr) auto;
+  gap:10px;
+  align-items:center;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:var(--bg);
+  padding:10px;
+  cursor:pointer;
+  transition:transform .15s ease,border-color .15s ease,background .15s ease;
+}
+.ctl-next-card:hover { transform:translateY(-1px); border-color:rgba(70,238,205,.35); background:rgba(70,238,205,.05); }
+.ctl-next-main { min-width:0; }
+.ctl-next-main strong { display:block; color:var(--text); font-size:.82rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ctl-next-main small { display:block; margin-top:3px; color:var(--text-muted); font-size:.68rem; line-height:1.3; }
+.ctl-next-kind { display:inline-flex; align-items:center; gap:4px; width:max-content; max-width:100%; margin-bottom:4px; border-radius:999px; padding:2px 7px; font-size:.62rem; font-weight:950; letter-spacing:.02em; text-transform:uppercase; border:1px solid var(--border); color:var(--text-secondary); background:var(--card); }
+.ctl-next-kind.bad { color:#f87171; border-color:rgba(239,68,68,.3); background:rgba(239,68,68,.08); }
+.ctl-next-kind.warn { color:#fbbf24; border-color:rgba(251,191,36,.3); background:rgba(251,191,36,.08); }
+.ctl-next-kind.ok { color:#46eecd; border-color:rgba(70,238,205,.3); background:rgba(70,238,205,.08); }
+.ctl-next-action { color:var(--text-secondary); font-size:.68rem; font-weight:900; white-space:nowrap; }
 .ctl-home-health-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
 .ctl-health-tile { border:1px solid var(--border); border-radius:10px; background:var(--bg); padding:10px; min-height:72px; display:flex; flex-direction:column; justify-content:space-between; }
 .ctl-health-tile strong { color:var(--text); font-size:1.25rem; line-height:1; }
@@ -11040,11 +11096,6 @@ let SIDEBAR_MENU = [
   { type: 'item', id: 'pub-history', label: 'Publicações', icon: '<span class="mso">assignment</span>', tab: 'pub-history' },
   { type: 'item', id: 'calendario', label: 'Calendário', icon: '<span class="mso">calendar_today</span>', tab: 'calendario' },
   { type: 'item', id: 'meta-publish', label: 'Histórico de Agendamentos', icon: '<span class="mso">upload</span>', tab: 'meta-publish' },
-  { type: 'category', id: 'cat-conteudo', label: 'Geração de Conteúdo', items: [
-    { type: 'folder', id: 'folder-starken' },
-    { type: 'folder', id: 'folder-processo' },
-    { type: 'folder', id: 'folder-arquivados' },
-  ]},
   { type: 'category', id: 'cat-relatorios', label: 'Relatórios', items: [
     { type: 'item', id: 'weekly', label: 'Semanal', icon: '<span class="mso">calendar_today</span>', tab: 'weekly' },
     { type: 'item', id: 'monthly', label: 'Mensal', icon: '<span class="mso">calendar_month</span>', tab: 'monthly' },
@@ -11284,6 +11335,7 @@ function renderSidebarMenu() {
   });
 
   nav.innerHTML = html;
+  renderSidebarContentClients();
 
   // Restore active state
   const activeTab = document.querySelector('.tab-content.active');
@@ -12754,7 +12806,30 @@ function ctContentGenerationClients(options) {
   return list.sort(function(a, b) { return a.name.localeCompare(b.name, 'pt-BR', { sensitivity:'base' }); });
 }
 
+function renderSidebarContentClients() {
+  var nav = document.getElementById('sidebarNav');
+  if (!nav || typeof ctContentGenerationClients !== 'function') return;
+  var existing = document.getElementById('sidebarContentClients');
+  var clients = ctContentGenerationClients({ includeAlpha:false, includeProcess:false });
+  var lastClient = '';
+  try { lastClient = localStorage.getItem('starken_last_client') || ''; } catch(e) {}
+  function btn(c) {
+    var cmAttr = ' oncontextmenu="ctShowClientStatusMenu(event,' + JSON.stringify(c.key) + ')"';
+    return '<button class="sidebar-client-btn' + (lastClient === c.key ? ' active' : '') + '" data-client="' + ctlEsc(c.key) + '" onclick="sidebarSelectClient(' + JSON.stringify(c.key) + ')"' + cmAttr + '>' +
+      clientLogoAvatarHtml({ slug: c.key, name: c.name, logo_url: c.logo_url }, 'sidebar-client-logo') +
+      '<span class="sidebar-client-name">' + ctlEsc(c.name) + '</span></button>';
+  }
+  var html = '<div class="sidebar-content-title"><span>Gestão de Conteúdos</span><span class="sidebar-content-count">' + clients.length + '</span></div>' +
+    '<div class="sidebar-content-list">' + (clients.map(btn).join('') || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 8px">Nenhum cliente ativo</div>') + '</div>';
+  if (existing) {
+    existing.innerHTML = html;
+  } else {
+    nav.insertAdjacentHTML('beforeend', '<div class="sidebar-content-clients" id="sidebarContentClients">' + html + '</div>');
+  }
+}
+
 function populateSidebarClients() {
+  renderSidebarContentClients();
   const clients = _metaClients || {};
   const starkenItems = document.getElementById('itemsStarken');
   const alphaItems = document.getElementById('itemsAlpha');
@@ -31676,11 +31751,35 @@ function clientTimelineRenderHome() {
     '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">event_available</span> Agendamentos e publicações</h3>' + weekNav + '</div><div class="ctl-home-filterbar"><span class="ctl-home-chip ok">Publicados ' + snap.published.length + '</span><span class="ctl-home-chip warn">Agendados ' + snap.scheduled.length + '</span></div><div class="ctl-home-list">' + postRows + '</div></section>' +
   '</div>';
   var actions = [];
-  snap.crono.rows.filter(function(r) { return r.cronoStatus !== 2; }).slice(0, 4).forEach(function(r) { actions.push({ kind:'client', title:'Cronograma · ' + r.name, text:(r.cronoStatus >= 1 ? 'Enviar cronograma gerado' : 'Gerar cronograma pendente'), key:r.metaKey || r.id }); });
-  snap.overdue.slice(0, 3).forEach(function(t) { actions.push({ kind:'task', taskId:t.id, title:t.name || 'Task atrasada', text:(t.assignee || 'Sem responsável') + ' · ' + (t.due_date || 'sem data'), key:clientTimelineTaskClientKey(t) }); });
+  snap.overdue.slice(0, 4).forEach(function(t) {
+    var key = clientTimelineTaskClientKey(t);
+    var meta = clientTimelineClientMeta(key);
+    actions.push({ kind:'task', type:'Atraso', tone:'bad', action:'Abrir task', taskId:t.id, title:t.name || 'Task atrasada', text:(meta.name || key || 'Cliente') + ' · ' + (t.due_date || 'sem data') + ' · ' + (t.assignee || 'Sem responsável'), key:key, logo:meta });
+  });
+  snap.approvals.slice(0, 3).forEach(function(t) {
+    var key = clientTimelineTaskClientKey(t);
+    var meta = clientTimelineClientMeta(key);
+    actions.push({ kind:'task', type:'Aprovação', tone:'warn', action:'Revisar', taskId:t.id, title:t.name || 'Aprovação pendente', text:(meta.name || key || 'Cliente') + ' · ' + mtNormalizeStatus(t.status) + ' · ' + (t.assignee || 'Sem responsável'), key:key, logo:meta });
+  });
+  snap.crono.rows.filter(function(r) { return r.cronoStatus >= 1 && r.cronoStatus !== 2; }).slice(0, 4).forEach(function(r) {
+    actions.push({ kind:'client', type:'Enviar', tone:'warn', action:'Enviar', title:r.name, text:'Cronograma gerado · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, logo:r });
+  });
+  snap.crono.rows.filter(function(r) { return !r.cronoStatus; }).slice(0, 4).forEach(function(r) {
+    actions.push({ kind:'client', type:'Cronograma', tone:'bad', action:'Gerar', title:r.name, text:'Gerar cronograma · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, logo:r });
+  });
+  snap.noOwner.slice(0, 3).forEach(function(t) {
+    var key = clientTimelineTaskClientKey(t);
+    var meta = clientTimelineClientMeta(key);
+    actions.push({ kind:'task', type:'Sem dono', tone:'warn', action:'Atribuir', taskId:t.id, title:t.name || 'Task sem responsável', text:(meta.name || key || 'Cliente') + ' · precisa de dono operacional', key:key, logo:meta });
+  });
   next.innerHTML = actions.length ? actions.slice(0, 8).map(function(a) {
     var click = (a.kind === 'task' && a.taskId) ? 'ctOpenModal(' + ctlJsArg(a.taskId) + ')' : 'clientTimelineOpenClientContent(' + ctlJsArg(a.key) + ')';
-    return '<div class="ctl-next-item" onclick="' + click + '" style="cursor:pointer"><strong>' + ctlEsc(a.title) + '</strong><small>' + ctlEsc(a.text) + '</small></div>';
+    var logo = a.logo || clientTimelineClientMeta(a.key);
+    return '<div class="ctl-next-card" onclick="' + click + '">' +
+      clientLogoAvatarHtml({ slug:a.key, name:logo.name || a.title || a.key, logo_url:logo.logo_url || logo.logoUrl || logo.logo }, 'ctl-home-logo') +
+      '<div class="ctl-next-main"><span class="ctl-next-kind ' + (a.tone || '') + '">' + ctlEsc(a.type || 'Ação') + '</span><strong>' + ctlEsc(a.title) + '</strong><small>' + ctlEsc(a.text) + '</small></div>' +
+      '<div class="ctl-next-action">' + ctlEsc(a.action || 'Abrir') + '</div>' +
+    '</div>';
   }).join('') : '<div class="ctl-empty">Nenhuma ação crítica agora.</div>';
   ai.innerHTML = '<div class="ctl-next-item"><strong>Visão geral · ' + (snap.overdue.length ? 'Atenção' : 'OK') + '</strong><small>' + ctlEsc('Semana: ' + (snap.weekInfo.label || snap.weekKey) + '. Base Starken operacional: ' + active.length + ' clientes; ' + contentActive.length + ' com conteúdo na semana. Há ' + snap.crono.pending + ' cronogramas pendentes, ' + snap.overdue.length + ' tasks atrasadas e ' + snap.approvals.length + ' aprovações abertas.') + '</small></div>' +
     '<button class="ctl-btn primary" style="width:100%;margin-top:8px" onclick="clientTimelineHomeAnalyze()">Gerar análise geral</button>' +
