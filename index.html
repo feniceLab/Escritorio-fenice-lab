@@ -4526,10 +4526,19 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .ctl-home-filterbar { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:10px; }
 .ctl-home-filterbar .ctl-home-chip.active { color:#46eecd; border-color:rgba(70,238,205,.42); background:rgba(70,238,205,.12); box-shadow:0 0 0 1px rgba(70,238,205,.08) inset; }
 .ctl-home-empty { padding: 18px; color: var(--text-muted); text-align:center; border:1px dashed var(--border); border-radius:10px; background:var(--bg); }
+.ctl-home-health-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:10px; }
+.ctl-health-tile { border:1px solid var(--border); border-radius:10px; background:var(--bg); padding:10px; min-height:72px; display:flex; flex-direction:column; justify-content:space-between; }
+.ctl-health-tile strong { color:var(--text); font-size:1.25rem; line-height:1; }
+.ctl-health-tile span { color:var(--text-secondary); font-size:.68rem; font-weight:900; text-transform:uppercase; letter-spacing:.04em; }
+.ctl-health-tile small { color:var(--text-muted); font-size:.66rem; line-height:1.25; margin-top:4px; }
+.ctl-health-tile.ok { border-color:rgba(70,238,205,.25); background:rgba(70,238,205,.07); }
+.ctl-health-tile.warn { border-color:rgba(251,191,36,.28); background:rgba(251,191,36,.07); }
+.ctl-health-tile.bad { border-color:rgba(239,68,68,.28); background:rgba(239,68,68,.07); }
 @media (max-width: 980px) {
   .ctl-home-grid { grid-template-columns: 1fr; }
   .ctl-home-progress-row { grid-template-columns: 1fr; gap:6px; }
   .ctl-home-progress-meta { text-align:left; }
+  .ctl-home-health-grid { grid-template-columns:1fr; }
 }
 @media (max-width: 980px) {
   .ctl-toolbar { flex-direction: column; }
@@ -11031,7 +11040,7 @@ let SIDEBAR_MENU = [
   { type: 'item', id: 'pub-history', label: 'Publicações', icon: '<span class="mso">assignment</span>', tab: 'pub-history' },
   { type: 'item', id: 'calendario', label: 'Calendário', icon: '<span class="mso">calendar_today</span>', tab: 'calendario' },
   { type: 'item', id: 'meta-publish', label: 'Histórico de Agendamentos', icon: '<span class="mso">upload</span>', tab: 'meta-publish' },
-  { type: 'category', id: 'cat-conteudo', label: 'Conteúdo', items: [
+  { type: 'category', id: 'cat-conteudo', label: 'Geração de Conteúdo', items: [
     { type: 'folder', id: 'folder-starken' },
     { type: 'folder', id: 'folder-processo' },
     { type: 'folder', id: 'folder-arquivados' },
@@ -11125,7 +11134,7 @@ function renderSidebarFolder(folderId) {
     return '<div class="sidebar-folder" id="sidebarStarken">' +
       '<button class="sidebar-folder-header" onclick="toggleSidebarFolder(\'starken\')">' +
         '<span class="sidebar-folder-chevron" id="chevronStarken">▸</span>' +
-        '<span class="icon" style="color:#46eecd">' + folderSvg + '</span> Starken Performance' +
+        '<span class="icon" style="color:#46eecd">' + folderSvg + '</span> Clientes ativos' +
         '<span class="sidebar-folder-count" id="countStarken">25</span>' +
       '</button>' +
       '<input type="text" id="searchStarken" placeholder="Buscar..." style="display:none;width:100%;padding:6px 12px;margin:6px 0;border:1px solid rgba(255,255,255,0.2);border-radius:4px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:0.75rem" oninput="sidebarFilterClients(\'starken\')">' +
@@ -12717,6 +12726,34 @@ function switchTab(tabName) {
 function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
 
 // ============ SIDEBAR FOLDER NAVIGATION ============
+function ctContentGenerationClients(options) {
+  options = options || {};
+  var clients = (typeof _metaClients !== 'undefined' && _metaClients) ? _metaClients : {};
+  var statuses = typeof ctGetClientStatuses === 'function' ? ctGetClientStatuses() : {};
+  var list = [];
+  Object.entries(clients || {}).forEach(function(entry) {
+    var key = entry[0];
+    var c = entry[1] || {};
+    var status = statuses[key] || c.status || 'ativo';
+    var tenant = c.tenant === 'alpha' ? 'alpha' : 'starken';
+    if (tenant === 'alpha' && !options.includeAlpha) return;
+    if (/arquivado|desativado|inactive|inativo/i.test(String(status || ''))) return;
+    if (!options.includeProcess && (status === 'onboarding' || status === 'standby')) return;
+    list.push({
+      key: key,
+      id: key,
+      metaKey: key,
+      slug: key,
+      name: c.name || key,
+      company: tenant === 'alpha' ? 'Alpha' : 'Starken',
+      tenant: tenant,
+      status: status,
+      logo_url: c.logo_url || c.logoUrl || c.logo
+    });
+  });
+  return list.sort(function(a, b) { return a.name.localeCompare(b.name, 'pt-BR', { sensitivity:'base' }); });
+}
+
 function populateSidebarClients() {
   const clients = _metaClients || {};
   const starkenItems = document.getElementById('itemsStarken');
@@ -12741,7 +12778,7 @@ function populateSidebarClients() {
       entry.status = st;
       processoClients.push(entry);
     } else if (c.tenant === 'alpha') {
-      alphaClients.push(entry);
+      return;
     } else {
       starkenClients.push(entry);
     }
@@ -12881,7 +12918,7 @@ function sidebarSelectClient(clientKey) {
 function restoreSidebarFolders() {
   const state = JSON.parse(localStorage.getItem('sidebarFolders') || '{}');
   ['starken', 'alpha'].forEach(function(folder) {
-    if (state[folder]) {
+    if (state[folder] || folder === 'starken') {
       const capitalized = folder.charAt(0).toUpperCase() + folder.slice(1);
       const items = document.getElementById('items' + capitalized);
       const chevron = document.getElementById('chevron' + capitalized);
@@ -31297,20 +31334,25 @@ function clientTimelineClientMeta(key) {
 
 function clientTimelineActiveClients() {
   var list = [];
-  if (typeof data !== 'undefined' && data.clients && data.clients.length) {
-    list = data.clients.filter(function(c) { return c && c.active; }).map(function(c) {
-      var tenant = c.company === 'Alpha' ? 'alpha' : 'starken';
-      var metaKey = (typeof findMetaClientKey === 'function') ? findMetaClientKey(c.name, tenant) : c.id;
-      return { id: c.id, metaKey: metaKey || c.id, slug: metaKey || c.id, name: c.name || c.id, company: c.company || 'Starken', tenant: tenant };
+  if (typeof ctContentGenerationClients === 'function') {
+    list = ctContentGenerationClients({ includeAlpha:false, includeProcess:false }).map(function(c) {
+      return { id:c.id, metaKey:c.metaKey || c.id, slug:c.slug || c.id, name:c.name, company:c.company || 'Starken', tenant:c.tenant || 'starken', status:c.status, logo_url:c.logo_url };
     }).filter(clientTimelineIsOperationalClient);
   }
   if (!list.length && typeof _metaClients !== 'undefined') {
     Object.keys(_metaClients || {}).forEach(function(key) {
       var c = _metaClients[key] || {};
       var tenant = c.tenant === 'alpha' ? 'alpha' : 'starken';
-      var item = { id: key, metaKey: key, slug: key, name: c.name || key, company: 'Starken', tenant: tenant, status: c.status };
+      var item = { id: key, metaKey: key, slug: key, name: c.name || key, company: 'Starken', tenant: tenant, status: c.status, logo_url: c.logo_url || c.logoUrl || c.logo };
       if (clientTimelineIsOperationalClient(item)) list.push(item);
     });
+  }
+  if (!list.length && typeof data !== 'undefined' && data.clients && data.clients.length) {
+    list = data.clients.filter(function(c) { return c && c.active; }).map(function(c) {
+      var tenant = c.company === 'Alpha' ? 'alpha' : 'starken';
+      var metaKey = (typeof findMetaClientKey === 'function') ? findMetaClientKey(c.name, tenant) : c.id;
+      return { id: c.id, metaKey: metaKey || c.id, slug: metaKey || c.id, name: c.name || c.id, company: c.company || 'Starken', tenant: tenant };
+    }).filter(clientTimelineIsOperationalClient);
   }
   return list.sort(function(a,b) { return a.name.localeCompare(b.name, 'pt-BR'); });
 }
@@ -31489,6 +31531,15 @@ function clientTimelineHomeSnapshot() {
   var approvals = open.filter(function(t) { return /aprovacao|aprovação|revisao|revisão/i.test(String(t.status || '')); });
   var scheduled = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled'; });
   var published = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'published'; });
+  var states = tasks.map(function(t) { return mtTaskOperationalState(t); });
+  var health = {
+    measurable: states.filter(function(s) { return s.measurable; }).length,
+    done: states.filter(function(s) { return s.measurable && s.done; }).length,
+    neutral: states.filter(function(s) { return s.neutral; }).length,
+    noDeadline: states.filter(function(s) { return s.noDeadline; }).length,
+    legacyDraft: states.filter(function(s) { return s.legacyDraft; }).length,
+    production: tasks.filter(function(t) { return ['a-fazer','design','em-andamento','criacao-conteudo','aprovacao-design'].includes(mtNormalizeStatus(t.status)); }).length
+  };
   var byClient = {};
   function addRisk(key, weight, label) {
     if (!key) return;
@@ -31503,7 +31554,7 @@ function clientTimelineHomeSnapshot() {
   approvals.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 3, 'aguarda aprovação'); });
   noOwner.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 2, 'sem responsável'); });
   var critical = Object.keys(byClient).map(function(k) { return byClient[k]; }).sort(function(a,b) { return b.score - a.score || a.name.localeCompare(b.name, 'pt-BR'); });
-  return { active: active, contentActive: contentActive, weekKey: weekKey, weekInfo: weekInfo, range: clientTimelineHomeRange(), crono: crono, tasks: tasks, open: open, overdue: overdue, noOwner: noOwner, approvals: approvals, scheduled: scheduled, published: published, critical: critical };
+  return { active: active, contentActive: contentActive, weekKey: weekKey, weekInfo: weekInfo, range: clientTimelineHomeRange(), crono: crono, tasks: tasks, health: health, open: open, overdue: overdue, noOwner: noOwner, approvals: approvals, scheduled: scheduled, published: published, critical: critical };
 }
 
 function clientTimelineHomeClientRow(item, kind) {
@@ -31531,7 +31582,7 @@ function clientTimelineHomeTaskRow(task) {
   var media = task._creativeUrl
     ? '<div class="ctl-home-logo has-logo">' + (isVideo ? '<video src="' + ctlEsc(task._creativeUrl) + '" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>' : '<img class="client-logo-img" src="' + ctlEsc(task._creativeUrl) + '" loading="lazy" onerror="clientLogoFallback(this)" data-fallback="POST">') + '</div>'
     : '<div class="ctl-home-score ' + (st === 'published' ? '' : 'warn') + '"><span class="mso">' + (st === 'published' ? 'task_alt' : st === 'scheduled' ? 'calendar_today' : 'pending_actions') + '</span></div>';
-  return '<div class="ctl-home-row" onclick="' + (key ? 'clientTimelineOpenClientContent(' + ctlJsArg(key) + ')' : 'ctOpenModal(' + ctlJsArg(task.id) + ')') + '">' +
+  return '<div class="ctl-home-row" onclick="' + (task.id ? 'ctOpenModal(' + ctlJsArg(task.id) + ')' : 'clientTimelineOpenClientContent(' + ctlJsArg(key) + ')') + '">' +
     media +
     '<div><strong>' + ctlEsc(meta.name || key || 'Sem cliente') + '</strong><small>' + ctlEsc((task.due_date || 'sem data') + ' · ' + (task.name || 'Task')) + '</small></div>' +
     '<span class="ctl-home-chip ' + chipCls + '">' + chip + '</span>' +
@@ -31560,7 +31611,9 @@ function clientTimelineRenderHome() {
     return '<div class="ctl-stat"><small>' + ctlEsc(item[2]) + '</small><strong>' + ctlEsc(item[1]) + '</strong><small>' + ctlEsc(item[0]) + '</small></div>';
   }).join('');
   var sentPct = contentActive.length ? Math.round((snap.crono.sent / contentActive.length) * 100) : 0;
-  var weeklyDone = snap.tasks.length ? Math.round(((snap.published.length + snap.scheduled.length) / snap.tasks.length) * 100) : 0;
+  var weeklyTotal = snap.health && snap.health.measurable ? snap.health.measurable : snap.tasks.length;
+  var weeklyDone = weeklyTotal ? Math.round(((snap.published.length + snap.scheduled.length) / weeklyTotal) * 100) : 0;
+  var weekNav = '<div class="ctl-home-weeknav"><button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(-1)">‹</button><span class="ctl-home-week-label">' + ctlEsc(snap.weekInfo.label || snap.weekKey) + '</span><button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(1)">›</button>' + (snap.weekKey !== ((typeof _dashGetCurrentWeekKey === 'function') ? _dashGetCurrentWeekKey() : snap.weekKey) ? '<button class="ctl-home-chip ok" onclick="event.stopPropagation();clientTimelineHomeResetWeek()">Atual</button>' : '') + '</div>';
   var cronoFilters = '<div class="ctl-home-filterbar">' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'all' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;all&quot;)">Todos ' + snap.crono.rows.length + '</button>' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'pending' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;pending&quot;)">Pendentes ' + snap.crono.pending + '</button>' +
@@ -31599,15 +31652,28 @@ function clientTimelineRenderHome() {
     var st = clientTimelineHomeTaskStatus(t);
     return st === 'scheduled' || st === 'published';
   }).sort(function(a,b) { return String(a.due_date || '').localeCompare(String(b.due_date || '')); }).slice(0, 8).map(clientTimelineHomeTaskRow).filter(Boolean).join('') || '<div class="ctl-home-empty">' + (_ctlHomeLoading ? 'Carregando posts da semana...' : 'Nenhum post agendado ou publicado nesta semana.') + '</div>';
+  function healthTile(label, value, note, cls) {
+    return '<div class="ctl-health-tile ' + (cls || '') + '" title="' + ctlEsc(note) + '"><span>' + ctlEsc(label) + '</span><strong>' + ctlEsc(String(value)) + '</strong><small>' + ctlEsc(note) + '</small></div>';
+  }
+  var healthGrid = '<div class="ctl-home-health-grid">' +
+    healthTile('Clientes ativos', active.length, 'Clientes reais da geração de conteúdo', 'ok') +
+    healthTile('Com conteúdo', contentActive.length, 'Clientes com tasks na semana escolhida', contentActive.length ? 'ok' : 'warn') +
+    healthTile('Cronos enviados', snap.crono.sent + '/' + contentActive.length, 'Cronogramas enviados na semana selecionada', sentPct >= 80 ? 'ok' : 'warn') +
+    healthTile('Entrega semanal', (snap.published.length + snap.scheduled.length) + '/' + weeklyTotal, 'Publicados e agendados contra tasks mensuráveis', weeklyDone >= 80 ? 'ok' : 'warn') +
+    healthTile('Atrasos reais', snap.overdue.length, 'Tasks mensuráveis com data vencida', snap.overdue.length ? 'bad' : 'ok') +
+    healthTile('Aprovação', snap.approvals.length, 'Tasks aguardando revisão ou cliente', snap.approvals.length ? 'warn' : 'ok') +
+    healthTile('Sem prazo', (snap.health && snap.health.noDeadline) || 0, 'Fora do percentual principal', '') +
+    healthTile('Stand-by/neutras', (snap.health && snap.health.neutral) || 0, 'Não pesam contra a entrega', '') +
+  '</div>';
   stages.innerHTML = '<div class="ctl-home-grid">' +
-    '<section class="ctl-home-card"><h3><span class="mso">monitoring</span> Saúde operacional</h3><div class="ctl-home-progress">' +
+    '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">monitoring</span> Saúde operacional</h3>' + weekNav + '</div><div class="ctl-home-progress">' +
       '<div class="ctl-home-progress-row"><div class="ctl-home-progress-label">Cronogramas enviados</div><div class="ctl-home-bar"><div class="ctl-home-fill" style="width:' + sentPct + '%"></div></div><div class="ctl-home-progress-meta">' + snap.crono.sent + '/' + contentActive.length + '</div></div>' +
-      '<div class="ctl-home-progress-row"><div class="ctl-home-progress-label">Entrega semanal</div><div class="ctl-home-bar"><div class="ctl-home-fill" style="width:' + weeklyDone + '%"></div></div><div class="ctl-home-progress-meta">' + (snap.published.length + snap.scheduled.length) + '/' + snap.tasks.length + '</div></div>' +
+      '<div class="ctl-home-progress-row"><div class="ctl-home-progress-label">Entrega semanal</div><div class="ctl-home-bar"><div class="ctl-home-fill" style="width:' + weeklyDone + '%"></div></div><div class="ctl-home-progress-meta">' + (snap.published.length + snap.scheduled.length) + '/' + weeklyTotal + '</div></div>' +
       '<div class="ctl-home-progress-row"><div class="ctl-home-progress-label">Aprovações abertas</div><div class="ctl-home-bar"><div class="ctl-home-fill" style="width:' + Math.min(100, snap.approvals.length * 12) + '%;background:linear-gradient(90deg,#fbbf24,#ef4444)"></div></div><div class="ctl-home-progress-meta">' + snap.approvals.length + '</div></div>' +
-    '</div></section>' +
+    '</div>' + healthGrid + '</section>' +
     '<section class="ctl-home-card"><h3><span class="mso">priority_high</span> Clientes que precisam de atenção</h3><div class="ctl-home-list">' + criticalRows + '</div></section>' +
-    '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">calendar_month</span> Cronogramas da semana</h3><div class="ctl-home-weeknav"><button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(-1)">‹</button><span class="ctl-home-week-label">' + ctlEsc(snap.weekInfo.label || snap.weekKey) + '</span><button class="ctl-home-chip" onclick="event.stopPropagation();clientTimelineHomeNavWeek(1)">›</button>' + (snap.weekKey !== ((typeof _dashGetCurrentWeekKey === 'function') ? _dashGetCurrentWeekKey() : snap.weekKey) ? '<button class="ctl-home-chip ok" onclick="event.stopPropagation();clientTimelineHomeResetWeek()">Atual</button>' : '') + '</div></div>' + cronoFilters + '<div class="ctl-home-list">' + cronoRows + '</div></section>' +
-    '<section class="ctl-home-card"><h3><span class="mso">event_available</span> Agendamentos e publicações</h3><div class="ctl-home-list">' + postRows + '</div></section>' +
+    '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">calendar_month</span> Cronogramas da semana</h3>' + weekNav + '</div>' + cronoFilters + '<div class="ctl-home-list">' + cronoRows + '</div></section>' +
+    '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">event_available</span> Agendamentos e publicações</h3>' + weekNav + '</div><div class="ctl-home-filterbar"><span class="ctl-home-chip ok">Publicados ' + snap.published.length + '</span><span class="ctl-home-chip warn">Agendados ' + snap.scheduled.length + '</span></div><div class="ctl-home-list">' + postRows + '</div></section>' +
   '</div>';
   var actions = [];
   snap.crono.rows.filter(function(r) { return r.cronoStatus !== 2; }).slice(0, 4).forEach(function(r) { actions.push({ kind:'client', title:'Cronograma · ' + r.name, text:(r.cronoStatus >= 1 ? 'Enviar cronograma gerado' : 'Gerar cronograma pendente'), key:r.metaKey || r.id }); });
