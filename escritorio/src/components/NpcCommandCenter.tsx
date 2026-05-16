@@ -659,9 +659,9 @@ export default function NpcCommandCenter({
   };
 
   return (
-    <div className={`${embedded ? "relative h-screen w-screen" : "fixed inset-0"} z-[80] flex ${embedded ? "bg-[#070d1c]" : "bg-black/65"}`}>
+    <div className={`${embedded ? "relative min-h-screen w-full" : "fixed inset-0"} z-[80] flex ${embedded ? "bg-[#070d1c]" : "bg-black/65"}`}>
       {!embedded && <div className="flex-1" onClick={onClose} />}
-      <div className={`relative flex h-full min-h-0 w-full flex-col bg-[#090f1f] shadow-2xl ${embedded ? "max-w-none border-0" : "max-w-[980px] border-l border-white/10"}`}>
+      <div className={`relative flex w-full flex-col bg-[#090f1f] shadow-2xl ${embedded ? "min-h-screen max-w-none border-0" : "h-full min-h-0 max-w-[980px] border-l border-white/10"}`}>
         <div className="flex items-start justify-between gap-4 border-b border-white/10 px-6 py-5">
           <div>
             <div className="text-[10px] font-bold uppercase tracking-[0.26em] text-cyan-300/80">Npc Command Center</div>
@@ -731,7 +731,7 @@ export default function NpcCommandCenter({
                       icon={<Pencil className="h-4 w-4" />}
                       onClick={() => {
                         onEditNpc(npc.id);
-                        onClose();
+                        if (!embedded) onClose();
                       }}
                     />
                     <ActionButton

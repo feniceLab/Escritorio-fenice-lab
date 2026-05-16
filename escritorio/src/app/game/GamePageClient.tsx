@@ -1750,7 +1750,7 @@ function GamePageInner() {
 
   if (npcCommandOnly) {
     return (
-      <div className="h-screen w-screen overflow-hidden bg-[#070d1c] text-white">
+      <div className="min-h-screen w-screen overflow-y-auto bg-[#070d1c] text-white">
         {loading && (
           <div className="min-h-screen flex items-center justify-center text-white">
             <div className="text-center">
