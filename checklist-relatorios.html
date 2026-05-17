@@ -1334,6 +1334,191 @@ body {
 
 .content { margin-left: 216px; flex: 1; min-height: 100vh; }
 
+/* ===== GLOBAL AGENT DOCK ===== */
+:root {
+  --global-agent-dock-expanded: 308px;
+  --global-agent-dock-collapsed: 58px;
+  --global-agent-dock-space: var(--global-agent-dock-expanded);
+}
+body.agent-dock-collapsed { --global-agent-dock-space: var(--global-agent-dock-collapsed); }
+body.agent-dock-visible .content:not(.office-active) {
+  margin-right: var(--global-agent-dock-space);
+  transition: margin-right .22s ease;
+}
+.global-agent-dock {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--global-agent-dock-expanded);
+  z-index: 8800;
+  display: none;
+  flex-direction: column;
+  background: linear-gradient(180deg, rgba(16,24,38,.98), rgba(9,15,26,.98));
+  border-left: 1px solid rgba(148,163,184,.18);
+  box-shadow: -18px 0 40px rgba(0,0,0,.22);
+  color: var(--text-primary);
+  transition: width .22s ease, transform .22s ease;
+}
+body.agent-dock-visible .global-agent-dock { display: flex; }
+body.agent-dock-collapsed .global-agent-dock { width: var(--global-agent-dock-collapsed); }
+.global-agent-dock-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 18px 18px 14px;
+  border-bottom: 1px solid rgba(148,163,184,.15);
+}
+.global-agent-kicker {
+  color: var(--starken, #46eecd);
+  font-size: .68rem;
+  font-weight: 950;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+.global-agent-title {
+  margin-top: 3px;
+  color: var(--text-primary);
+  font-weight: 850;
+  font-size: 1rem;
+}
+.global-agent-sub {
+  color: var(--text-secondary);
+  font-size: .78rem;
+  margin-top: 2px;
+}
+.global-agent-toggle {
+  width: 34px;
+  height: 34px;
+  border-radius: 12px;
+  border: 1px solid rgba(148,163,184,.25);
+  background: rgba(255,255,255,.05);
+  color: var(--text-primary);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+}
+.global-agent-toggle:hover { border-color: rgba(70,238,205,.5); color: var(--starken, #46eecd); }
+.global-agent-body {
+  padding: 14px 14px 18px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  gap: 12px;
+}
+.global-agent-open-center {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #11c88f, #46eecd);
+  color: #051018;
+  font-weight: 900;
+  padding: 11px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.global-agent-search {
+  width: 100%;
+  border: 1px solid rgba(148,163,184,.22);
+  border-radius: 999px;
+  background: rgba(5,10,20,.55);
+  color: var(--text-primary);
+  padding: 10px 13px;
+  font: inherit;
+  outline: none;
+}
+.global-agent-search:focus { border-color: rgba(70,238,205,.55); box-shadow: 0 0 0 3px rgba(70,238,205,.08); }
+.global-agent-list {
+  overflow: auto;
+  padding-right: 4px;
+  display: grid;
+  gap: 8px;
+  min-height: 0;
+}
+.global-agent-row {
+  width: 100%;
+  border: 1px solid transparent;
+  border-radius: 15px;
+  background: transparent;
+  color: var(--text-primary);
+  padding: 9px;
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 30px;
+  align-items: center;
+  gap: 10px;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+}
+.global-agent-row:hover { background: rgba(70,238,205,.08); border-color: rgba(70,238,205,.25); }
+.global-agent-row .npc-avatar { width: 42px; height: 42px; border-radius: 50%; }
+.global-agent-row strong {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: .9rem;
+  color: var(--text-primary);
+}
+.global-agent-row span:not(.mso) {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text-secondary);
+  font-size: .74rem;
+}
+.global-agent-chat {
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  border: 1px solid rgba(148,163,184,.2);
+  background: rgba(255,255,255,.04);
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+.global-agent-chat:hover { color: var(--starken, #46eecd); border-color: rgba(70,238,205,.35); }
+.global-agent-collapsed {
+  display: none;
+  height: 100%;
+  padding: 14px 8px;
+  align-items: center;
+  gap: 12px;
+  flex-direction: column;
+}
+.global-agent-collapsed-main {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  border: 1px solid rgba(70,238,205,.38);
+  background: rgba(70,238,205,.1);
+  color: var(--starken, #46eecd);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.global-agent-mini-stack { display: grid; gap: 8px; }
+.global-agent-mini-stack .npc-avatar { width: 34px; height: 34px; border-radius: 50%; }
+body.agent-dock-collapsed .global-agent-dock-head,
+body.agent-dock-collapsed .global-agent-body { display: none; }
+body.agent-dock-collapsed .global-agent-collapsed { display: flex; }
+body.agent-dock-visible #designerOverviewBtn { right: calc(var(--global-agent-dock-space) + 24px) !important; }
+@media (max-width: 1180px) {
+  body.agent-dock-visible .content:not(.office-active) { margin-right: 0; }
+  .global-agent-dock { display: none !important; }
+  body.agent-dock-visible #designerOverviewBtn { right: 24px !important; }
+}
+
+
 .topbar {
   background: var(--bg-surface); border-bottom: 1px solid var(--border-default);
   padding: 0 24px; display: flex; align-items: center; justify-content: space-between;
@@ -12840,6 +13025,7 @@ function switchTab(tabName) {
   if (mainEl) mainEl.classList.toggle('office-mode', tabName === 'escritorio');
   var contentEl = document.querySelector('.content');
   if (contentEl) contentEl.classList.toggle('office-active', tabName === 'escritorio');
+  if (typeof globalAgentDockRefresh === 'function') setTimeout(globalAgentDockRefresh, 0);
   document.getElementById('sidebar').classList.remove('open');
   // Persist last active tab
   try { localStorage.setItem('starken_last_tab', tabName); } catch(e) {}
@@ -18268,6 +18454,7 @@ function activateSession(user) {
 
   // ─── DESIGNER OVERVIEW BTN ───
   showDesignerOverviewBtn();
+  if (typeof globalAgentDockRefresh === 'function') setTimeout(globalAgentDockRefresh, 0);
 }
 
 function applyDesignerRestrictions() {
@@ -18526,6 +18713,7 @@ function gpLogout() {
   document.getElementById('loginUser').value = '';
   document.getElementById('loginPin').value = '';
   document.getElementById('loginError').classList.remove('show');
+  if (typeof globalAgentDockRefresh === 'function') globalAgentDockRefresh();
 }
 
 // ── User popup menu ──
@@ -40328,6 +40516,7 @@ function npcLoadOfficeRoster(force) {
       _npcOfficeRosterLoaded = true;
       npcRenderDashboard();
       npcRenderCards();
+      if (typeof globalAgentDockRender === 'function') globalAgentDockRender();
       if (_npcState.commandModalOpen && _npcState.activeNpc) npcRenderCommandEmbed(_npcState.activeNpc);
       npcHydrateAvatars();
     })
@@ -40594,6 +40783,70 @@ function npcRenderCards() {
       '<div style="margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="npc-pill">Escritório</span><span class="npc-pill">' + npcEsc(n.tools.length) + ' ações</span></div>' +
     '</button>';
   }).join('');
+  setTimeout(npcHydrateAvatars, 0);
+}
+
+
+
+const GLOBAL_AGENT_DOCK_KEY = 'starken_global_agent_dock_collapsed_v1';
+
+function globalAgentDockIsAvailable() {
+  var mainApp = document.getElementById('mainApp');
+  var contentEl = document.querySelector('.content');
+  if (!mainApp || mainApp.classList.contains('hidden')) return false;
+  if (!gpState || !gpState.user) return false;
+  if (contentEl && contentEl.classList.contains('office-active')) return false;
+  return true;
+}
+
+function globalAgentDockApplyCollapsed() {
+  var collapsed = false;
+  try { collapsed = localStorage.getItem(GLOBAL_AGENT_DOCK_KEY) === '1'; } catch(e) {}
+  document.body.classList.toggle('agent-dock-collapsed', collapsed);
+  var icon = document.getElementById('globalAgentToggleIcon');
+  if (icon) icon.textContent = collapsed ? 'chevron_left' : 'chevron_right';
+}
+
+function globalAgentDockToggle() {
+  var next = !document.body.classList.contains('agent-dock-collapsed');
+  try { localStorage.setItem(GLOBAL_AGENT_DOCK_KEY, next ? '1' : '0'); } catch(e) {}
+  globalAgentDockApplyCollapsed();
+  globalAgentDockRender();
+}
+
+function globalAgentDockRefresh() {
+  globalAgentDockApplyCollapsed();
+  var visible = globalAgentDockIsAvailable();
+  document.body.classList.toggle('agent-dock-visible', visible);
+  if (visible) globalAgentDockRender();
+}
+
+function globalAgentDockRender(filterText) {
+  var list = document.getElementById('globalAgentList');
+  var mini = document.getElementById('globalAgentMiniStack');
+  var count = document.getElementById('globalAgentCount');
+  if (!list && !mini) return;
+  var q = (filterText != null ? filterText : ((document.getElementById('globalAgentSearch') || {}).value || '')).toString().trim().toLowerCase();
+  var source = (typeof NPC_PROFILES !== 'undefined' ? NPC_PROFILES : []);
+  var rows = source.filter(function(n) {
+    if (!q) return true;
+    return [n.name, n.role, (n.domains || []).join(' ')].join(' ').toLowerCase().indexOf(q) >= 0;
+  });
+  if (count) count.textContent = String(source.length);
+  if (list) {
+    list.innerHTML = rows.map(function(n) {
+      return '<button class="global-agent-row" onclick="npcOpenCommandModal(\'' + npcEsc(n.id) + '\',\'resumo\')">' +
+        npcAvatarHtml(n, 'dock') +
+        '<span><strong>' + npcEsc(n.name) + '</strong><span>' + npcEsc(n.role || '') + '</span></span>' +
+        '<span class="global-agent-chat" onclick="event.stopPropagation();npcOpenCommandModal(\'' + npcEsc(n.id) + '\',\'chat\')" title="Conversar"><span class="mso" style="font-size:18px">chat</span></span>' +
+      '</button>';
+    }).join('') || '<div class="npc-empty" style="padding:12px">Nenhum NPC encontrado.</div>';
+  }
+  if (mini) {
+    mini.innerHTML = source.slice(0, 7).map(function(n) {
+      return '<button class="global-agent-collapsed-main" onclick="npcOpenCommandModal(\'' + npcEsc(n.id) + '\',\'resumo\')" title="' + npcEsc(n.name) + '">' + npcAvatarHtml(n, 'mini') + '</button>';
+    }).join('');
+  }
   setTimeout(npcHydrateAvatars, 0);
 }
 
@@ -41029,6 +41282,28 @@ function npcClearConversation() {
     </div>
   </div>
 </div>
+
+
+
+<aside id="globalAgentDock" class="global-agent-dock" aria-label="Agentes Starken HQ">
+  <div class="global-agent-dock-head">
+    <div>
+      <div class="global-agent-kicker">Agentes</div>
+      <div class="global-agent-title">Starken HQ</div>
+      <div class="global-agent-sub"><span id="globalAgentCount">0</span> NPCs disponíveis</div>
+    </div>
+    <button class="global-agent-toggle" onclick="globalAgentDockToggle()" title="Recolher agentes"><span id="globalAgentToggleIcon" class="mso">chevron_right</span></button>
+  </div>
+  <div class="global-agent-body">
+    <button class="global-agent-open-center" onclick="switchTab('npc-center')"><span class="mso">apps</span> Central de NPCs</button>
+    <input id="globalAgentSearch" class="global-agent-search" type="search" placeholder="Buscar agente..." oninput="globalAgentDockRender(this.value)">
+    <div id="globalAgentList" class="global-agent-list"></div>
+  </div>
+  <div class="global-agent-collapsed">
+    <button class="global-agent-collapsed-main" onclick="globalAgentDockToggle()" title="Abrir agentes"><span class="mso">smart_toy</span></button>
+    <div id="globalAgentMiniStack" class="global-agent-mini-stack"></div>
+  </div>
+</aside>
 
 <!-- ═══ DESIGNER OVERVIEW BTN ═══ -->
 <div id="npcDrawerBackdrop" class="npc-drawer-backdrop" onclick="npcCloseDrawer()"></div>
