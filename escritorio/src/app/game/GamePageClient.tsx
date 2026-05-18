@@ -253,6 +253,9 @@ function GamePageInner() {
   const channelId = searchParams.get("channelId");
   const npcCommandId = searchParams.get("npcCommandId") || searchParams.get("npcId");
   const npcCommandOnly = searchParams.get("npcCommandOnly") === "1";
+  const npcDockOnly = searchParams.get("npcDockOnly") === "1";
+  const embedHost = searchParams.get("embedHost");
+  const hideEmbeddedNpcDock = searchParams.get("hideNpcDock") === "1" || (embedHost === "starken-os" && searchParams.get("embedMode") === "starken-shell");
 
   const [character, setCharacter] = useState<Character | null>(null);
   const [channel, setChannel] = useState<ChannelInfo | null>(null);
@@ -1164,7 +1167,7 @@ function GamePageInner() {
 
   // Fetch character data and channel data
   useEffect(() => {
-    if (npcCommandOnly && npcCommandId && channelId && !characterId) {
+    if (((npcCommandOnly && npcCommandId) || npcDockOnly) && channelId && !characterId) {
       let ignore = false;
       setError(null);
       setLoading(true);
@@ -1308,7 +1311,7 @@ function GamePageInner() {
         setLoading(false);
       });
     })();
-  }, [characterId, channelId, npcCommandId, npcCommandOnly, t]);
+  }, [characterId, channelId, npcCommandId, npcCommandOnly, npcDockOnly, t]);
 
   // Fetch NPCs for this channel (parallel — no longer gated on channel data)
   useEffect(() => {
@@ -1748,6 +1751,42 @@ function GamePageInner() {
     }
   }, [npcCommandOnly]);
 
+  const postNpcDockAction = useCallback((type: string, payload: Record<string, unknown>) => {
+    if (typeof window === "undefined" || !window.parent || window.parent === window) return;
+    window.parent.postMessage({ type, ...payload }, window.location.origin);
+  }, []);
+
+  if (npcDockOnly) {
+    return (
+      <div className="h-screen w-screen overflow-hidden bg-[#0d1222] text-white">
+        {loading && (
+          <div className="flex h-screen items-center justify-center text-slate-300">
+            Carregando agentes...
+          </div>
+        )}
+
+        {!loading && error && (
+          <div className="flex h-screen items-center justify-center px-4 text-center text-red-300">
+            {error}
+          </div>
+        )}
+
+        {!loading && !error && (
+          <NpcDockPanel
+            embedded
+            channelName={channel?.name || "Starken HQ"}
+            npcs={channelNpcs}
+            selectedNpcId={managedNpcId}
+            onManageNpc={(npcId) => postNpcDockAction("starken-os:npc-dock-manage", { npcId })}
+            onTalkToNpc={(npcId, npcName) => postNpcDockAction("starken-os:npc-dock-talk", { npcId, npcName })}
+            onEditNpc={(npcId) => postNpcDockAction("starken-os:npc-dock-edit", { npcId })}
+            onHireNpc={() => postNpcDockAction("starken-os:npc-dock-hire", {})}
+          />
+        )}
+      </div>
+    );
+  }
+
   if (npcCommandOnly) {
     return (
       <div className="min-h-screen w-screen overflow-y-auto bg-[#070d1c] text-white">
@@ -1783,7 +1822,7 @@ function GamePageInner() {
             socket={socket}
             isOpen={Boolean(managedNpc)}
             onClose={handleCloseManagedNpc}
-            onOpenChat={handleSelectNpc}
+            onOpenChat={(npcId, npcName) => postNpcDockAction("starken-os:npc-dock-talk", { npcId, npcName })}
             onEditNpc={(npcId) => EventBus.emit("npc:edit", { npcId })}
             onResetChat={(npcId) => handleResetNpcChatById(npcId)}
             onNpcUpdated={() => refreshChannelNpcs()}
@@ -2626,7 +2665,7 @@ function GamePageInner() {
         />
       )}
 
-      {mode === "office" && channelId && (
+      {mode === "office" && channelId && !hideEmbeddedNpcDock && (
         <NpcDockPanel
           channelName={channel?.name || "Canal"}
           npcs={channelNpcs}
@@ -2756,6 +2795,9 @@ function GamePageInner() {
             onRequestReportTask={requestTaskReport}
             onResumeTask={resumeTask}
             onCompleteTask={completeTask}
+            dockSide="right"
+            dockOffset={hideEmbeddedNpcDock ? 0 : 260}
+            dockTop={56}
           />
         </>
       )}

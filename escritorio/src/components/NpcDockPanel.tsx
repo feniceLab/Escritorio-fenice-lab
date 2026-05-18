@@ -24,6 +24,7 @@ interface NpcDockPanelProps {
   onTalkToNpc: (npcId: string, npcName: string) => void;
   onEditNpc: (npcId: string) => void;
   onHireNpc?: () => void;
+  embedded?: boolean;
 }
 
 function getProviderLabel(provider?: string | null) {
@@ -56,6 +57,7 @@ export default function NpcDockPanel({
   onTalkToNpc,
   onEditNpc,
   onHireNpc,
+  embedded = false,
 }: NpcDockPanelProps) {
   const [query, setQuery] = useState("");
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -76,7 +78,7 @@ export default function NpcDockPanel({
   };
 
   return (
-    <aside className="fixed inset-y-0 right-0 z-30 hidden w-[260px] lg:flex">
+    <aside className={embedded ? "flex h-screen w-full" : "fixed inset-y-0 right-0 z-30 hidden w-[260px] lg:flex"}>
       <div className="flex h-full w-full flex-col overflow-hidden border-l border-white/10 bg-[#0d1222]/92 shadow-2xl backdrop-blur-xl">
         {/* Header enxuto */}
         <div className="border-b border-white/10 px-3 py-3">
