@@ -35335,7 +35335,7 @@ function cronogramaShowModal() {
     var hasDate = !!chipDate;
     var isPublished = t.status === 'publicado';
     var isScheduled = t.status === 'agendado';
-    var hasImg = (t._attachments || []).some(function(a) { return a.file_type && a.file_type.startsWith('image/'); });
+    var hasImg = cronogramaTaskHasCreativeAttachment(t);
     var hasCopy = !!(t.copy_text || t.description || t.briefing);
     var shortDate = hasDate ? chipDate.slice(8,10) + '/' + chipDate.slice(5,7) : '?';
     var weekKey = hasDate ? getMondayKey(chipDate) : '';
@@ -38441,6 +38441,32 @@ function cronogramaFormatDate(dateStr) {
 }
 
 // Returns array of individual page HTML strings (for preview thumbnails)
+function cronogramaIsCreativeAttachment(att) {
+  var cat = String(att && att.category || '').toLowerCase();
+  return cat === 'creative' || cat === 'final';
+}
+
+function cronogramaAttachmentMatchesFormat(att, postType) {
+  var fmt = String(att && att.format_type || '').toLowerCase();
+  if (!fmt) return postType === 'feed';
+  return fmt === String(postType || '').toLowerCase();
+}
+
+function cronogramaFilterCreativeAttachments(attachments, postType) {
+  var creativeAtts = (attachments || []).filter(cronogramaIsCreativeAttachment);
+  var matched = creativeAtts.filter(function(att) {
+    return cronogramaAttachmentMatchesFormat(att, postType);
+  });
+  if (matched.length) return matched;
+  return creativeAtts.filter(function(att) { return !att.format_type; });
+}
+
+function cronogramaTaskHasCreativeAttachment(task) {
+  return (task && task._attachments || []).some(function(a) {
+    return cronogramaIsCreativeAttachment(a) && a.file_type && a.file_type.startsWith('image/');
+  });
+}
+
 function cronogramaBuildPages(clientName, clientLogo, tenant, tasks) {
   var tenantLabel = tenant === 'alpha' ? 'Alpha' : 'Starken';
   var tenantColor = tenant === 'alpha' ? '#10b981' : '#3b82f6';
@@ -38474,7 +38500,7 @@ function cronogramaBuildPages(clientName, clientLogo, tenant, tasks) {
   tasks.forEach(function(task) {
     var config = task.publish_config || {};
     var selectedFormats = config.formats || config.selected_formats || [];
-    var attachments = task._attachments || [];
+    var attachments = (task._attachments || []).filter(cronogramaIsCreativeAttachment);
 
     // If task has multiple formats, generate one page per format
     var formatsToRender = [];
@@ -38488,10 +38514,8 @@ function cronogramaBuildPages(clientName, clientLogo, tenant, tasks) {
     var typeLabel = postType === 'reels' ? 'FEED REELS' : postType === 'carrossel' ? 'CARROSSEL DE FOTOS' : postType === 'story' ? 'STORIES' : 'FEED CRIATIVO';
     var dateLabel = cronogramaFormatDate((task.publish_config && task.publish_config.post_date) ? task.publish_config.post_date : task.due_date);
 
-    // Filter attachments by format_type when multi-format
-    var fmtAttachments = selectedFormats.length > 1
-      ? attachments.filter(function(a) { return a.format_type === postType || (!a.format_type && postType === 'feed'); })
-      : attachments;
+    // Cronograma mostra somente criativos finais/entregáveis do formato selecionado.
+    var fmtAttachments = cronogramaFilterCreativeAttachments(attachments, postType);
 
     var img = null, vid = null, allImages = [];
     for (var a = 0; a < fmtAttachments.length; a++) {
