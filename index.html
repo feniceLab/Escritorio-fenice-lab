@@ -31930,6 +31930,7 @@ function ctlJsArg(v) {
 
 function clientTimelineInit() {
   _clientTimelineReady = true;
+  clientTimelineLoadState();
   clientTimelineLoadClients();
   if (!_ctlClientSlug) {
     _ctlClientSlug = _hubCurrentSlug || '';
@@ -32100,6 +32101,30 @@ var _ctlHomeLoaded = false;
 var _ctlHomeLoading = false;
 var _ctlHomeWeekKey = null;
 var _ctlHomeCronoFilter = 'all';
+var CTL_TIMELINE_STATE_KEY = 'starken_ctl_timeline_state_v1';
+
+function clientTimelineLoadState() {
+  try {
+    var state = JSON.parse(localStorage.getItem(CTL_TIMELINE_STATE_KEY) || '{}');
+    if (state && typeof state === 'object') {
+      if (state.weekKey) _ctlHomeWeekKey = state.weekKey;
+      if (state.cronoFilter) _ctlHomeCronoFilter = state.cronoFilter;
+      var rangeEl = document.getElementById('ctlRangeSelect');
+      if (rangeEl && state.range) rangeEl.value = state.range;
+    }
+  } catch(e) {}
+}
+
+function clientTimelineSaveState() {
+  try {
+    var rangeEl = document.getElementById('ctlRangeSelect');
+    localStorage.setItem(CTL_TIMELINE_STATE_KEY, JSON.stringify({
+      weekKey: _ctlHomeWeekKey || '',
+      cronoFilter: _ctlHomeCronoFilter || 'all',
+      range: rangeEl ? rangeEl.value : 'week'
+    }));
+  } catch(e) {}
+}
 
 function clientTimelineIsOperationalClient(input) {
   var c = typeof input === 'object' && input ? input : {};
@@ -32180,6 +32205,7 @@ function clientTimelineHomeNavWeek(delta) {
   var nextIdx = idx + delta;
   if (nextIdx < 0 || nextIdx >= all.length) return;
   _ctlHomeWeekKey = all[nextIdx];
+  clientTimelineSaveState();
   var rangeSel = document.getElementById('ctlRangeSelect');
   if (_ctlClientSlug && rangeSel) rangeSel.value = 'week';
   if (_ctlClientSlug) {
@@ -32193,6 +32219,7 @@ function clientTimelineHomeNavWeek(delta) {
 
 function clientTimelineHomeResetWeek() {
   _ctlHomeWeekKey = null;
+  clientTimelineSaveState();
   var rangeSel = document.getElementById('ctlRangeSelect');
   if (_ctlClientSlug && rangeSel) rangeSel.value = 'week';
   if (_ctlClientSlug) {
@@ -32206,6 +32233,7 @@ function clientTimelineHomeResetWeek() {
 
 function clientTimelineHomeSetCronoFilter(filter) {
   _ctlHomeCronoFilter = filter || 'all';
+  clientTimelineSaveState();
   clientTimelineRenderHome();
 }
 
@@ -32471,6 +32499,7 @@ function clientTimelineRenderHome() {
   var ai = document.getElementById('ctlLurdinhaPanel');
   var notes = document.getElementById('ctlNotes');
   if (!stats || !stages || !next || !ai) return;
+  clientTimelineSaveState();
   var snap = clientTimelineHomeSnapshot();
   var active = snap.active;
   var contentActive = snap.contentActive || [];
@@ -32824,6 +32853,7 @@ function clientTimelineRender() {
   var statsEl = document.getElementById('ctlStats');
   var nextEl = document.getElementById('ctlNextActions');
   if (!stagesEl || !statsEl || !nextEl) return;
+  clientTimelineSaveState();
   if (!_ctlClientSlug) return clientTimelineRenderHome();
 
   var tasks = clientTimelineOperationalTasks(_ctlTasks.filter(clientTimelineInRange));
