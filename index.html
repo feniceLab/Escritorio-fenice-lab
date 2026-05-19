@@ -32489,17 +32489,20 @@ function clientTimelineRenderHome() {
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'pending' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;pending&quot;)">Pendentes ' + snap.crono.pending + '</button>' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'generated' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;generated&quot;)">Gerados ' + snap.crono.generated + '</button>' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'sent' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;sent&quot;)">Enviados ' + snap.crono.sent + '</button>' +
+    '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'complements' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;complements&quot;)">Complementos ' + (snap.complements || 0) + '</button>' +
   '</div>';
   var cronoList = snap.crono.rows.filter(function(r) {
     if (_ctlHomeCronoFilter === 'sent') return r.cronoStatus === 2;
     if (_ctlHomeCronoFilter === 'generated') return r.cronoStatus >= 1 && r.cronoStatus !== 2;
     if (_ctlHomeCronoFilter === 'pending') return !r.cronoStatus;
+    if (_ctlHomeCronoFilter === 'complements') return !!(r.weekState && r.weekState.complements.length);
     return true;
   });
   var cronoRows = cronoList.slice(0, 10).map(function(r) {
     var state = r.weekState || {};
     var label = state.cronoLabel || (r.cronoStatus === 2 ? 'Enviado' : r.cronoStatus >= 1 ? 'Gerado, falta enviar' : 'Pendente');
     var cls = state.cronoTone || (r.cronoStatus === 2 ? 'ok' : r.cronoStatus >= 1 ? 'warn' : 'bad');
+    if (r.cronoStatus === 2 && state.complements && state.complements.length) { label = 'Enviado + complemento'; cls = 'warn'; }
     var actions = '';
     if (r.cronoStatus >= 1) {
       if (r.pdf_url) {
@@ -32563,10 +32566,10 @@ function clientTimelineRenderHome() {
     actions.push({ kind:'client', type:'Complemento', tone:'warn', action:'Ver cliente', title:r.name, text:r.weekState.complements.length + ' ação complementar · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, logo:r });
   });
   snap.crono.rows.filter(function(r) { return r.cronoStatus >= 1 && r.cronoStatus !== 2; }).slice(0, 4).forEach(function(r) {
-    actions.push({ kind:'client', type:'Enviar', tone:'warn', action:'Enviar', title:r.name, text:'Cronograma gerado · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, logo:r });
+    actions.push({ kind:'client', type:'Enviar', tone:'warn', action:'Enviar', command: r.pdf_url ? 'send-crono' : 'generate-crono', title:r.name, text:'Cronograma gerado · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, clientId:r.id, periodKey:snap.weekKey, logo:r });
   });
   snap.crono.rows.filter(function(r) { return !r.cronoStatus; }).slice(0, 4).forEach(function(r) {
-    actions.push({ kind:'client', type:'Cronograma', tone:'bad', action:'Gerar', title:r.name, text:'Gerar cronograma · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, logo:r });
+    actions.push({ kind:'client', type:'Cronograma', tone:'bad', action:'Gerar', command:'generate-crono', title:r.name, text:'Gerar cronograma · ' + (snap.weekInfo.label || snap.weekKey), key:r.metaKey || r.id, clientId:r.id, periodKey:snap.weekKey, logo:r });
   });
   snap.noOwner.slice(0, 3).forEach(function(t) {
     var key = clientTimelineTaskClientKey(t);
@@ -32575,6 +32578,8 @@ function clientTimelineRenderHome() {
   });
   next.innerHTML = actions.length ? actions.slice(0, 8).map(function(a) {
     var click = (a.kind === 'task' && a.taskId) ? 'ctOpenModal(' + ctlJsArg(a.taskId) + ')' : 'clientTimelineOpenClientContent(' + ctlJsArg(a.key) + ')';
+    if (a.command === 'generate-crono') click = 'cronogramaFromSchedule(' + ctlJsArg(a.key) + ',' + ctlJsArg(a.clientId || a.key) + ',\'sched-weekly\',' + ctlJsArg(a.periodKey || snap.weekKey) + ')';
+    if (a.command === 'send-crono') click = 'zappfySendReport(' + ctlJsArg(a.clientId || a.key) + ',\'sched-weekly\',' + ctlJsArg(a.periodKey || snap.weekKey) + ')';
     var logo = a.logo || clientTimelineClientMeta(a.key);
     return '<div class="ctl-next-card" onclick="' + click + '">' +
       clientLogoAvatarHtml({ slug:a.key, name:logo.name || a.title || a.key, logo_url:logo.logo_url || logo.logoUrl || logo.logo }, 'ctl-home-logo') +
