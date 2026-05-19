@@ -26024,8 +26024,8 @@ async function ctSaveAllFields(silent) {
   if (descVal !== (ctModalTask.description || '')) fields.description = descVal;
 
   if (Object.keys(fields).length === 0) {
-    if (!silent && btn) { btn.disabled = false; btn.textContent = '<span class="mso">save</span> Salvar'; }
-    if (!silent && statusEl) { statusEl.textContent = '<span class="mso mso-fill">check_circle</span> Tudo salvo'; setTimeout(function() { statusEl.textContent = ''; }, 2000); }
+    if (!silent && btn) { btn.disabled = false; btn.innerHTML = '<span class="mso">save</span> Salvar'; }
+    if (!silent && statusEl) { statusEl.innerHTML = '<span class="mso mso-fill">check_circle</span> Tudo salvo'; setTimeout(function() { statusEl.textContent = ''; }, 2000); }
     return;
   }
 
@@ -26035,11 +26035,11 @@ async function ctSaveAllFields(silent) {
     await ctApi('upsert_task', fields);
     // Update local cache
     Object.keys(fields).forEach(function(k) { if (k !== 'id' && k !== 'user') ctModalTask[k] = fields[k]; });
-    if (!silent && btn) { btn.disabled = false; btn.textContent = '<span class="mso">save</span> Salvar'; }
-    if (!silent && statusEl) { statusEl.textContent = '<span class="mso mso-fill">check_circle</span> Salvo!'; setTimeout(function() { statusEl.textContent = ''; }, 2500); }
+    if (!silent && btn) { btn.disabled = false; btn.innerHTML = '<span class="mso">save</span> Salvar'; }
+    if (!silent && statusEl) { statusEl.innerHTML = '<span class="mso mso-fill">check_circle</span> Salvo!'; setTimeout(function() { statusEl.textContent = ''; }, 2500); }
   } catch(e) {
-    if (!silent && btn) { btn.disabled = false; btn.textContent = '<span class="mso">save</span> Salvar'; }
-    if (!silent && statusEl) { statusEl.textContent = '<span class="mso">cancel</span> Erro'; setTimeout(function() { statusEl.textContent = ''; }, 3000); }
+    if (!silent && btn) { btn.disabled = false; btn.innerHTML = '<span class="mso">save</span> Salvar'; }
+    if (!silent && statusEl) { statusEl.innerHTML = '<span class="mso">cancel</span> Erro'; setTimeout(function() { statusEl.textContent = ''; }, 3000); }
   }
 }
 
