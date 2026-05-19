@@ -4936,11 +4936,27 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
 .ctl-health-tile.ok { border-color:rgba(70,238,205,.25); background:rgba(70,238,205,.07); }
 .ctl-health-tile.warn { border-color:rgba(251,191,36,.28); background:rgba(251,191,36,.07); }
 .ctl-health-tile.bad { border-color:rgba(239,68,68,.28); background:rgba(239,68,68,.07); }
+.ctl-client-week-card { border:1px solid rgba(70,238,205,.16); border-radius:14px; background:linear-gradient(135deg,rgba(70,238,205,.08),rgba(96,165,250,.04)); padding:14px; margin-bottom:14px; box-shadow:0 12px 34px rgba(0,0,0,.16); }
+.ctl-client-week-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.ctl-client-week-title { display:flex; align-items:center; gap:10px; min-width:0; }
+.ctl-client-week-title strong { display:block; color:var(--text); font-size:.95rem; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.ctl-client-week-title small { display:block; color:var(--text-muted); font-size:.7rem; margin-top:2px; }
+.ctl-client-week-actions { display:flex; align-items:center; justify-content:flex-end; gap:7px; flex-wrap:wrap; }
+.ctl-client-week-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:8px; }
+.ctl-client-week-metric { border:1px solid rgba(255,255,255,.06); background:rgba(13,18,30,.54); border-radius:10px; padding:9px; min-height:64px; display:flex; flex-direction:column; justify-content:space-between; }
+.ctl-client-week-metric span { color:var(--text-muted); font-size:.62rem; font-weight:950; letter-spacing:.04em; text-transform:uppercase; }
+.ctl-client-week-metric strong { color:var(--text); font-size:1.08rem; line-height:1; margin-top:6px; }
+.ctl-client-week-metric.ok strong { color:#46eecd; }
+.ctl-client-week-metric.warn strong { color:#fbbf24; }
+.ctl-client-week-metric.bad strong { color:#f87171; }
 @media (max-width: 980px) {
   .ctl-home-grid { grid-template-columns: 1fr; }
   .ctl-home-progress-row { grid-template-columns: 1fr; gap:6px; }
   .ctl-home-progress-meta { text-align:left; }
   .ctl-home-health-grid { grid-template-columns:1fr; }
+  .ctl-client-week-head { flex-direction:column; }
+  .ctl-client-week-actions { justify-content:flex-start; }
+  .ctl-client-week-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
 }
 @media (max-width: 980px) {
   .ctl-toolbar { flex-direction: column; }
@@ -14463,6 +14479,9 @@ function cronoRefreshAllViews() {
   }
   if (typeof clientTimelineRenderHome === 'function' && (typeof _ctlClientSlug === 'undefined' || !_ctlClientSlug)) {
     try { clientTimelineRenderHome(); } catch(e2) {}
+  }
+  if (typeof clientTimelineRender === 'function' && typeof _ctlClientSlug !== 'undefined' && _ctlClientSlug) {
+    try { clientTimelineRender(); } catch(e3) {}
   }
 }
 
@@ -32438,6 +32457,120 @@ function clientTimelineWeekNavHtml() {
   '</div>';
 }
 
+function clientTimelineSelectedClientRecord() {
+  var key = _ctlClientSlug || '';
+  var active = clientTimelineActiveClients();
+  var found = active.find(function(c) {
+    return c.metaKey === key || c.slug === key || c.id === key;
+  });
+  if (found) return found;
+  var meta = clientTimelineClientMeta(key);
+  return {
+    id: meta.id || key,
+    metaKey: meta.metaKey || meta.slug || key,
+    slug: meta.slug || key,
+    name: meta.name || meta.pageName || key,
+    company: meta.company || 'Starken',
+    logo_url: meta.logo_url || meta.logoUrl || meta.logo
+  };
+}
+
+function clientTimelineSelectedCronoStatus(record, weekKey) {
+  record = record || clientTimelineSelectedClientRecord();
+  weekKey = weekKey || clientTimelineHomeWeekKey();
+  var ids = [record.id, record.metaKey, record.slug, _ctlClientSlug].filter(Boolean);
+  for (var i = 0; i < ids.length; i++) {
+    if (typeof _dashGetStatus === 'function') {
+      var dashStatus = _dashGetStatus(ids[i], 'sched-weekly', weekKey);
+      if (dashStatus && (dashStatus.status || dashStatus.pdf_url || dashStatus.sent_date)) return dashStatus;
+    }
+    if (typeof getCronogramaStatus === 'function') {
+      var cronoStatus = getCronogramaStatus(ids[i], weekKey);
+      if (cronoStatus) return cronoStatus;
+    }
+  }
+  return { status: 0 };
+}
+
+function clientTimelineOpenSelectedCronograma() {
+  if (!_ctlClientSlug) return;
+  var record = clientTimelineSelectedClientRecord();
+  var metaKey = record.metaKey || record.slug || _ctlClientSlug;
+  var clientId = record.id || metaKey;
+  if (typeof cronogramaFromSchedule === 'function') {
+    cronogramaFromSchedule(metaKey, clientId, 'sched-weekly', clientTimelineHomeWeekKey());
+  }
+}
+
+function clientTimelineSendSelectedCronograma() {
+  if (!_ctlClientSlug) return;
+  var record = clientTimelineSelectedClientRecord();
+  var status = clientTimelineSelectedCronoStatus(record, clientTimelineHomeWeekKey());
+  if (!status || !status.pdf_url) {
+    if (typeof showToast === 'function') showToast('Gere o PDF antes de enviar.', 'warning');
+    return;
+  }
+  if (typeof zappfySendReport === 'function') {
+    zappfySendReport(record.id || record.metaKey || _ctlClientSlug, 'sched-weekly', clientTimelineHomeWeekKey());
+  }
+}
+
+function clientTimelineClientWeekSummaryHtml(tasks) {
+  var record = clientTimelineSelectedClientRecord();
+  var weekKey = clientTimelineHomeWeekKey();
+  var weekInfo = clientTimelineHomeWeekInfo(weekKey);
+  var crono = clientTimelineSelectedCronoStatus(record, weekKey);
+  var cronoStatus = crono && crono.status ? crono.status : 0;
+  var cronoLabel = cronoStatus === 2 ? 'Cronograma enviado' : cronoStatus >= 1 ? 'Gerado, falta enviar' : 'Sem cronograma';
+  var cronoTone = cronoStatus === 2 ? 'ok' : cronoStatus >= 1 ? 'warn' : 'bad';
+  var open = tasks.filter(function(t) { return mtTaskOperationalState(t).open; });
+  var approvals = open.filter(function(t) { return /aprovacao|aprovação|revisao|revisão/i.test(String(t.status || '')); });
+  var scheduled = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled'; });
+  var published = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'published'; });
+  var overdue = tasks.filter(function(t) { return mtTaskOperationalState(t).overdue; });
+  var sentAt = crono && (crono.sent_date || crono.sent_at || crono.updated_at);
+  var complements = [];
+  if (cronoStatus === 2 && sentAt) {
+    var sentTime = new Date(sentAt).getTime();
+    if (Number.isFinite(sentTime)) {
+      complements = tasks.filter(function(t) {
+        var created = new Date(t.created_at || t.updated_at || 0).getTime();
+        var state = mtTaskOperationalState(t);
+        return Number.isFinite(created) && created > sentTime && !state.done && !state.neutral;
+      });
+    }
+  }
+  var nextStep = cronoStatus === 0 ? 'Gerar cronograma' :
+    cronoStatus === 1 ? 'Enviar cronograma' :
+    complements.length ? 'Enviar complemento' :
+    approvals.length ? 'Cobrar aprovação' :
+    open.length ? 'Resolver pendências' :
+    'Semana controlada';
+  var actions = '';
+  if (crono && crono.pdf_url) actions += '<a class="ctl-home-chip" href="' + ctlEsc(crono.pdf_url) + '" target="_blank" onclick="event.stopPropagation()" style="text-decoration:none">PDF</a>';
+  actions += '<button class="ctl-home-chip ' + (cronoStatus ? 'warn' : 'bad') + '" onclick="event.stopPropagation();clientTimelineOpenSelectedCronograma()">' + (cronoStatus ? 'Regenerar' : 'Gerar cronograma') + '</button>';
+  if (cronoStatus >= 1) actions += '<button class="ctl-home-chip ok" onclick="event.stopPropagation();clientTimelineSendSelectedCronograma()">Enviar</button>';
+  var metrics = [
+    ['Cronograma', cronoLabel, cronoTone],
+    ['Posts semana', tasks.length, tasks.length ? 'ok' : 'warn'],
+    ['Aprovação', approvals.length, approvals.length ? 'warn' : 'ok'],
+    ['Agend/Public', scheduled.length + published.length, (scheduled.length + published.length) ? 'ok' : 'warn'],
+    ['Complementos', complements.length, complements.length ? 'warn' : 'ok']
+  ].map(function(m) {
+    return '<div class="ctl-client-week-metric ' + m[2] + '"><span>' + ctlEsc(m[0]) + '</span><strong>' + ctlEsc(String(m[1])) + '</strong></div>';
+  }).join('');
+  return '<div class="ctl-client-week-card">' +
+    '<div class="ctl-client-week-head">' +
+      '<div class="ctl-client-week-title">' +
+        clientLogoAvatarHtml({ slug:record.metaKey || record.id || _ctlClientSlug, name:record.name, logo_url:record.logo_url || record.logoUrl || record.logo }, 'ctl-home-logo') +
+        '<div><strong>' + ctlEsc(record.name || _ctlClientSlug) + '</strong><small>' + ctlEsc(((weekInfo && weekInfo.label) || weekKey || 'Semana atual') + ' · Próximo passo: ' + nextStep) + '</small></div>' +
+      '</div>' +
+      '<div class="ctl-client-week-actions">' + actions + '</div>' +
+    '</div>' +
+    '<div class="ctl-client-week-grid">' + metrics + '</div>' +
+  '</div>';
+}
+
 function clientTimelineTaskTone(task) {
   var state = (typeof mtTaskOperationalState === 'function') ? mtTaskOperationalState(task) : {};
   if (state && state.overdue) return 'bad';
@@ -32476,7 +32609,7 @@ function clientTimelineRender() {
   var byStage = {};
   CTL_STAGES.forEach(function(stage) { byStage[stage.key] = []; });
   tasks.forEach(function(task) {
-    byStage[clientTimelineStageFor(task.status).key].push(task);
+    byStage[clientTimelineStageFor(typeof mtTaskEffectiveStatus === 'function' ? mtTaskEffectiveStatus(task) : task.status).key].push(task);
   });
 
   var counts = {
@@ -32499,7 +32632,7 @@ function clientTimelineRender() {
     return '<div class="ctl-stat"><small>' + ctlEsc(item[2]) + '</small><strong>' + ctlEsc(item[1]) + '</strong><small>' + ctlEsc(item[0]) + '</small></div>';
   }).join('');
 
-  stagesEl.innerHTML = clientTimelineWeekNavHtml() + '<div class="ctl-board">' + CTL_STAGES.map(function(stage) {
+  stagesEl.innerHTML = clientTimelineWeekNavHtml() + clientTimelineClientWeekSummaryHtml(tasks) + '<div class="ctl-board">' + CTL_STAGES.map(function(stage) {
     var rows = byStage[stage.key] || [];
     return '<section class="ctl-stage" data-stage="' + ctlEsc(stage.key) + '">' +
       '<div class="ctl-stage-head"><div class="ctl-stage-title"><span class="mso">' + stage.icon + '</span><div>' + ctlEsc(stage.title) + '<small>' + ctlEsc(stage.sub) + '</small></div></div><span class="ctl-stage-count">' + rows.length + '</span></div>' +
@@ -32508,7 +32641,7 @@ function clientTimelineRender() {
   }).join('') + '</div>';
 
   var clientMeta = clientTimelineClientMeta(_ctlClientSlug);
-  var openTasks = tasks.filter(function(t) { return !mtIsDoneStatus(t.status); });
+  var openTasks = tasks.filter(function(t) { return !mtTaskOperationalState(t).done; });
   var priorityTasks = openTasks.slice().sort(function(a, b) {
     var toneA = clientTimelineTaskTone(a) === 'bad' ? 0 : (clientTimelineTaskTone(a) === 'warn' ? 1 : 2);
     var toneB = clientTimelineTaskTone(b) === 'bad' ? 0 : (clientTimelineTaskTone(b) === 'warn' ? 1 : 2);
@@ -32536,7 +32669,8 @@ function clientTimelineRender() {
 }
 
 function clientTimelineTaskHtml(task) {
-  var status = clientTimelineStatusDef(task.status || 'a-fazer');
+  var effectiveStatus = typeof mtTaskEffectiveStatus === 'function' ? mtTaskEffectiveStatus(task) : (task.status || 'a-fazer');
+  var status = clientTimelineStatusDef(effectiveStatus);
   var stage = clientTimelineStageFor(status.key);
   var next = clientTimelineNextStatus(status.key);
   var date = clientTimelineDate(task) || 'sem data';
