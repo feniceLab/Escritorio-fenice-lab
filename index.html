@@ -36271,6 +36271,41 @@ function mtTaskPublishConfig(task) {
   try { return JSON.parse(cfg); } catch(e) { return {}; }
 }
 
+function mtTaskPublishEntries(task) {
+  var cfg = mtTaskPublishConfig(task);
+  var entries = [];
+  function addEntryList(list) {
+    if (!Array.isArray(list)) return;
+    list.forEach(function(entry) { if (entry && typeof entry === 'object') entries.push(entry); });
+  }
+  addEntryList(cfg.entries);
+  Object.keys(cfg || {}).forEach(function(key) {
+    var value = cfg[key];
+    if (value && typeof value === 'object') addEntryList(value.entries);
+  });
+  return entries;
+}
+
+function mtTaskEffectiveStatus(task) {
+  if (!task || typeof task !== 'object') return mtNormalizeStatus(task);
+  var status = mtNormalizeStatus(task.status);
+  if (['publicado', 'publicado-st', 'agendado', 'aprovado', 'nao-utilizado', 'nao-publicado', 'cancelado', 'complete'].includes(status)) return status;
+  var entries = mtTaskPublishEntries(task);
+  var hasPublished = entries.some(function(entry) {
+    var entryStatus = mtNormalizeStatus(entry.status);
+    if (['cancelado', 'nao-publicado', 'failed', 'falhou'].includes(entryStatus)) return false;
+    return entryStatus === 'publicado' || String(entry.published_at || '').trim();
+  });
+  if (hasPublished) return 'publicado';
+  var hasScheduled = entries.some(function(entry) {
+    var entryStatus = mtNormalizeStatus(entry.status);
+    if (['cancelado', 'nao-publicado', 'failed', 'falhou'].includes(entryStatus)) return false;
+    return ['agendado', 'queued'].includes(entryStatus) || String(entry.scheduled_for || '').trim();
+  });
+  if (hasScheduled) return 'agendado';
+  return status;
+}
+
 function mtTaskPostDate(task) {
   var cfg = mtTaskPublishConfig(task);
   return cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || cfg.scheduled_at || cfg.scheduledAt || '';
@@ -36342,7 +36377,7 @@ function mtTaskThumbHtml(task) {
 }
 
 function mtTaskOperationalState(task) {
-  var status = mtNormalizeStatus(task && task.status);
+  var status = mtTaskEffectiveStatus(task);
   var hasDate = mtTaskHasOperationalDate(task);
   var hasPostDate = mtTaskHasPostDate(task);
   var hasCreative = mtTaskHasCreative(task);
@@ -36453,14 +36488,14 @@ function mtOperationalStages() {
 }
 
 function mtOperationalStageForStatus(status) {
-  var s = mtNormalizeStatus(status);
+  var s = (status && typeof status === 'object') ? mtTaskEffectiveStatus(status) : mtNormalizeStatus(status);
   var found = mtOperationalStages().find(function(stage) { return stage.statuses.includes(s); });
   return found ? found.key : 'production';
 }
 
 function mtApplyOperationalFilter(rows) {
   if (!mtOperationalFilter) return (rows || []).slice();
-  return (rows || []).filter(function(t) { return mtOperationalStageForStatus(t.status) === mtOperationalFilter; });
+  return (rows || []).filter(function(t) { return mtOperationalStageForStatus(t) === mtOperationalFilter; });
 }
 
 function mtSetOperationalFilter(stage) {
@@ -36574,7 +36609,7 @@ function mtApplyTaskFilters(sourceTasks) {
   var statusFilterEl = document.getElementById('mtStatusFilter');
   var statusFilter = statusFilterEl ? statusFilterEl.value : '';
   if (statusFilter) {
-    tasks = tasks.filter(function(t) { return mtNormalizeStatus(t.status) === statusFilter; });
+    tasks = tasks.filter(function(t) { return mtTaskEffectiveStatus(t) === statusFilter; });
   }
   var periodFilterEl = document.getElementById('mtPeriodFilter');
   var periodFilter = periodFilterEl ? periodFilterEl.value : '';
@@ -36633,7 +36668,8 @@ function mtBuildGroupEntries(view, rows) {
       var label = view === 'client' ? mtClientName(item) : key;
       if (!map[key]) map[key] = { key: key, label: label, total: 0, open: 0, done: 0 };
       map[key].total += 1;
-      if (mtIsDoneStatus(item.status)) map[key].done += 1;
+      var state = mtTaskOperationalState(item);
+      if (state.done) map[key].done += 1;
       else map[key].open += 1;
     });
   });
@@ -36747,7 +36783,7 @@ function mtSortTasks(tasks) {
     var todayISO = new Date().toISOString().slice(0, 10);
     function bucket(t) {
       var d = mtTaskOperationalDateISO(t);
-      var done = mtIsDoneStatus(t.status);
+      var done = mtTaskOperationalState(t).done;
       if (d && !done && d >= todayISO) return 0;
       if (!d) return 1;
       if (d && !done && d < todayISO) return 2;
@@ -36762,8 +36798,8 @@ function mtSortTasks(tasks) {
     } else if (dA !== dB) {
       return dA.localeCompare(dB);
     }
-    const sA = statusOrder[mtNormalizeStatus(a.status)] ?? 99;
-    const sB = statusOrder[mtNormalizeStatus(b.status)] ?? 99;
+    const sA = statusOrder[mtTaskEffectiveStatus(a)] ?? 99;
+    const sB = statusOrder[mtTaskEffectiveStatus(b)] ?? 99;
     if (sA !== sB) return sA - sB;
     const pA = prioOrder[a.priority] ?? 2;
     const pB = prioOrder[b.priority] ?? 2;
@@ -36806,7 +36842,7 @@ function mtRenderPipeline(tasks) {
   ];
   let html = '';
   statusGroups.forEach(sg => {
-    const count = tasks.filter(t => mtNormalizeStatus(t.status) === sg.key).length;
+    const count = tasks.filter(t => mtTaskEffectiveStatus(t) === sg.key).length;
     if (count === 0) return;
     html += '<button onclick="document.getElementById(\'mtStatusFilter\').value=\'' + sg.key + '\';mtRender()" '
       + 'style="display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:20px;border:1px solid ' + sg.bg + ';background:' + sg.bg + ';color:' + sg.color + ';cursor:pointer;font-size:12px;font-weight:700;font-family:inherit;transition:all 0.15s'
@@ -36896,7 +36932,7 @@ function mtRenderBento(rows) {
   var source = Array.isArray(rows) ? rows : mtTasks;
   var stats = mtOperationalStages().map(function(stage) {
     return Object.assign({}, stage, {
-      count: source.filter(function(t) { return mtOperationalStageForStatus(t.status) === stage.key; }).length
+      count: source.filter(function(t) { return mtOperationalStageForStatus(t) === stage.key; }).length
     });
   });
   var html = '';
@@ -36986,7 +37022,7 @@ function mtGetRecentVisibleTasks() {
   var statusFilter = statusFilterEl ? statusFilterEl.value : '';
   if (statusFilter) {
     if (!['agendado', 'publicado'].includes(statusFilter)) return [];
-    rows = rows.filter(function(t) { return mtNormalizeStatus(t.status) === statusFilter; });
+    rows = rows.filter(function(t) { return mtTaskEffectiveStatus(t) === statusFilter; });
   }
   var periodFilterEl = document.getElementById('mtPeriodFilter');
   var periodFilter = periodFilterEl ? periodFilterEl.value : '';
@@ -37015,8 +37051,8 @@ function mtRenderRecent(container, rows) {
   var h = '<div style="margin-top:24px">';
   h += '<div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">';
   h += '<h3 style="font-size:15px;font-weight:700;margin:0;color:#e2e8f0"><span class="mso">assignment</span> Agendados &amp; Publicados (últimos 7 dias)</h3>';
-  var agCount = recentRows.filter(function(t) { return mtNormalizeStatus(t.status) === 'agendado'; }).length;
-  var pubCount = recentRows.filter(function(t) { return mtNormalizeStatus(t.status) === 'publicado'; }).length;
+  var agCount = recentRows.filter(function(t) { return mtTaskEffectiveStatus(t) === 'agendado'; }).length;
+  var pubCount = recentRows.filter(function(t) { return mtTaskEffectiveStatus(t) === 'publicado'; }).length;
   h += '<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">' + agCount + ' agendados</span>';
   h += '<span style="background:#dcfce7;color:#166534;padding:2px 8px;border-radius:10px;font-size:11px;font-weight:700">' + pubCount + ' publicados</span>';
   h += '</div>';
@@ -37290,8 +37326,8 @@ function mtRenderReport(container, sourceTasks, visibleTasks) {
     people.forEach(function(p) { byPerson[p] = (byPerson[p] || 0) + 1; });
   });
   var topPerson = Object.keys(byPerson).sort(function(a, b) { return byPerson[b] - byPerson[a]; })[0] || 'Sem dados';
-  var published7 = mtRecentTasks.filter(function(t) { return mtNormalizeStatus(t.status) === 'publicado'; }).length;
-  var scheduled7 = mtRecentTasks.filter(function(t) { return mtNormalizeStatus(t.status) === 'agendado'; }).length;
+  var published7 = mtRecentTasks.filter(function(t) { return mtTaskEffectiveStatus(t) === 'publicado'; }).length;
+  var scheduled7 = mtRecentTasks.filter(function(t) { return mtTaskEffectiveStatus(t) === 'agendado'; }).length;
   var agentOpen = mtAgentTasks.filter(function(t) { return !mtIsDoneStatus(t.status); }).length;
 
   var html = '<div class="mt-nx-report">';
@@ -37371,7 +37407,7 @@ function mtRenderRowFallback(task, error, mode) {
 
 function mtRenderRow(task, mode) {
   // Use CT_STATUSES for correct labels/colors
-  const normalizedStatus = mtNormalizeStatus(task.status);
+  const normalizedStatus = mtTaskEffectiveStatus(task);
   const statusDef = CT_STATUSES.find(s => s.key === normalizedStatus) || CT_STATUSES[0];
   const statusKey = statusDef.key;
   const statusLabel = statusDef.label;
