@@ -24267,11 +24267,11 @@ async function ctAutoPromotePublished() {
   }
 }
 
-// Verifica posts esquecidos: status 'agendado' com data de entrega no passado
+// Verifica publicações que precisam de validação: agendadas com data real de post vencida, sem evidência.
 async function ctCheckForgottenPosts() {
   if (!_supabase) return;
   // Throttle: uma vez por sessão (evita spam a cada navegação)
-  var sessionKey = 'starken_forgotten_checked_' + new Date().toISOString().slice(0, 10);
+  var sessionKey = 'starken_publication_validation_checked_' + new Date().toISOString().slice(0, 10);
   if (sessionStorage.getItem(sessionKey)) return;
 
   try {
@@ -24280,12 +24280,16 @@ async function ctCheckForgottenPosts() {
 
     var res = await _supabase
       .from('content_tasks')
-      .select('id,name,due_date,client_key,publish_config,parent_id')
-      .eq('status', 'agendado')
-      .not('due_date', 'is', null)
-      .lt('due_date', todayISO);
+      .select('id,name,status,due_date,client_key,client_id,publish_config,parent_id')
+      .eq('status', 'agendado');
 
-    var tasks = (res.data || []).filter(function(t) { return !t.parent_id; }); // só tasks raiz
+    var tasks = (res.data || []).filter(function(t) {
+      if (t.parent_id) return false; // só tasks raiz
+      if (typeof mtTaskNeedsPublicationValidation === 'function') return mtTaskNeedsPublicationValidation(t);
+      var cfg = mtTaskPublishConfig(t);
+      var postDate = String(cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || '').slice(0, 10);
+      return /^\d{4}-\d{2}-\d{2}$/.test(postDate) && postDate < todayISO;
+    });
     if (!tasks.length) {
       sessionStorage.setItem(sessionKey, '1');
       return;
@@ -24302,7 +24306,7 @@ async function ctCheckForgottenPosts() {
 
     var clientMap = {};
     tasks.forEach(function(t) {
-      var ck = t.client_key || 'outros';
+      var ck = t.client_key || t.client_id || 'outros';
       if (!clientMap[ck]) clientMap[ck] = [];
       clientMap[ck].push(t);
     });
@@ -24317,8 +24321,8 @@ async function ctCheckForgottenPosts() {
     banner.id = 'forgottenPostsBanner';
     banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:99998;background:#b45309;color:#fff;padding:10px 50px 10px 20px;font-family:inherit;font-size:0.82rem;display:flex;align-items:center;gap:12px;flex-wrap:wrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)';
     banner.innerHTML = '<span class="mso" style="font-size:1.2rem;flex-shrink:0">warning</span>'
-      + '<strong>⚠ ' + tasks.length + ' post' + (tasks.length > 1 ? 's' : '') + ' esquecido' + (tasks.length > 1 ? 's' : '') + '</strong>'
-      + '<span style="opacity:.85">— deveriam ter sido publicados mas ainda estão como Agendado:</span>'
+      + '<strong>⚠ ' + tasks.length + ' publicação' + (tasks.length > 1 ? 'ões' : '') + ' para validar</strong>'
+      + '<span style="opacity:.85">— data de post vencida, ainda agendada e sem evidência real de publicação:</span>'
       + '<span style="display:flex;flex-wrap:wrap;gap:4px">' + clientLines + '</span>'
       + '<button onclick="if(typeof switchTab===\'function\')switchTab(\'content\')" style="background:rgba(255,255,255,0.2);color:#fff;border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:4px 12px;font-family:inherit;font-size:0.78rem;cursor:pointer;font-weight:700;margin-left:auto;white-space:nowrap">Ver Tarefas →</button>';
 
@@ -24332,8 +24336,8 @@ async function ctCheckForgottenPosts() {
 
     // Web Notification
     if ('Notification' in window && Notification.permission === 'granted') {
-      var n = new Notification('Starken OS — Posts não publicados', {
-        body: tasks.length + ' post(s) estavam agendados mas não foram publicados. Clique para ver.',
+      var n = new Notification('Starken OS — Validar publicações', {
+        body: tasks.length + ' publicação(ões) agendada(s) passaram da data de post sem evidência. Clique para ver.',
         icon: '/favicon.ico',
         requireInteraction: true,
       });
@@ -32842,8 +32846,9 @@ function clientTimelineClientWeekState(client, weekKey, tasks) {
   var cronoStatus = crono && crono.status ? crono.status : 0;
   var open = clientTasks.filter(function(t) { return mtTaskOperationalState(t).open; });
   var approvals = open.filter(function(t) { return /aprovacao|aprovação|revisao|revisão/i.test(String(t.status || '')); });
-  var scheduled = clientTasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled'; });
+  var scheduled = clientTasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled' && !mtTaskNeedsPublicationValidation(t); });
   var published = clientTasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'published'; });
+  var validations = clientTasks.filter(function(t) { return mtTaskNeedsPublicationValidation(t); });
   var overdue = clientTasks.filter(function(t) { return mtTaskOperationalState(t).overdue; });
   var noOwner = clientTasks.filter(function(t) { return mtTaskOperationalState(t).noOwnerReal; });
   var sentAt = crono && (crono.sent_date || crono.sent_at || crono.updated_at);
@@ -32862,6 +32867,7 @@ function clientTimelineClientWeekState(client, weekKey, tasks) {
   var nextStep = cronoStatus === 0 ? 'Gerar cronograma' :
     cronoStatus === 1 ? 'Enviar cronograma' :
     complements.length ? 'Enviar complemento' :
+    validations.length ? 'Validar publicação' :
     approvals.length ? 'Cobrar aprovação' :
     overdue.length ? 'Resolver atraso' :
     open.length ? 'Resolver pendências' :
@@ -32876,6 +32882,7 @@ function clientTimelineClientWeekState(client, weekKey, tasks) {
     approvals: approvals,
     scheduled: scheduled,
     published: published,
+    validations: validations,
     overdue: overdue,
     noOwner: noOwner,
     complements: complements,
@@ -33007,8 +33014,9 @@ function clientTimelineHomeSnapshot() {
   var overdue = tasks.filter(function(t) { return mtTaskOperationalState(t).overdue; });
   var noOwner = tasks.filter(function(t) { return mtTaskOperationalState(t).noOwnerReal; });
   var approvals = open.filter(function(t) { return /aprovacao|aprovação|revisao|revisão/i.test(String(t.status || '')); });
-  var scheduled = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled'; });
+  var scheduled = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'scheduled' && !mtTaskNeedsPublicationValidation(t); });
   var published = tasks.filter(function(t) { return clientTimelineHomeTaskStatus(t) === 'published'; });
+  var validations = tasks.filter(function(t) { return mtTaskNeedsPublicationValidation(t); });
   var states = tasks.map(function(t) { return mtTaskOperationalState(t); });
   var health = {
     measurable: states.filter(function(s) { return s.measurable; }).length,
@@ -33029,12 +33037,15 @@ function clientTimelineHomeSnapshot() {
   }
   crono.rows.forEach(function(c) { if (c.cronoStatus !== 2) addRisk(c.metaKey || c.id, c.cronoStatus >= 1 ? 2 : 4, c.cronoStatus >= 1 ? 'cronograma gerado' : 'cronograma pendente'); });
   crono.rows.forEach(function(c) { if (c.weekState && c.weekState.complements.length) addRisk(c.metaKey || c.id, 3, 'complemento pendente'); });
-  overdue.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 5, 'task atrasada'); });
+  validations.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 5, 'validar publicação'); });
+  overdue.forEach(function(t) {
+    if (!mtTaskNeedsPublicationValidation(t)) addRisk(clientTimelineTaskClientKey(t), 5, 'task atrasada');
+  });
   approvals.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 3, 'aguarda aprovação'); });
   noOwner.forEach(function(t) { addRisk(clientTimelineTaskClientKey(t), 2, 'sem responsável'); });
   var critical = Object.keys(byClient).map(function(k) { return byClient[k]; }).sort(function(a,b) { return b.score - a.score || a.name.localeCompare(b.name, 'pt-BR'); });
   var complements = crono.rows.reduce(function(sum, r) { return sum + ((r.weekState && r.weekState.complements.length) || 0); }, 0);
-  return { active: active, contentActive: contentActive, weekKey: weekKey, weekInfo: weekInfo, range: clientTimelineHomeRange(), crono: crono, tasks: tasks, health: health, open: open, overdue: overdue, noOwner: noOwner, approvals: approvals, scheduled: scheduled, published: published, complements: complements, critical: critical };
+  return { active: active, contentActive: contentActive, weekKey: weekKey, weekInfo: weekInfo, range: clientTimelineHomeRange(), crono: crono, tasks: tasks, health: health, open: open, overdue: overdue, noOwner: noOwner, approvals: approvals, scheduled: scheduled, published: published, validations: validations, complements: complements, critical: critical };
 }
 
 function clientTimelineHomeClientRow(item, kind) {
@@ -33056,8 +33067,9 @@ function clientTimelineHomeTaskRow(task) {
   var meta = clientTimelineClientMeta(key);
   if (key && !clientTimelineIsOperationalClient(meta)) return '';
   var st = clientTimelineHomeTaskStatus(task);
-  var chipCls = st === 'published' ? 'ok' : st === 'scheduled' ? 'warn' : '';
-  var chip = st === 'published' ? 'Publicado' : st === 'scheduled' ? 'Agendado' : 'Aberto';
+  var needsValidation = mtTaskNeedsPublicationValidation(task);
+  var chipCls = needsValidation ? 'bad' : st === 'published' ? 'ok' : st === 'scheduled' ? 'warn' : '';
+  var chip = needsValidation ? 'Validar' : st === 'published' ? 'Publicado' : st === 'scheduled' ? 'Agendado' : 'Aberto';
   var isVideo = /video/i.test(String(task._creativeType || ''));
   var media = task._creativeUrl
     ? '<div class="ctl-home-logo has-logo">' + (isVideo ? '<video src="' + ctlEsc(task._creativeUrl) + '" muted playsinline preload="metadata" style="width:100%;height:100%;object-fit:cover"></video>' : '<img class="client-logo-img" src="' + ctlEsc(task._creativeUrl) + '" loading="lazy" onerror="clientLogoFallback(this)" data-fallback="POST">') + '</div>'
@@ -33156,6 +33168,7 @@ function clientTimelineRenderHome() {
     healthTile('Com conteúdo', contentActive.length, 'Clientes com tasks na semana escolhida', contentActive.length ? 'ok' : 'warn') +
     healthTile('Cronos enviados', snap.crono.sent + '/' + contentActive.length, 'Cronogramas enviados na semana selecionada', sentPct >= 80 ? 'ok' : 'warn') +
     healthTile('Cobertura semanal', (snap.published.length + snap.scheduled.length) + '/' + weeklyTotal, 'Publicados comprovados + agendados contra tasks mensuráveis', weeklyDone >= 80 ? 'ok' : 'warn') +
+    healthTile('Validar publicação', snap.validations.length, 'Agendadas vencidas sem evidência real', snap.validations.length ? 'bad' : 'ok') +
     healthTile('Atrasos reais', snap.overdue.length, 'Tasks mensuráveis com data vencida', snap.overdue.length ? 'bad' : 'ok') +
     healthTile('Aprovação', snap.approvals.length, 'Tasks aguardando revisão ou cliente', snap.approvals.length ? 'warn' : 'ok') +
     healthTile('Sem prazo', (snap.health && snap.health.noDeadline) || 0, 'Fora do percentual principal', '') +
@@ -33172,10 +33185,15 @@ function clientTimelineRenderHome() {
     '<section class="ctl-home-card"><div class="ctl-home-toolbar"><h3 style="margin:0"><span class="mso">event_available</span> Agendamentos e publicações</h3></div><div class="ctl-home-filterbar"><span class="ctl-home-chip ok">Publicados ' + snap.published.length + '</span><span class="ctl-home-chip warn">Agendados ' + snap.scheduled.length + '</span></div><div class="ctl-home-list">' + postRows + '</div></section>' +
   '</div>';
   var actions = [];
-  snap.overdue.slice(0, 4).forEach(function(t) {
+  snap.overdue.filter(function(t) { return !mtTaskNeedsPublicationValidation(t); }).slice(0, 4).forEach(function(t) {
     var key = clientTimelineTaskClientKey(t);
     var meta = clientTimelineClientMeta(key);
     actions.push({ kind:'task', type:'Atraso', tone:'bad', action:'Abrir task', taskId:t.id, title:t.name || 'Task atrasada', text:(meta.name || key || 'Cliente') + ' · ' + (t.due_date || 'sem data') + ' · ' + (t.assignee || 'Sem responsável'), key:key, logo:meta });
+  });
+  snap.validations.slice(0, 4).forEach(function(t) {
+    var key = clientTimelineTaskClientKey(t);
+    var meta = clientTimelineClientMeta(key);
+    actions.push({ kind:'task', type:'Validar', tone:'bad', action:'Conferir', taskId:t.id, title:t.name || 'Publicação para validar', text:(meta.name || key || 'Cliente') + ' · post ' + (mtTaskPostDateISO(t) || 'sem data') + ' · sem evidência', key:key, logo:meta });
   });
   snap.approvals.slice(0, 3).forEach(function(t) {
     var key = clientTimelineTaskClientKey(t);
@@ -37271,6 +37289,30 @@ function mtTaskPostDateISO(task) {
   return /^\d{4}-\d{2}-\d{2}$/.test(datePart) ? datePart : '';
 }
 
+function mtTaskPublishedEvidence(task) {
+  if (!task || typeof task !== 'object') return false;
+  var status = mtNormalizeStatus(task.status);
+  if (['publicado', 'publicado-st'].includes(status)) return true;
+  var cfg = mtTaskPublishConfig(task);
+  if (String(cfg.published_at || cfg.meta_post_id || cfg.post_id || cfg.permalink_url || '').trim()) return true;
+  return mtTaskPublishEntries(task).some(function(entry) {
+    var entryStatus = mtNormalizeStatus(entry.status);
+    if (['cancelado', 'nao-publicado', 'failed', 'falhou'].includes(entryStatus)) return false;
+    return ['publicado', 'published', 'success'].includes(entryStatus) || String(entry.published_at || entry.meta_post_id || entry.post_id || entry.permalink_url || '').trim();
+  });
+}
+
+function mtTaskNeedsPublicationValidation(task) {
+  if (!task || typeof task !== 'object') return false;
+  if (mtNormalizeStatus(task.status) !== 'agendado') return false;
+  if (mtTaskPublishedEvidence(task)) return false;
+  var postISO = mtTaskPostDateISO(task);
+  if (!postISO) return false;
+  var today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return new Date(postISO + 'T00:00:00') < today;
+}
+
 function mtTaskOperationalDateISO(task) {
   return mtTaskPostDateISO(task) || (task && task.post_date ? String(task.post_date).slice(0, 10) : '') || (task && task.due_date ? String(task.due_date).slice(0, 10) : '');
 }
@@ -37345,14 +37387,17 @@ function mtTaskOperationalState(task) {
   var hasOwner = mtTaskHasRealOwner(task);
   var neutral = archived || ['standby', 'nao-utilizado', 'nao-publicado', 'cancelado'].includes(status);
   var scheduled = status === 'agendado';
+  var needsPublicationValidation = mtTaskNeedsPublicationValidation(task);
   var published = ['publicado', 'publicado-st'].includes(status);
   var done = published || ['aprovado', 'complete'].includes(status);
   var legacyDraft = !done && !neutral && !hasOwner && !hasCreative && !hasDate && ['a-fazer', 'backlog'].includes(status);
   var measurable = !neutral && !legacyDraft && hasDate;
-  var open = measurable && !done && !scheduled;
+  var open = measurable && !done && (!scheduled || needsPublicationValidation);
   var overdue = false;
   var opDate = mtTaskOperationalDateISO(task);
-  if (open && hasPostDate && opDate) {
+  if (needsPublicationValidation) {
+    overdue = true;
+  } else if (open && hasPostDate && opDate) {
     var today = new Date(); today.setHours(0, 0, 0, 0);
     overdue = new Date(opDate + 'T00:00:00') < today;
   }
@@ -37360,6 +37405,7 @@ function mtTaskOperationalState(task) {
     status: status,
     archived: archived,
     scheduled: scheduled,
+    needsPublicationValidation: needsPublicationValidation,
     published: published,
     done: done,
     neutral: neutral,
@@ -38274,8 +38320,9 @@ function mtRenderReport(container, sourceTasks, visibleTasks) {
   var states = rows.map(mtTaskOperationalState);
   var measurable = states.filter(function(s) { return s.measurable; }).length;
   var done = states.filter(function(s) { return s.measurable && s.done; }).length;
-  var scheduled = states.filter(function(s) { return s.measurable && s.scheduled; }).length;
+  var scheduled = states.filter(function(s) { return s.measurable && s.scheduled && !s.needsPublicationValidation; }).length;
   var published = states.filter(function(s) { return s.measurable && s.published; }).length;
+  var needsPublicationValidation = states.filter(function(s) { return s.measurable && s.needsPublicationValidation; }).length;
   var open = states.filter(function(s) { return s.open; }).length;
   var overdue = states.filter(function(s) { return s.overdue; }).length;
   var neutral = states.filter(function(s) { return s.neutral; }).length;
@@ -38310,6 +38357,7 @@ function mtRenderReport(container, sourceTasks, visibleTasks) {
     ['Finalizadas', done, 'publicadas, aprovadas ou encerradas'],
     ['Publicadas', published, 'publicação comprovada ou marcada como publicada'],
     ['Agendadas', scheduled, 'já estão no calendário, ainda sem prova de publicação'],
+    ['Validar publicação', needsPublicationValidation, 'agendadas vencidas sem evidência real'],
     ['Atrasadas', overdue, 'com entrega vencida'],
     ['Stand-by/neutras', neutral, 'não pesam contra a entrega'],
     ['Sem prazo', noDeadline, 'fora do percentual principal'],
