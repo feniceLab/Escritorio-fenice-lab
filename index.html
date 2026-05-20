@@ -9218,7 +9218,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             </div>
             <div class="ctl-actions">
               <select id="ctlClientSelect" class="ctl-select" onchange="clientTimelineSelectClient(this.value)"></select>
-              <select id="ctlRangeSelect" class="ctl-select" onchange="clientTimelineRender()">
+              <select id="ctlRangeSelect" class="ctl-select" onchange="clientTimelineHandleRangeChange()">
                 <option value="all">Todo o fluxo</option>
                 <option value="week">Semana selecionada</option>
                 <option value="next-week">Próxima semana</option>
@@ -16106,7 +16106,13 @@ async function _ensureGroupToClient() {
   _groupToClientPromise = (async function() {
     try {
       // Sempre via /api/content (service role) — direct supabase falha em RLS p/ sb_publishable
-      var rows = await _sbQuery('content_groups', { select: 'id,client_id,archived,name,status' });
+      var rows = [];
+      try {
+        rows = await _sbQuery('content_groups', { select: 'id,client_id,archived,name' });
+      } catch(primaryErr) {
+        console.warn('[content-groups] full group map failed, retrying minimal map:', primaryErr);
+        rows = await _sbQuery('content_groups', { select: 'id,client_id' });
+      }
       _groupToClientCache = {};
       _groupMetaByIdCache = {};
       (rows || []).forEach(function(g) {
@@ -32460,6 +32466,16 @@ function clientTimelineSelectClient(slug) {
   clientTimelineRefresh();
 }
 
+function clientTimelineHandleRangeChange() {
+  if (!_ctlClientSlug) {
+    _ctlHomeLoaded = false;
+    _ctlHomeTasks = [];
+    clientTimelineRefreshHome(true);
+    return;
+  }
+  clientTimelineRender();
+}
+
 async function clientTimelineRefresh() {
   if (!_ctlClientSlug) return clientTimelineRefreshHome(true);
   if (_ctlLoading) return;
@@ -32582,6 +32598,7 @@ function clientTimelineNextStatus(status) {
 var _ctlHomeTasks = [];
 var _ctlHomeLoaded = false;
 var _ctlHomeLoading = false;
+var _ctlHomeError = '';
 var _ctlHomeWeekKey = null;
 var _ctlHomeCronoFilter = 'all';
 
@@ -32742,15 +32759,36 @@ function clientTimelineRenderMasterWeekNav() {
 }
 
 function clientTimelineHomeRange() {
+  var rangeMode = (document.getElementById('ctlRangeSelect') || {}).value || 'all';
   var weekInfo = clientTimelineHomeWeekInfo();
-  if (weekInfo.startISO && weekInfo.endISO) return { startISO: weekInfo.startISO, endISO: weekInfo.endISO };
+  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
+  if (rangeMode === 'month') {
+    var base = weekInfo.startISO ? new Date(weekInfo.startISO + 'T12:00:00') : new Date();
+    var startMonth = new Date(base.getFullYear(), base.getMonth(), 1);
+    var endMonth = new Date(base.getFullYear(), base.getMonth() + 1, 0);
+    return { startISO: iso(startMonth), endISO: iso(endMonth), mode: 'month' };
+  }
+  if (rangeMode === 'next-week') {
+    var nowNext = new Date();
+    var dayNext = nowNext.getDay();
+    var diffNext = dayNext === 0 ? 1 : 8 - dayNext;
+    var startNext = new Date(nowNext.getFullYear(), nowNext.getMonth(), nowNext.getDate() + diffNext);
+    var endNext = new Date(startNext.getFullYear(), startNext.getMonth(), startNext.getDate() + 6);
+    return { startISO: iso(startNext), endISO: iso(endNext), mode: 'next-week' };
+  }
+  if (rangeMode === 'all') {
+    var baseAll = weekInfo.startISO ? new Date(weekInfo.startISO + 'T12:00:00') : new Date();
+    var startAll = new Date(baseAll.getFullYear(), baseAll.getMonth(), 1);
+    var endAll = new Date(baseAll.getFullYear(), baseAll.getMonth() + 1, 0);
+    return { startISO: iso(startAll), endISO: iso(endAll), mode: 'month' };
+  }
+  if (weekInfo.startISO && weekInfo.endISO) return { startISO: weekInfo.startISO, endISO: weekInfo.endISO, mode: 'week' };
   var now = new Date();
   var day = now.getDay();
   var diff = day === 0 ? -6 : 1 - day;
   var start = new Date(now.getFullYear(), now.getMonth(), now.getDate() + diff);
   var end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
-  function iso(d) { return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); }
-  return { startISO: iso(start), endISO: iso(end) };
+  return { startISO: iso(start), endISO: iso(end), mode: 'week' };
 }
 
 function clientTimelineMergeTasksById(lists) {
@@ -32861,6 +32899,7 @@ async function clientTimelineRefreshHome(force) {
   if (_ctlHomeLoading) return;
   if (_ctlHomeLoaded && !force) return;
   _ctlHomeLoading = true;
+  _ctlHomeError = '';
   clientTimelineRenderHome();
   try {
     var range = clientTimelineHomeRange();
@@ -32937,6 +32976,9 @@ async function clientTimelineRefreshHome(force) {
     _ctlHomeLoaded = true;
   } catch(e) {
     console.warn('[client-timeline-home] load failed:', e);
+    _ctlHomeError = e && e.message ? e.message : String(e || 'Erro ao carregar dados operacionais.');
+    _ctlHomeTasks = [];
+    _ctlHomeLoaded = false;
   } finally {
     _ctlHomeLoading = false;
     if (!_ctlClientSlug) clientTimelineRenderHome();
@@ -33048,6 +33090,14 @@ function clientTimelineRenderHome() {
   var notes = document.getElementById('ctlNotes');
   if (!stats || !stages || !next || !ai) return;
   var snap = clientTimelineHomeSnapshot();
+  if (_ctlHomeError) {
+    stats.innerHTML = '<div class="ctl-stat bad"><small>dados operacionais</small><strong>!</strong><small>falha no carregamento</small></div>';
+    stages.innerHTML = '<div class="ctl-home-grid"><section class="ctl-home-card"><h3><span class="mso">error</span> Timeline indisponível</h3><div class="ctl-home-empty">Não foi possível carregar os dados operacionais agora. Use Atualizar em alguns segundos.<br><small>' + ctlEsc(_ctlHomeError) + '</small></div></section></div>';
+    next.innerHTML = '<div class="ctl-empty">Aguardando dados operacionais.</div>';
+    ai.innerHTML = '<div class="ctl-next-item"><strong>Visão geral indisponível</strong><small>A Timeline não vai mostrar zero como se estivesse tudo certo quando a API falhar.</small></div>';
+    if (notes) notes.innerHTML = '<div class="ctl-empty" style="padding:12px">Notas seguem disponíveis após o carregamento.</div>';
+    return;
+  }
   var active = snap.active;
   var contentActive = snap.contentActive || [];
   var weekPosts = snap.scheduled.length + snap.published.length;
