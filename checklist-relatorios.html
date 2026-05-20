@@ -15890,6 +15890,7 @@ function renderProgress(containerId, periodKey, active) {
 // Progress from content_tasks (Supabase) — replaces old renderProgress for dashboard
 var _contentProgressCache = {};
 var _groupToClientCache = null;
+var _groupMetaByIdCache = {};
 
 var _groupToClientPromise = null;
 async function _ensureGroupToClient() {
@@ -15898,9 +15899,13 @@ async function _ensureGroupToClient() {
   _groupToClientPromise = (async function() {
     try {
       // Sempre via /api/content (service role) — direct supabase falha em RLS p/ sb_publishable
-      var rows = await _sbQuery('content_groups', { select: 'id,client_id' });
+      var rows = await _sbQuery('content_groups', { select: 'id,client_id,archived,name,status' });
       _groupToClientCache = {};
-      (rows || []).forEach(function(g) { _groupToClientCache[g.id] = g.client_id; });
+      _groupMetaByIdCache = {};
+      (rows || []).forEach(function(g) {
+        _groupToClientCache[g.id] = g.client_id;
+        _groupMetaByIdCache[g.id] = g;
+      });
       return _groupToClientCache;
     } finally {
       _groupToClientPromise = null;
@@ -26102,6 +26107,14 @@ function ctRemoveTaskFromRuntimeCaches(taskId) {
   try { if (typeof _ctlHomeTasks !== 'undefined') strip(_ctlHomeTasks); } catch(e) {}
 }
 
+function ctWithTimeout(promise, ms, message) {
+  var timer;
+  var timeout = new Promise(function(_, reject) {
+    timer = setTimeout(function() { reject(new Error(message || 'Tempo limite excedido.')); }, ms || 25000);
+  });
+  return Promise.race([promise, timeout]).finally(function() { clearTimeout(timer); });
+}
+
 async function ctDeleteModalTask() {
   if (!ctModalTask || !ctModalTask.id) return;
   var taskId = ctModalTask.id;
@@ -26112,7 +26125,7 @@ async function ctDeleteModalTask() {
     btn.innerHTML = '<span class="mso">hourglass_empty</span> Excluindo...';
   }
   try {
-    await ctApi('delete_task', { id: taskId, user: ctGetUser() });
+    await ctWithTimeout(ctApi('delete_task', { id: taskId, user: ctGetUser() }), 25000, 'A exclusão demorou demais. Atualize a lista e tente novamente.');
     ctRemoveTaskFromRuntimeCaches(taskId);
     if (typeof showToast === 'function') showToast('Task excluída com segurança.', 'success');
     ctCloseModal(true, true);
@@ -26132,7 +26145,8 @@ async function ctDeleteModalTask() {
       statusEl.innerHTML = '<span class="mso">error</span> Erro ao excluir';
       setTimeout(function(){ statusEl.textContent = ''; }, 3000);
     }
-    alert('Erro ao excluir task: ' + (e.message || e));
+    if (typeof showToast === 'function') showToast('Não consegui excluir agora: ' + (e.message || e), 'error');
+    else alert('Erro ao excluir task: ' + (e.message || e));
   }
 }
 
@@ -32426,6 +32440,10 @@ async function clientTimelineRefreshHome(force) {
     var mapped = (tasks || []).map(function(t) {
       var copy = Object.assign({}, t);
       copy._clientKey = groupMap[t.group_id] || t.client_key || t.client_id || '';
+      var groupMeta = _groupMetaByIdCache && _groupMetaByIdCache[t.group_id];
+      copy._groupArchived = !!(groupMeta && groupMeta.archived);
+      copy._groupStatus = groupMeta && groupMeta.status || '';
+      copy._groupName = groupMeta && groupMeta.name || '';
       return copy;
     }).filter(function(t) {
       return !!t._clientKey && clientTimelineIsOperationalClient(clientTimelineClientMeta(t._clientKey));
@@ -36730,6 +36748,15 @@ function mtTaskEffectiveStatus(task) {
   return status;
 }
 
+function mtTaskIsArchived(task) {
+  if (!task || typeof task !== 'object') return false;
+  if (task.archived === true || task.is_archived === true || task._groupArchived === true || task.group_archived === true) return true;
+  var cfg = mtTaskPublishConfig(task);
+  if (cfg.archived === true || cfg.is_archived === true || cfg.group_archived === true) return true;
+  var groupStatus = mtNormalizeStatus(task._groupStatus || task.group_status || task.groupStatus || '');
+  return ['arquivado', 'archived'].includes(groupStatus);
+}
+
 function mtTaskPostDate(task) {
   var cfg = mtTaskPublishConfig(task);
   return cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || cfg.scheduled_at || cfg.scheduledAt || '';
@@ -36808,11 +36835,12 @@ function mtTaskThumbHtml(task) {
 
 function mtTaskOperationalState(task) {
   var status = mtTaskEffectiveStatus(task);
+  var archived = mtTaskIsArchived(task);
   var hasDate = mtTaskHasOperationalDate(task);
   var hasPostDate = mtTaskHasPostDate(task);
   var hasCreative = mtTaskHasCreative(task);
   var hasOwner = mtTaskHasRealOwner(task);
-  var neutral = ['standby', 'nao-utilizado', 'nao-publicado', 'cancelado'].includes(status);
+  var neutral = archived || ['standby', 'nao-utilizado', 'nao-publicado', 'cancelado'].includes(status);
   var done = ['publicado', 'publicado-st', 'aprovado', 'agendado', 'complete'].includes(status);
   var legacyDraft = !done && !neutral && !hasOwner && !hasCreative && !hasDate && ['a-fazer', 'backlog'].includes(status);
   var measurable = !neutral && !legacyDraft && hasDate;
@@ -36825,6 +36853,7 @@ function mtTaskOperationalState(task) {
   }
   return {
     status: status,
+    archived: archived,
     done: done,
     neutral: neutral,
     legacyDraft: legacyDraft,
