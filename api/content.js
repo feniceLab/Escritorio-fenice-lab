@@ -616,6 +616,8 @@ ${message || ''}`;
 }
 
 function safeJson(value, fallback) {
+  if (value == null || value === '') return fallback;
+  if (typeof value === 'object') return value;
   try {
     return JSON.parse(value);
   } catch {
@@ -879,7 +881,7 @@ async function autoPublishOverdueScheduled({ dry_run = true, user = 'Sistema (au
   const todayISO = /^\d{4}-\d{2}-\d{2}$/.test(String(today || ''))
     ? String(today)
     : getSaoPauloTodayISO();
-  const shouldWrite = dry_run === false || dry_run === 'false' || dry_run === 0 || dry_run === '0';
+  const requestedWrite = dry_run === false || dry_run === 'false' || dry_run === 0 || dry_run === '0';
 
   const candidates = await supaSelectAll(
     'content_tasks',
@@ -887,15 +889,19 @@ async function autoPublishOverdueScheduled({ dry_run = true, user = 'Sistema (au
   );
 
   const overdue = candidates
-    .map((task) => ({ ...task, post_date: taskPostDate(task, { allowDueDateFallback: true }) }))
+    .map((task) => ({ ...task, post_date: taskPostDate(task, { allowDueDateFallback: false }) }))
     .filter((task) => normalizeContentStatus(task.status) === 'agendado' && task.post_date && task.post_date < todayISO);
 
   const summary = {
-    dry_run: !shouldWrite,
+    dry_run: true,
+    requested_write: requestedWrite,
+    write_disabled: true,
+    mode: 'validation_only',
     today: todayISO,
     scanned: candidates.length,
     matched: overdue.length,
     updated: 0,
+    would_update: overdue.length,
     errors: [],
     examples: overdue.slice(0, 20).map((task) => ({
       id: task.id,
@@ -904,31 +910,9 @@ async function autoPublishOverdueScheduled({ dry_run = true, user = 'Sistema (au
       due_date: task.due_date,
       post_date: task.post_date,
       status: task.status,
+      next_step: 'validar_publicacao',
     })),
   };
-
-  if (!shouldWrite || !overdue.length) return ok(summary);
-
-  const now = new Date().toISOString();
-  for (const task of overdue) {
-    try {
-      await supaUpdate('content_tasks', task.id, { status: 'publicado', updated_at: now });
-      await logActivity(task.id, user, 'status_changed', {
-        old_status: task.status,
-        new_status: 'publicado',
-        reason: 'auto_publish_overdue_scheduled',
-        post_date: task.post_date,
-        cutoff_date: todayISO,
-      });
-      summary.updated += 1;
-    } catch (err) {
-      summary.errors.push({
-        id: task.id,
-        name: task.name,
-        error: err.message || String(err),
-      });
-    }
-  }
 
   return ok(summary);
 }

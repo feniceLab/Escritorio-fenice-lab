@@ -24248,32 +24248,22 @@ function ctInit() {
   ctApplyDensity();
   // Prewarm: fire a lightweight request to wake up the serverless function
   fetch(ctApiBase() + '/api/content', { method: 'OPTIONS' }).catch(() => {});
-  // Auto-promote agendado → publicado for past dates
-  ctAutoPromotePublished();
-  // Verificar posts esquecidos (agendado + data passada) — roda depois do promote
+  // Verificar posts esquecidos (agendado + data passada) sem auto-publicar.
   setTimeout(ctCheckForgottenPosts, 5000);
 }
 
-// Auto-promote tasks with status 'agendado' to 'publicado' if post date has passed
+// Diagnóstico: agendado vencido deve virar alerta/evidência, nunca publicado automático.
 async function ctAutoPromotePublished() {
   try {
     var result = await ctApi('auto_publish_overdue_scheduled', {
-      dry_run: false,
+      dry_run: true,
       user: 'Sistema (auto frontend)'
     });
-    if (!result || !result.updated) return;
-    console.info('Auto-publicadas ' + result.updated + ' tasks agendadas vencidas via API central');
-
-    // Reload groups if content tab is active
-    if (document.getElementById('tab-content') && document.getElementById('tab-content').classList.contains('active')) {
-      ctLoadGroups();
-    }
-    // Also refresh Minhas Tasks if active
-    if (document.getElementById('tab-minhas-tasks') && document.getElementById('tab-minhas-tasks').classList.contains('active')) {
-      if (typeof mtInit === 'function') mtInit();
-    }
+    if (result && result.would_update) console.info('Publicações agendadas aguardando validação: ' + result.would_update);
+    return result;
   } catch(e) {
     console.warn('ctAutoPromotePublished error:', e);
+    return null;
   }
 }
 
@@ -24864,8 +24854,6 @@ async function ctRefreshAgendadoStatuses() {
   if (typeof _ctStatusRefreshTimer !== 'undefined' && _ctStatusRefreshTimer) return;
   _ctStatusRefreshTimer = setInterval(function() {
     if (ctGroups.length > 0) ctRefreshAgendadoStatuses();
-    // Also auto-promote agendado → publicado (checks scheduled_for time)
-    if (_supabase) ctAutoPromotePublished();
   }, 45000);
 })();
 
@@ -36981,7 +36969,6 @@ async function mtInit() {
   if (mtStatusFilterEl) mtStatusFilterEl.style.display = '';
 
   try {
-    await mtAutoPromoteOverdueScheduled();
     const res = await ctApi('list_my_tasks', { assignee: gpState.user.name });
     mtTasks = Array.isArray(res) ? res : (res.data || []);
     mtAllContentTasks = [];
@@ -37085,10 +37072,10 @@ async function mtAutoPromoteOverdueScheduled() {
   mtAutoPromoteRan = true;
   try {
     var result = await ctApi('auto_publish_overdue_scheduled', {
-      dry_run: false,
+      dry_run: true,
       user: 'Sistema (auto minhas tasks)'
     });
-    if (result && result.updated) console.info('Auto-publicadas ' + result.updated + ' tasks agendadas vencidas ao abrir Minhas Tasks');
+    if (result && result.would_update) console.info('Publicações agendadas aguardando validação ao abrir Minhas Tasks: ' + result.would_update);
     return result;
   } catch(e) {
     console.warn('mtAutoPromoteOverdueScheduled error:', e);
