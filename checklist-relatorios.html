@@ -36894,6 +36894,12 @@ function mtBuildGroupEntries(view, rows) {
   return Object.values(map);
 }
 
+function mtVisibleTaskCounts(rows) {
+  var list = Array.isArray(rows) ? rows : [];
+  var done = list.filter(function(t) { return mtTaskOperationalState(t).done; }).length;
+  return { total: list.length, done: done, open: Math.max(0, list.length - done) };
+}
+
 function mtSortGroupEntries(entries, view) {
   var sort = mtGroupSort[view] || 'az';
   return entries.slice().sort(function(a, b) {
@@ -37391,11 +37397,13 @@ function mtRenderByClient(el, tasks) {
   groupEntries.forEach(function(group) {
     const cid = group.key;
     const clientTasks = groups[cid] || [];
+    if (!clientTasks.length) return;
     const client = mtGetClient(cid);
     const clientName = group.label;
     const color = client ? (client.tenant === 'starken' ? 'var(--brand)' : 'var(--brand-alpha)') : '#6b7280';
-    const done = group.done;
-    const open = group.open;
+    const counts = mtVisibleTaskCounts(clientTasks);
+    const done = counts.done;
+    const open = counts.open;
     const isOpen = mtIsClientGroupOpen(cid);
 
     html += '<div class="mt-client-section' + (isOpen ? ' is-open' : '') + '">';
@@ -37414,22 +37422,14 @@ function mtRenderByClient(el, tasks) {
         html += '<div class="mt-header-col" data-col="' + i + '">' + h + '<div class="mt-resize-handle" data-col="' + i + '"></div></div>';
       });
       html += '</div>';
-      if (!clientTasks.length) {
-        html += mtRenderClientEmptyRow(cols, 'Nenhuma task visível neste grupo.');
-      } else {
-        var renderedRows = 0;
-        mtSortTasks(clientTasks).forEach(function(t) {
-          try {
-            html += mtRenderRow(t, 'by-client');
-            renderedRows++;
-          } catch(e) {
-            console.warn('[Minhas Tasks] Falha ao renderizar linha por cliente', t && t.id, e);
-            html += mtRenderRowFallback(t, e, 'by-client');
-            renderedRows++;
-          }
-        });
-        if (!renderedRows) html += mtRenderClientEmptyRow(cols, 'Nenhuma linha renderizada neste grupo.');
-      }
+      mtSortTasks(clientTasks).forEach(function(t) {
+        try {
+          html += mtRenderRow(t, 'by-client');
+        } catch(e) {
+          console.warn('[Minhas Tasks] Falha ao renderizar linha por cliente', t && t.id, e);
+          html += mtRenderRowFallback(t, e, 'by-client');
+        }
+      });
       html += '</div>';
     }
     html += '</div>';
@@ -37454,10 +37454,12 @@ function mtRenderByPerson(el, tasks) {
   mtSortGroupEntries(mtBuildGroupEntries('person', tasks), 'person').forEach(function(group) {
     var person = group.key;
     var personTasks = mtSortTasks(groups[person] || []);
+    if (!personTasks.length) return;
     var user = CT_USERS.find(function(u) { return u.name === person; });
     var color = user ? user.color : '#64748b';
-    var done = group.done;
-    var open = group.open;
+    var counts = mtVisibleTaskCounts(personTasks);
+    var done = counts.done;
+    var open = counts.open;
     html += '<div class="mt-client-section">';
     html += '<div class="mt-client-header">';
     html += '<div class="mt-client-avatar" style="background:' + color + '">' + esc(person.substring(0, 2).toUpperCase()) + '</div>';
