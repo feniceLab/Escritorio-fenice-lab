@@ -35464,15 +35464,22 @@ async function loadCronogramaStatus() {
   }
 }
 
+function normalizeCronogramaStatus(row) {
+  if (!row) return row;
+  var sent = row.sent === true || !!row.sent_date || !!row.sent_at;
+  if (sent && Number(row.status || 0) < 2) return Object.assign({}, row, { status: 2, sent: true });
+  return row;
+}
+
 function getCronogramaStatus(clientId, periodKey) {
   var key = clientId + '_' + periodKey;
-  if (_cronogramaStatusCache[key]) return _cronogramaStatusCache[key];
+  if (_cronogramaStatusCache[key]) return normalizeCronogramaStatus(_cronogramaStatusCache[key]);
   // Try matching via meta key (findMetaClientKey maps legacy ID → meta slug)
   if (typeof findMetaClientKey === 'function') {
     var metaKey = findMetaClientKey(clientId);
     if (metaKey && metaKey !== clientId) {
       var altKey = metaKey + '_' + periodKey;
-      if (_cronogramaStatusCache[altKey]) return _cronogramaStatusCache[altKey];
+      if (_cronogramaStatusCache[altKey]) return normalizeCronogramaStatus(_cronogramaStatusCache[altKey]);
     }
   }
   return null;
@@ -36187,25 +36194,29 @@ async function cronogramaBuildPdf(opts) {
     if (_supabase && _csClientId && _csPeriodKey) {
       try {
         var csId = _csClientId + '_' + _csPeriodKey;
-        var { error: csErr } = await _supabase.from('cronograma_status').upsert({
+        var prevCronoStatus = typeof getCronogramaStatus === 'function' ? getCronogramaStatus(_csClientId, _csPeriodKey) : null;
+        var prevWasSent = !!(prevCronoStatus && (Number(prevCronoStatus.status || 0) >= 2 || prevCronoStatus.sent || prevCronoStatus.sent_date));
+        var nowIso = new Date().toISOString();
+        var cronoPayload = {
           id: csId,
           client_id: _csClientId,
           period_key: _csPeriodKey,
-          status: 1,
+          status: prevWasSent ? 2 : 1,
           pdf_url: _pdfUrlForReport || null,
           pdf_name: filename,
-          generated_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
-        }, { onConflict: 'id' });
+          generated_at: nowIso,
+          updated_at: nowIso
+        };
+        if (prevWasSent) {
+          cronoPayload.sent = true;
+          cronoPayload.sent_date = prevCronoStatus.sent_date || prevCronoStatus.sent_at || nowIso;
+        }
+        var { error: csErr } = await _supabase.from('cronograma_status').upsert(cronoPayload, { onConflict: 'id' });
         if (csErr) console.warn('cronograma_status upsert error:', csErr);
         else {
           console.log('cronograma_status saved OK');
           // Update local cache immediately
-          _cronogramaStatusCache[csId] = {
-            id: csId, client_id: _csClientId, period_key: _csPeriodKey,
-            status: 1, pdf_url: _pdfUrlForReport, pdf_name: filename,
-            generated_at: new Date().toISOString()
-          };
+          _cronogramaStatusCache[csId] = Object.assign({}, _cronogramaStatusCache[csId] || {}, cronoPayload);
         }
       } catch(csE) {
         console.warn('cronograma_status save error:', csE);
