@@ -32328,6 +32328,21 @@ function clientTimelineHomeRange() {
   return { startISO: iso(start), endISO: iso(end) };
 }
 
+function clientTimelineMergeTasksById(lists) {
+  var byId = {};
+  (lists || []).forEach(function(list) {
+    (list || []).forEach(function(task) {
+      if (!task || !task.id) return;
+      byId[task.id] = Object.assign({}, byId[task.id] || {}, task);
+    });
+  });
+  return Object.keys(byId).map(function(id) { return byId[id]; }).sort(function(a, b) {
+    var da = (typeof mtTaskOperationalDateISO === 'function' ? mtTaskOperationalDateISO(a) : '') || a.due_date || '';
+    var db = (typeof mtTaskOperationalDateISO === 'function' ? mtTaskOperationalDateISO(b) : '') || b.due_date || '';
+    return String(da).localeCompare(String(db)) || String(a.name || '').localeCompare(String(b.name || ''), 'pt-BR');
+  });
+}
+
 function clientTimelineTaskClientKey(task) {
   return task.client_key || task.clientKey || task._clientKey || task.meta_key || task.client_id || '';
 }
@@ -32426,7 +32441,28 @@ async function clientTimelineRefreshHome(force) {
     var range = clientTimelineHomeRange();
     var tasks = [];
     if (typeof _sbQuery === 'function') {
-      tasks = await _sbQuery('content_tasks', {
+      var select = 'id,group_id,name,status,due_date,publish_config,assignee,priority,created_at,updated_at';
+      var queryResults = await Promise.allSettled([
+        _sbQuery('content_tasks', {
+          select: select,
+          filters: ['publish_config->>post_date=gte.' + range.startISO, 'publish_config->>post_date=lte.' + range.endISO],
+          order: 'due_date.asc',
+          limit: 700
+        }),
+        _sbQuery('content_tasks', {
+          select: select,
+          filters: ['due_date=gte.' + range.startISO, 'due_date=lte.' + range.endISO],
+          order: 'due_date.asc',
+          limit: 700
+        })
+      ]);
+      queryResults.forEach(function(result) {
+        if (result.status === 'rejected') console.warn('[client-timeline-home] task query failed:', result.reason);
+      });
+      tasks = clientTimelineMergeTasksById(queryResults.map(function(result) {
+        return result.status === 'fulfilled' ? result.value : [];
+      }));
+      if (!tasks.length) tasks = await _sbQuery('content_tasks', {
         select: 'id,group_id,name,status,due_date,publish_config,assignee,priority,created_at,updated_at',
         filters: ['due_date=gte.' + range.startISO, 'due_date=lte.' + range.endISO],
         order: 'due_date.asc',
@@ -36759,7 +36795,15 @@ function mtTaskIsArchived(task) {
 
 function mtTaskPostDate(task) {
   var cfg = mtTaskPublishConfig(task);
-  return cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || cfg.scheduled_at || cfg.scheduledAt || '';
+  var direct = cfg.post_date || cfg.publish_date || cfg.scheduled_date || cfg.date || cfg.scheduled_at || cfg.scheduledAt || '';
+  if (direct) return direct;
+  var entries = mtTaskPublishEntries(task);
+  for (var i = 0; i < entries.length; i++) {
+    var entry = entries[i] || {};
+    var entryDate = entry.post_date || entry.publish_date || entry.scheduled_date || entry.date || entry.scheduled_for || entry.published_at || '';
+    if (entryDate) return entryDate;
+  }
+  return '';
 }
 
 function mtTaskPostDateISO(task) {
