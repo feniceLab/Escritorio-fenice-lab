@@ -9250,6 +9250,11 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
                   <input id="ctlQuickNote" class="ctl-input" placeholder="Ex: cliente pediu promoção de sexta">
                   <button class="ctl-btn" onclick="clientTimelineSaveNote()">Salvar</button>
                 </div>
+                <div class="ctl-home-filterbar" style="margin-top:8px">
+                  <button class="ctl-home-chip" onclick="clientTimelineSetQuickNote('Cronograma enviado manualmente')">Enviado manualmente</button>
+                  <button class="ctl-home-chip" onclick="clientTimelineSetQuickNote('Cliente pediu ajuste no cronograma')">Ajuste pedido</button>
+                  <button class="ctl-home-chip" onclick="clientTimelineSetQuickNote('Aguardando aprovação do cliente')">Aguardando aprovação</button>
+                </div>
                 <div id="ctlNotes" style="margin-top:10px"></div>
               </div>
             </aside>
@@ -32674,6 +32679,39 @@ function clientTimelineHomeSetCronoFilter(filter) {
   clientTimelineRenderHome();
 }
 
+async function clientTimelineMarkWeekSentManual() {
+  var snap = clientTimelineHomeSnapshot();
+  var rows = (snap.crono && snap.crono.rows ? snap.crono.rows : []).filter(function(r) {
+    return r && r.weekState && r.weekState.tasks && r.weekState.tasks.length;
+  });
+  if (!rows.length) {
+    if (typeof showToast === 'function') showToast('Nenhum cliente com cronograma nesta semana.', 'warning');
+    return;
+  }
+  var ok = confirm('Marcar ' + rows.length + ' cronograma(s) da semana ' + ((snap.weekInfo && snap.weekInfo.label) || snap.weekKey) + ' como enviados manualmente?');
+  if (!ok) return;
+  var nowIso = new Date().toISOString();
+  for (var i = 0; i < rows.length; i++) {
+    var r = rows[i];
+    var clientId = r.id || r.metaKey || r.slug;
+    if (!clientId) continue;
+    var payload = {
+      id: clientId + '_' + snap.weekKey,
+      client_id: clientId,
+      period_key: snap.weekKey,
+      status: 2,
+      sent: true,
+      sent_date: nowIso,
+      updated_at: nowIso
+    };
+    if (r.pdf_url) payload.pdf_url = r.pdf_url;
+    if (r.pdf_name) payload.pdf_name = r.pdf_name;
+    await upsertCronogramaStatusSafe(payload);
+  }
+  if (typeof showToast === 'function') showToast('Semana marcada como enviada manualmente.', 'success');
+  cronoRefreshAllViews();
+}
+
 function clientTimelineMasterWeekNavHtml() {
   var weekKey = clientTimelineHomeWeekKey();
   var weekInfo = clientTimelineHomeWeekInfo(weekKey);
@@ -32979,6 +33017,7 @@ function clientTimelineRenderHome() {
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'generated' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;generated&quot;)">Gerados ' + snap.crono.generated + '</button>' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'sent' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;sent&quot;)">Enviados ' + snap.crono.sent + '</button>' +
     '<button class="ctl-home-chip' + (_ctlHomeCronoFilter === 'complements' ? ' active' : '') + '" onclick="event.stopPropagation();clientTimelineHomeSetCronoFilter(&quot;complements&quot;)">Complementos ' + (snap.complements || 0) + '</button>' +
+    '<button class="ctl-home-chip ok" onclick="event.stopPropagation();clientTimelineMarkWeekSentManual()">Marcar semana enviada</button>' +
   '</div>';
   var cronoList = snap.crono.rows.filter(function(r) {
     if (_ctlHomeCronoFilter === 'sent') return r.cronoStatus === 2;
@@ -33519,11 +33558,19 @@ function clientTimelineOpenClientContent(slug) {
 }
 
 function clientTimelineNotesKey() {
-  return 'client_timeline_notes_' + (_ctlClientSlug || '');
+  return _ctlClientSlug
+    ? 'client_timeline_notes_' + _ctlClientSlug + '_' + clientTimelineHomeWeekKey()
+    : 'client_timeline_notes_global_' + clientTimelineHomeWeekKey();
+}
+
+function clientTimelineSetQuickNote(text) {
+  var input = document.getElementById('ctlQuickNote');
+  if (!input) return;
+  input.value = text || '';
+  input.focus();
 }
 
 function clientTimelineSaveNote() {
-  if (!_ctlClientSlug) return;
   var input = document.getElementById('ctlQuickNote');
   var text = input ? input.value.trim() : '';
   if (!text) return;
@@ -33538,12 +33585,12 @@ function clientTimelineSaveNote() {
 
 function clientTimelineRenderNotes() {
   var el = document.getElementById('ctlNotes');
-  if (!el || !_ctlClientSlug) { if (el) el.innerHTML = ''; return; }
+  if (!el) return;
   var notes = [];
   try { notes = JSON.parse(localStorage.getItem(clientTimelineNotesKey()) || '[]'); } catch(e) {}
   el.innerHTML = notes.length ? notes.map(function(n) {
     return '<div class="ctl-next-item"><strong>' + ctlEsc(n.text) + '</strong><small>' + ctlEsc(n.user || 'Sistema') + ' · ' + new Date(n.at).toLocaleString('pt-BR') + '</small></div>';
-  }).join('') : '<div class="ctl-empty" style="padding:12px">Sem notas rápidas.</div>';
+  }).join('') : '<div class="ctl-empty" style="padding:12px">' + (_ctlClientSlug ? 'Sem notas rápidas para este cliente.' : 'Sem notas rápidas da operação nesta semana.') + '</div>';
 }
 
 // ============================================================
@@ -35907,6 +35954,45 @@ function getCronogramaStatus(clientId, periodKey) {
   return null;
 }
 
+async function upsertCronogramaStatusSafe(payload) {
+  if (!payload || !payload.client_id || !payload.period_key) return null;
+  payload.id = payload.id || (payload.client_id + '_' + payload.period_key);
+  payload.updated_at = payload.updated_at || new Date().toISOString();
+  var cacheKey = payload.client_id + '_' + payload.period_key;
+  _cronogramaStatusCache[cacheKey] = normalizeCronogramaStatus(Object.assign({}, _cronogramaStatusCache[cacheKey] || {}, payload));
+  _cronogramaStatusCache[payload.id] = _cronogramaStatusCache[cacheKey];
+  var lastError = null;
+  if (_supabase) {
+    try {
+      var res = await _supabase.from('cronograma_status').upsert(payload, { onConflict: 'id' });
+      if (res && res.error) lastError = res.error;
+    } catch(e) { lastError = e; }
+  }
+  try {
+    var apiRes = await fetch('/api/content', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'upsert_cronograma', payload: payload })
+    });
+    if (!apiRes.ok) lastError = new Error('HTTP ' + apiRes.status);
+  } catch(e2) {
+    if (!_supabase) lastError = e2;
+  }
+  if (lastError) console.warn('cronograma_status safe upsert warning:', lastError);
+  return _cronogramaStatusCache[cacheKey];
+}
+
+function cronogramaPeriodFilenameLabel(periodKey, fallbackLabel) {
+  if (periodKey && periodKey.indexOf('-S') > -1) {
+    var parts = periodKey.split('-S');
+    var month = parts[0].split('-')[1] || '';
+    var week = parseInt(parts[1], 10) || 1;
+    var map = { '01':'JAN', '02':'FEV', '03':'MAR', '04':'ABR', '05':'MAI', '06':'JUN', '07':'JUL', '08':'AGO', '09':'SET', '10':'OUT', '11':'NOV', '12':'DEZ' };
+    return (map[month] || parts[0]) + '_' + week + 'SEMANA';
+  }
+  return fallbackLabel || 'SEMANA';
+}
+
 function cronogramaUpdateButton() {
   var btn = document.getElementById('ctCronoBtn');
   if (btn) btn.style.display = document.getElementById('ctClientFilter').value ? '' : 'none';
@@ -36484,7 +36570,8 @@ async function cronogramaBuildPdf(opts) {
     if (modal) modal.style.display = 'none';
 
     var weekLabel = cronogramaGetWeekLabel(tasks);
-    var filename = 'CRONOGRAMA_' + s.clientName.toUpperCase().replace(/\s+/g, '_') + '_' + weekLabel + '.pdf';
+    var filenameWeekLabel = cronogramaPeriodFilenameLabel(periodInfo.periodKey, weekLabel);
+    var filename = 'CRONOGRAMA_' + s.clientName.toUpperCase().replace(/\s+/g, '_') + '_' + filenameWeekLabel + '.pdf';
 
     // DEFINITIVE: render each page with html2canvas, compose with jsPDF directly
     var W = 960, H = 680;
@@ -36613,7 +36700,7 @@ async function cronogramaBuildPdf(opts) {
 
     console.log('Saving cronograma_status:', { clientId: _csClientId, periodKey: _csPeriodKey, pdfUrl: _pdfUrlForReport });
 
-    if (_supabase && _csClientId && _csPeriodKey) {
+    if (_csClientId && _csPeriodKey) {
       try {
         var csId = _csClientId + '_' + _csPeriodKey;
         var prevCronoStatus = typeof getCronogramaStatus === 'function' ? getCronogramaStatus(_csClientId, _csPeriodKey) : null;
@@ -36633,13 +36720,8 @@ async function cronogramaBuildPdf(opts) {
           cronoPayload.sent = true;
           cronoPayload.sent_date = prevCronoStatus.sent_date || prevCronoStatus.sent_at || nowIso;
         }
-        var { error: csErr } = await _supabase.from('cronograma_status').upsert(cronoPayload, { onConflict: 'id' });
-        if (csErr) console.warn('cronograma_status upsert error:', csErr);
-        else {
-          console.log('cronograma_status saved OK');
-          // Update local cache immediately
-          _cronogramaStatusCache[csId] = Object.assign({}, _cronogramaStatusCache[csId] || {}, cronoPayload);
-        }
+        await upsertCronogramaStatusSafe(cronoPayload);
+        console.log('cronograma_status saved OK');
       } catch(csE) {
         console.warn('cronograma_status save error:', csE);
       }
