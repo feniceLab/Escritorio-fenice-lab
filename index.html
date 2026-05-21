@@ -42238,32 +42238,146 @@ function npcNormalizeMatch(v) {
   return String(v || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
+var _npcOfficeRosterRows = _npcOfficeRosterRows || [];
+var _npcOfficeRosterByAnyId = _npcOfficeRosterByAnyId || {};
+
+function npcOfficeKey(v) {
+  return npcNormalizeMatch(v).replace(/\s+/g, '-');
+}
+
+function npcOfficeInitials(name) {
+  var clean = String(name || 'NPC').replace(/[-–].*$/, ' ').trim().split(/\s+/).filter(Boolean);
+  return (clean[0] || 'N').charAt(0).toUpperCase() + (clean[1] || clean[0] || 'P').charAt(0).toUpperCase();
+}
+
+function npcOfficeColor(seed) {
+  var text = String(seed || 'npc');
+  var hash = 0;
+  for (var i = 0; i < text.length; i++) hash = ((hash << 5) - hash) + text.charCodeAt(i);
+  var palette = ['#5b8fd7','#45d6bc','#c55b99','#2da8d8','#d69b28','#2ca75a','#8d6dd1','#30afa2','#d25f76','#c46d2a','#78b43a','#9b67c8'];
+  return palette[Math.abs(hash) % palette.length];
+}
+
+function npcOfficeText(value, fallback) {
+  var text = String(value || '').trim();
+  return text || fallback || '';
+}
+
+function npcOfficeFindProfileByAnyId(value) {
+  if (!value || typeof NPC_PROFILES === 'undefined') return null;
+  var key = String(value);
+  if (_npcOfficeRosterByAnyId[key]) return _npcOfficeRosterByAnyId[key];
+  return (NPC_PROFILES || []).find(function(profile) {
+    return profile.id === key || profile.officeNpcId === key || profile.agentId === key || profile.officeName === key || profile.name === key;
+  }) || null;
+}
+
+function npcOfficeIndexProfile(profile, row) {
+  if (!profile) return;
+  [profile.id, profile.officeNpcId, profile.agentId, profile.officeName, profile.name, row && row.id, row && row.agentId, row && row.name].forEach(function(value) {
+    if (value) _npcOfficeRosterByAnyId[String(value)] = profile;
+  });
+}
+
+function npcOfficeBuildProfile(row) {
+  var cfg = row || {};
+  var agentId = cfg.agentId || cfg.agent_id || '';
+  var name = npcOfficeText(cfg.name, agentId || 'NPC do Escritório');
+  var identity = npcOfficeText(cfg.identity, '');
+  var soul = npcOfficeText(cfg.soul, '');
+  var role = npcOfficeText(cfg.role || cfg.function || (identity.split('\n')[0] || ''), 'NPC real do Escritório Virtual');
+  var profileId = agentId || ('office-' + cfg.id);
+  var initials = npcOfficeInitials(name);
+  var seed = npcOfficeText(identity || soul, role);
+  return {
+    id: profileId,
+    name: name,
+    initials: initials,
+    role: role,
+    seed: seed,
+    color: npcOfficeColor(profileId + name),
+    runtime: cfg.runtimeProvider ? String(cfg.runtimeProvider).replace(/^./, function(c){ return c.toUpperCase(); }) : 'Codex',
+    model: cfg.model || 'provider-default',
+    officeNpcId: cfg.id || null,
+    officeChannelId: cfg.channelId || cfg.channel_id || NPC_OFFICE_CHANNEL_ID,
+    officeName: name,
+    agentId: agentId || profileId,
+    appearance: cfg.appearance || null,
+    identity: identity,
+    soul: soul,
+    totalTokens: cfg.totalTokens || cfg.total_tokens || 0,
+    reportsToId: cfg.reportsToId || cfg.reports_to_id || null,
+    domains: Array.isArray(cfg.domains) && cfg.domains.length ? cfg.domains : ['Escritório', 'Operação'],
+    menus: Array.isArray(cfg.menus) && cfg.menus.length ? cfg.menus : ['Escritório Virtual', 'NPCs'],
+    actions: Array.isArray(cfg.actions) && cfg.actions.length ? cfg.actions : ['Abrir chat', 'Gerir NPC', 'Editar NPC', 'Analisar contexto'],
+    tools: Array.isArray(cfg.tools) && cfg.tools.length ? cfg.tools : ['Chat', 'Memória', 'Tarefas', 'Relatórios'],
+    live: true
+  };
+}
+
+function npcOfficeFindExisting(row) {
+  if (!row || typeof NPC_PROFILES === 'undefined') return null;
+  var byAny = npcOfficeFindProfileByAnyId(row.id) || npcOfficeFindProfileByAnyId(row.agentId) || npcOfficeFindProfileByAnyId(row.name);
+  if (byAny) return byAny;
+  var rowFirst = npcNormalizeMatch(row.name).split(' ')[0];
+  return (NPC_PROFILES || []).find(function(profile) {
+    return rowFirst && npcNormalizeMatch(profile.name).split(' ')[0] === rowFirst;
+  }) || null;
+}
+
+function npcUpsertOfficeProfile(row) {
+  if (!row || typeof NPC_PROFILES === 'undefined') return null;
+  var profile = npcOfficeFindExisting(row);
+  var built = npcOfficeBuildProfile(row);
+  if (profile) {
+    Object.keys(built).forEach(function(key) {
+      if (built[key] !== undefined && built[key] !== null && built[key] !== '') profile[key] = built[key];
+    });
+  } else {
+    profile = built;
+    NPC_PROFILES.push(profile);
+  }
+  npcOfficeIndexProfile(profile, row);
+  return profile;
+}
+
+function npcOfficeRememberRows(rows) {
+  _npcOfficeRosterRows = rows || [];
+  _npcOfficeRosterByAnyId = {};
+  _npcOfficeRosterRows.forEach(function(row) { npcUpsertOfficeProfile(row); });
+}
+
+function npcOfficeFetchRoomIds() {
+  var root = (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a';
+  var strategic = 'bd4766f5-1cbe-4cdf-bc0a-4bf6541660ca';
+  var ids = [root, strategic];
+  return fetch('/api/channels/office-rooms?channelId=' + encodeURIComponent(root))
+    .then(function(res){ return res.ok ? res.json() : null; })
+    .then(function(data) {
+      var rooms = data && Array.isArray(data.rooms) ? data.rooms : [];
+      rooms.forEach(function(room) {
+        var id = room.id || room.channelId || room.channel_id;
+        if (id && ids.indexOf(id) === -1) ids.push(id);
+      });
+      return ids;
+    })
+    .catch(function(){ return ids; });
+}
+
 function npcLoadOfficeRoster(force) {
   if (_npcOfficeRosterLoaded && !force) return Promise.resolve();
   if (_npcOfficeRosterLoading && _npcOfficeRosterPromise) return _npcOfficeRosterPromise;
   _npcOfficeRosterLoading = true;
-  _npcOfficeRosterPromise = fetch('/api/npcs?channelId=' + encodeURIComponent(NPC_OFFICE_CHANNEL_ID))
+  _npcOfficeRosterPromise = npcOfficeFetchRoomIds()
+    .then(function(channelIds) {
+      var unique = channelIds.filter(function(id, index, arr){ return id && arr.indexOf(id) === index; });
+      return fetch('/api/npcs?channelIds=' + encodeURIComponent(unique.join(',')));
+    })
     .then(function(res){ return res.ok ? res.json() : null; })
     .then(function(data){
       var rows = data && Array.isArray(data.npcs) ? data.npcs : [];
       if (!rows.length) return;
-      rows.forEach(function(row) {
-        var byAgent = NPC_PROFILES.find(function(p){ return p.agentId && row.agentId && p.agentId === row.agentId; });
-        var byOffice = NPC_PROFILES.find(function(p){ return p.officeNpcId && p.officeNpcId === row.id; });
-        var rowName = npcNormalizeMatch(row.name).split(' ')[0];
-        var byName = NPC_PROFILES.find(function(p){ return npcNormalizeMatch(p.name).split(' ')[0] === rowName; });
-        var profile = byAgent || byOffice || byName;
-        if (!profile) return;
-        profile.officeNpcId = row.id || profile.officeNpcId;
-        profile.officeChannelId = row.channelId || NPC_OFFICE_CHANNEL_ID;
-        profile.officeName = row.name || profile.officeName;
-        profile.appearance = row.appearance || profile.appearance;
-        profile.identity = row.identity || profile.identity;
-        profile.soul = row.soul || profile.soul;
-        profile.runtime = row.runtimeProvider ? String(row.runtimeProvider).replace(/^./, function(c){ return c.toUpperCase(); }) : profile.runtime;
-        profile.model = row.model || profile.model;
-        profile.reportsToId = row.reportsToId || profile.reportsToId;
-      });
+      npcOfficeRememberRows(rows);
       _npcOfficeRosterLoaded = true;
       npcRenderDashboard();
       npcRenderCards();
@@ -42771,10 +42885,15 @@ function globalAgentDockRender() {
 
 function npcProfileFromDockId(npcId) {
   if (!npcId || typeof NPC_PROFILES === 'undefined') return null;
+  if (typeof npcOfficeFindProfileByAnyId === 'function') {
+    var resolved = npcOfficeFindProfileByAnyId(npcId);
+    if (resolved) return resolved;
+  }
   return (NPC_PROFILES || []).find(function(n) {
-    return n.id === npcId || n.officeNpcId === npcId || n.agentId === npcId;
+    return n.id === npcId || n.officeNpcId === npcId || n.agentId === npcId || n.officeName === npcId || n.name === npcId;
   }) || null;
 }
+
 
 function globalAgentDockOpenNpc(npcId, tab, npcName) {
   var localNpc = npcProfileFromDockId(npcId);
@@ -42788,8 +42907,17 @@ function globalAgentDockOpenNpc(npcId, tab, npcName) {
       if (refreshed) {
         npcOpenCommandModal(refreshed.id, tab || 'resumo');
       } else {
-        var channel = (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a';
-        window.open('/game?embedHost=starken-os&npcCommandOnly=1&channelId=' + encodeURIComponent(channel) + '&npcCommandId=' + encodeURIComponent(npcId || '') + '&npcName=' + encodeURIComponent(npcName || ''), '_blank');
+        var fallback = (typeof npcUpsertOfficeProfile === 'function') ? npcUpsertOfficeProfile({
+          id: npcId,
+          name: npcName || 'NPC do Escritório',
+          channelId: (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a',
+          agentId: npcId
+        }) : null;
+        if (fallback) {
+          npcOpenCommandModal(fallback.id, tab || 'resumo');
+        } else if (typeof showToast === 'function') {
+          showToast('Não encontrei este NPC no Escritório Virtual.', 'warning');
+        }
       }
     });
   }
@@ -42808,8 +42936,16 @@ function globalAgentDockOpenChat(npcId, npcName) {
   if (typeof npcLoadOfficeRoster === 'function') {
     npcLoadOfficeRoster(true).finally(function() {
       var refreshed = npcProfileFromDockId(npcId);
-      if (!openLocalDrawer(refreshed) && typeof showToast === 'function') {
-        showToast('Não encontrei o vínculo deste NPC para abrir o chat. Abra a central e tente novamente.', 'warning');
+      if (!openLocalDrawer(refreshed)) {
+        var fallback = (typeof npcUpsertOfficeProfile === 'function') ? npcUpsertOfficeProfile({
+          id: npcId,
+          name: npcName || 'NPC do Escritório',
+          channelId: (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a',
+          agentId: npcId
+        }) : null;
+        if (!openLocalDrawer(fallback) && typeof showToast === 'function') {
+          showToast('Não encontrei este NPC no Escritório Virtual.', 'warning');
+        }
       }
     });
   }
