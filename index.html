@@ -7376,7 +7376,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 .npc-hero h2{margin:0;color:var(--text);font-size:1.55rem;line-height:1.05}
 .npc-hero p{margin:9px 0 0;color:var(--text-secondary);max-width:820px;line-height:1.45}
 .npc-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
-.npc-card{border:1px solid var(--border);border-radius:20px;background:var(--card);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:.18s ease;min-height:258px;display:flex;flex-direction:column;gap:14px;text-align:center;align-items:center}
+.npc-card{border:1px solid var(--border);border-radius:20px;background:var(--card);padding:20px;box-shadow:var(--shadow);cursor:pointer;transition:.18s ease;height:320px;min-height:320px;display:flex;flex-direction:column;gap:12px;text-align:center;align-items:center;overflow:hidden}
 .npc-card:hover,.npc-card.active{border-color:rgba(70,238,205,.44);transform:translateY(-1px);box-shadow:0 18px 44px rgba(0,0,0,.2)}
 .npc-card-top{display:grid;justify-items:center;gap:12px;width:100%}
 .npc-avatar{width:54px;height:54px;border-radius:16px;background:linear-gradient(135deg,#14283a,#46eecd);display:grid;place-items:center;color:#071313;font-size:1.3rem;font-weight:950;overflow:hidden;border:1px solid rgba(255,255,255,.08);flex-shrink:0;position:relative}
@@ -7390,8 +7390,10 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 .npc-name{font-size:1.05rem;color:var(--text);font-weight:950;line-height:1.15}
 .npc-role{font-size:.82rem;color:var(--text-secondary);margin-top:5px;line-height:1.25}
 .npc-pill-row{display:flex;flex-wrap:wrap;gap:6px}
+.npc-card-tags{justify-content:center;min-height:58px;max-height:58px;overflow:hidden;align-content:flex-start}
+.npc-card-actions{margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:center;min-height:28px}
 .npc-pill{border:1px solid rgba(70,238,205,.25);background:rgba(70,238,205,.08);color:#46eecd;border-radius:999px;padding:4px 8px;font-size:.67rem;font-weight:900;text-transform:uppercase;letter-spacing:.04em}
-.npc-card small{color:var(--text-muted);line-height:1.4}
+.npc-card small{color:var(--text-muted);line-height:1.35;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-height:4.1em}
 .npc-workbench{display:grid;grid-template-columns:1fr;gap:16px}
 .npc-panel{border:1px solid var(--border);border-radius:18px;background:var(--card);padding:16px;box-shadow:var(--shadow)}
 .npc-panel h3{margin:0 0 12px;color:var(--text);font-size:1rem;display:flex;align-items:center;gap:8px}
@@ -42636,6 +42638,12 @@ window.addEventListener('message', function(event) {
   }
 });
 
+function npcCardSummary(npc) {
+  var text = (npc && (npc.role || npc.seed || npc.description)) || 'NPC real do Escritório Virtual conectado ao Starken OS.';
+  text = String(text).replace(/\s+/g, ' ').trim();
+  return text.length > 150 ? text.slice(0, 147).trim() + '...' : text;
+}
+
 function npcRenderCards() {
   var el = document.getElementById('npcCards');
   if (!el) return;
@@ -42643,9 +42651,9 @@ function npcRenderCards() {
     return '<button class="npc-card ' + (_npcState.activeNpc === n.id ? 'active' : '') + '" onclick="npcOpenFromCard(\'' + npcEsc(n.id) + '\')">' +
       '<div class="npc-card-top">' + npcAvatarHtml(n, 'card') +
       '<div><div class="npc-name">' + npcEsc(n.name) + '</div><div class="npc-role">' + npcEsc(n.role) + '</div></div></div>' +
-      '<div class="npc-pill-row" style="justify-content:center">' + n.domains.slice(0,3).map(function(d){ return '<span class="npc-pill">' + npcEsc(d) + '</span>'; }).join('') + '</div>' +
-      '<small>' + npcEsc(n.seed || 'NPC real do Escritório Virtual conectado ao Starken OS.') + '</small>' +
-      '<div style="margin-top:auto;display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="npc-pill">Escritório</span><span class="npc-pill">' + npcEsc(n.tools.length) + ' ações</span></div>' +
+      '<div class="npc-pill-row npc-card-tags">' + n.domains.slice(0,3).map(function(d){ return '<span class="npc-pill">' + npcEsc(d) + '</span>'; }).join('') + '</div>' +
+      '<small>' + npcEsc(npcCardSummary(n)) + '</small>' +
+      '<div class="npc-card-actions"><span class="npc-pill">Escritório</span><span class="npc-pill">' + npcEsc(n.tools.length) + ' ações</span></div>' +
     '</button>';
   }).join('');
   setTimeout(npcHydrateAvatars, 0);
