@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 64" width="280" height="64">
+  <defs>
+    <linearGradient id="flame2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#FF6B35"/>
+      <stop offset="100%" style="stop-color:#FF2D78"/>
+    </linearGradient>
+  </defs>
+  <rect width="280" height="64" rx="8" fill="#FFFFFF"/>
+  <path d="M20 8 C20 8 12 14 11 22 C10 29 15 32 19 30 C16 35 14 42 22 43 C30 42 28 35 25 30 C29 32 34 29 33 22 C32 14 20 8 20 8 Z" fill="url(#flame2)" opacity="0.9"/>
+  <path d="M22 17 C22 17 18 21 18 26 C18 31 22 33 22 33 C22 33 26 31 26 26 C26 21 22 17 22 17 Z" fill="#FFF" opacity="0.85"/>
+  <circle cx="22" cy="26" r="2.5" fill="#FFFFFF" stroke="#FF6B35" stroke-width="1"/>
+  <text x="46" y="28" font-family="'Inter', 'SF Pro Display', sans-serif" font-size="18" font-weight="700" fill="#0A0A0F" letter-spacing="2">FENIX</text>
+  <text x="46" y="48" font-family="'Inter', 'SF Pro Display', sans-serif" font-size="13" font-weight="400" fill="#FF6B35" letter-spacing="4">LAB</text>
+</svg>
