@@ -850,7 +850,7 @@ async function hubPortalLogin({ client_slug, pin, client_name }) {
 async function hubPortalBundle({ client_slug, token, trusted_admin }) {
   if (!client_slug) return { error: true, message: 'client_slug is required' };
   const session = trusted_admin
-    ? { ok: true, payload: { client_slug, role: 'admin', name: 'Escritório Starken' } }
+    ? { ok: true, payload: { client_slug, role: 'admin', name: 'Escritório Fenix' } }
     : portalVerifyToken(token, client_slug);
   if (!session.ok) return { error: true, message: session.message };
 

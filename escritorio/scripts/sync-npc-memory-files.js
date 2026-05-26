@@ -54,14 +54,14 @@ const obsidianByAgent = {
 };
 
 const telegramUsernames = {
-  'strategic-eugene-schwartz': 'EugeneSchwartzStarken_bot',
-  'strategic-frank-kern': 'FrankKernStarken_bot',
-  'strategic-nassim-taleb': 'NassimNicholasTalebStarken_bot',
-  'strategic-pedro-sobral': 'PedroSobralStarken_bot',
-  'strategic-priscila-zillo': 'PriscilaZiloStarken_bot',
-  'strategic-sam-altman': 'SamAltmanStarken_bot',
-  'strategic-steve-jobs': 'SteveJobsStarken_bot',
-  'strategic-tony-robbins': 'TonyRobbinsStarken_bot',
+  'strategic-eugene-schwartz': 'EugeneSchwartzFenix_bot',
+  'strategic-frank-kern': 'FrankKernFenix_bot',
+  'strategic-nassim-taleb': 'NassimNicholasTalebFenix_bot',
+  'strategic-pedro-sobral': 'PedroSobralFenix_bot',
+  'strategic-priscila-zillo': 'PriscilaZiloFenix_bot',
+  'strategic-sam-altman': 'SamAltmanFenix_bot',
+  'strategic-steve-jobs': 'SteveJobsFenix_bot',
+  'strategic-tony-robbins': 'TonyRobbinsFenix_bot',
 };
 
 const classify = (file) => {
@@ -182,7 +182,7 @@ function buildPersonaBundle(npc, agentId, sourceFiles) {
   const identity = [
     `# ${npc.name}`,
     '',
-    `Agente operacional do Starken OS. Esta persona foi sincronizada dos arquivos reais do Obsidian/agent-memory vinculados ao agentId "${agentId}".`,
+    `Agente operacional do Fenix OS. Esta persona foi sincronizada dos arquivos reais do Obsidian/agent-memory vinculados ao agentId "${agentId}".`,
     '',
     identitySources.map((f) => `## ${f.title}\n\n${clip(f.content, 9000)}`).join('\n\n'),
   ].filter(Boolean).join('\n');

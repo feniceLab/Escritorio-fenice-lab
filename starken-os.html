@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Starken OS - Gestão & Performance</title>
+<title>Fenix OS - Gestão & Performance</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <style>
 :root {
@@ -333,7 +333,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
 
 <div id="loginPage" class="login-wrap">
   <div class="login-card">
-    <div class="login-logo"><h1>Starken OS</h1><p>Gestão & Performance</p></div>
+    <div class="login-logo"><h1>Fenix OS</h1><p>Gestão & Performance</p></div>
     <form id="loginForm">
       <div class="form-group"><label>Usuário</label><select id="loginUser" required><option value="">Selecione</option><option value="Juan">Juan</option></select></div>
       <div class="form-group"><label>PIN</label><input type="password" id="loginPin" maxlength="6" required></div>
@@ -345,8 +345,8 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
 
 <div class="app hidden" id="app">
   <aside class="sidebar">
-    <div class="sb-logo"><div class="sb-logo-icon">ST</div><div class="sb-logo-text">Starken OS</div></div>
-    <div class="sb-space"><select id="spaceSelector"><option value="starken">Starken</option><option value="alpha">Alpha</option></select></div>
+    <div class="sb-logo"><div class="sb-logo-icon">ST</div><div class="sb-logo-text">Fenix OS</div></div>
+    <div class="sb-space"><select id="spaceSelector"><option value="starken">Fenix</option><option value="alpha">Alpha</option></select></div>
     <nav class="sb-nav">
       <div class="sb-section-title">Negócio</div>
       <div class="sb-item active" data-page="gestao"><span class="icon">💼</span> Gestão de Projetos</div>
@@ -362,7 +362,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
 
   <main class="main">
     <header class="topbar">
-      <div id="breadcrumb">Starken / <span id="curPage">Gestão de Projetos</span></div>
+      <div id="breadcrumb">Fenix / <span id="curPage">Gestão de Projetos</span></div>
     </header>
     
     <div class="content-area">
@@ -371,7 +371,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
         <!-- TOPBAR -->
         <div class="topbar">
           <div class="topbar-breadcrumb">
-            <span id="breadSpace">Starken</span>
+            <span id="breadSpace">Fenix</span>
             <span class="topbar-sep">/</span>
             <span id="curPage">Gestão de Projetos</span>
           </div>
@@ -445,7 +445,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
       <!-- Section: Performance & Relatórios -->
       <section id="page-relatorios" class="page">
         <div class="topbar">
-          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Performance & Relatórios</span></div>
+          <div class="topbar-breadcrumb"><span>Fenix</span><span class="topbar-sep">/</span><span>Performance & Relatórios</span></div>
           <div class="topbar-actions">
             <button class="btn-new" onclick="Relatorios.openSyncModal()">🔄 Sincronizar PDFs</button>
           </div>
@@ -489,7 +489,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
       <!-- Section: Cronogramas -->
       <section id="page-cronogramas" class="page">
         <div class="topbar">
-          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Cronogramas</span></div>
+          <div class="topbar-breadcrumb"><span>Fenix</span><span class="topbar-sep">/</span><span>Cronogramas</span></div>
           <div class="topbar-actions">
             <button class="btn-new" onclick="Cronograma.openNewModal()">+ Novo Cronograma</button>
           </div>
@@ -513,14 +513,14 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
       <!-- Section: Hub de Clientes -->
       <section id="page-hub" class="page">
         <div class="topbar">
-          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>Hub de Clientes</span></div>
+          <div class="topbar-breadcrumb"><span>Fenix</span><span class="topbar-sep">/</span><span>Hub de Clientes</span></div>
           <div class="topbar-actions">
             <button class="btn-new" onclick="Hub.openModal()">+ Novo Cliente</button>
           </div>
         </div>
         <div class="content-area" style="padding:20px 24px;">
            <div class="filter-bar" style="margin-bottom:14px">
-            <select id="hubCompanyFilter"><option value="all">Todas empresas</option><option value="Starken">Starken</option><option value="Alpha">Alpha</option></select>
+            <select id="hubCompanyFilter"><option value="all">Todas empresas</option><option value="Fenix">Fenix</option><option value="Alpha">Alpha</option></select>
             <select id="hubStatusFilter"><option value="active">Ativos</option><option value="inactive">Inativos</option><option value="all">Todos</option></select>
           </div>
           <div class="two-columns" id="hubColumns"></div>
@@ -530,7 +530,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
       <!-- Section: AI Squads -->
       <section id="page-squads" class="page">
         <div class="topbar">
-          <div class="topbar-breadcrumb"><span>Starken</span><span class="topbar-sep">/</span><span>AI Squads</span></div>
+          <div class="topbar-breadcrumb"><span>Fenix</span><span class="topbar-sep">/</span><span>AI Squads</span></div>
         </div>
         <div class="content-area" style="padding:20px 24px;">
            <div class="asana-columns" id="asanaColumns">
@@ -795,7 +795,7 @@ const Nav = {
     document.getElementById('spaceSelector').addEventListener('change', e => {
       state.space = e.target.value;
       const bread = document.getElementById('breadSpace');
-      if (bread) bread.textContent = state.space === 'starken' ? 'Starken' : 'Alpha';
+      if (bread) bread.textContent = state.space === 'starken' ? 'Fenix' : 'Alpha';
       Gestao.populateClientFilter();
       Gestao.renderCurrentView();
     });

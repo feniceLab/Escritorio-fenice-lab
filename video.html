@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Preview do Vídeo — Starken OS</title>
+<title>Preview do Vídeo — Fenix OS</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
   body { background:#0f0f0f; font-family:Inter,-apple-system,sans-serif; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; }
@@ -20,7 +20,7 @@
 <div class="container">
   <div id="player"></div>
   <div id="actions"></div>
-  <div class="brand">Powered by <a href="https://starken-os.vercel.app">Starken OS</a></div>
+  <div class="brand">Powered by <a href="https://starken-os.vercel.app">Fenix OS</a></div>
 </div>
 <script>
   var params = new URLSearchParams(window.location.search);
@@ -35,7 +35,7 @@
     actionsEl.innerHTML = '<a href="' + src + '" download class="download">⬇ Baixar vídeo</a>';
     // Update title with filename
     var name = src.split('/').pop().split('?')[0].replace(/_/g, ' ');
-    document.title = name + ' — Starken OS';
+    document.title = name + ' — Fenix OS';
     // Unmute after autoplay starts (Chrome requires muted for autoplay)
     var vid = document.getElementById('vid');
     vid.addEventListener('playing', function() { vid.muted = false; }, { once: true });

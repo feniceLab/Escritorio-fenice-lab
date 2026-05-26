@@ -145,7 +145,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, () => {
   console.log('');
   console.log('==============================================');
-  console.log('  🎬 FFmpeg Merge Server - Starken OS');
+  console.log('  🎬 FFmpeg Merge Server - Fenix OS');
   console.log('==============================================');
   console.log(`  URL: http://localhost:${PORT}`);
   console.log(`  FFmpeg: ${FFMPEG_PATH}`);

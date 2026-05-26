@@ -1,5 +1,5 @@
 /**
- * Starken Squad Router
+ * Fenix Squad Router
  * =====================
  * Lightweight Express API that routes agent requests to LiteLLM proxy.
  *
@@ -155,7 +155,7 @@ app.post('/squad/:squadName/run', async (req, res) => {
 // Start
 // ────────────────────────────────────────────
 app.listen(PORT, () => {
-  console.log(`🚀 Starken Squad Router running on port ${PORT}`);
+  console.log(`🚀 Fenix Squad Router running on port ${PORT}`);
   console.log(`📂 Squads path: ${SQUADS_BASE}`);
   console.log(`🤖 LiteLLM: ${LITELLM_URL}`);
 });

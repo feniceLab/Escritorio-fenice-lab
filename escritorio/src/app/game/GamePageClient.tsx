@@ -37,7 +37,7 @@ import { resolveNpcResponseChunk, type NpcResponsePayload } from "@/lib/npc-resp
 import { sanitizeNpcResponseText } from "@/lib/task-block-utils.js";
 
 const APP_VERSION = "2026.4.6";
-const OFFICE_PRODUCT_NAME = "Starken OS Escritório";
+const OFFICE_PRODUCT_NAME = "Fenix Lab Escritório";
 const SOURCE_CODE_URL = "https://github.com/dandacompany/deskrpg";
 const LICENSE_URL = `${SOURCE_CODE_URL}/blob/main/LICENSE.md`;
 const THIRD_PARTY_LICENSES_URL = "/third-party-licenses.html";
@@ -259,7 +259,7 @@ function GamePageInner() {
   const npcCommandOnly = searchParams.get("npcCommandOnly") === "1";
   const npcDockOnly = searchParams.get("npcDockOnly") === "1";
   const embedHost = searchParams.get("embedHost");
-  const hideEmbeddedNpcDock = searchParams.get("hideNpcDock") === "1" || (embedHost === "starken-os" && searchParams.get("embedMode") === "starken-shell");
+  const hideEmbeddedNpcDock = searchParams.get("hideNpcDock") === "1" || (embedHost === "fenix-lab" && searchParams.get("embedMode") === "fenix-shell");
 
   const [character, setCharacter] = useState<Character | null>(null);
   const [channel, setChannel] = useState<ChannelInfo | null>(null);
@@ -1788,7 +1788,7 @@ function GamePageInner() {
   const handleCloseManagedNpc = useCallback(() => {
     setManagedNpcId(null);
     if (npcCommandOnly && typeof window !== "undefined" && window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: "starken-os:npc-command-close" }, window.location.origin);
+      window.parent.postMessage({ type: "fenix-lab:npc-command-close" }, window.location.origin);
     }
   }, [npcCommandOnly]);
 
@@ -1796,13 +1796,13 @@ function GamePageInner() {
 
   useEffect(() => {
     if (!npcDockOnly || typeof window === "undefined" || !window.parent || window.parent === window) return;
-    window.parent.postMessage({ type: "starken-os:npc-dock-chat-state", open: dockChatOpen }, window.location.origin);
+    window.parent.postMessage({ type: "fenix-lab:npc-dock-chat-state", open: dockChatOpen }, window.location.origin);
   }, [dockChatOpen, npcDockOnly]);
 
   useEffect(() => {
     return () => {
       if (!npcDockOnly || typeof window === "undefined" || !window.parent || window.parent === window) return;
-      window.parent.postMessage({ type: "starken-os:npc-dock-chat-state", open: false }, window.location.origin);
+      window.parent.postMessage({ type: "fenix-lab:npc-dock-chat-state", open: false }, window.location.origin);
     };
   }, [npcDockOnly]);
 
@@ -1826,7 +1826,7 @@ function GamePageInner() {
             <div className="absolute inset-y-0 right-0 z-30 w-[260px]">
               <NpcDockPanel
                 embedded
-                channelName={officeNpcs.length > 0 ? "Escritório completo" : (channel?.name || "Starken HQ")}
+                channelName={officeNpcs.length > 0 ? "Escritório completo" : (channel?.name || "Fenix Lab HQ")}
                 npcs={dockNpcs}
                 selectedNpcId={managedNpcId || dialogNpc?.npcId || null}
                 onManageNpc={handleOpenCommandCenterById}

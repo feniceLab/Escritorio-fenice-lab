@@ -20,7 +20,7 @@
  *     }
  *   },
  *   tenants: {
- *     starken: { name: "Starken Performance" },
+ *     starken: { name: "Fenix Performance" },
  *     alpha: { name: "Alpha Assessoria" }
  *   }
  * }
@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
       const config = await loadConfig();
       return res.status(200).json({
         configured: !!config,
-        config: config || { clients: {}, tenants: { starken: { name: 'Starken Performance' }, alpha: { name: 'Alpha Assessoria' } } },
+        config: config || { clients: {}, tenants: { starken: { name: 'Fenix Performance' }, alpha: { name: 'Alpha Assessoria' } } },
       });
     } catch (err) {
       return res.status(500).json({
@@ -66,7 +66,7 @@ module.exports = async function handler(req, res) {
     try {
       const config = {
         clients,
-        tenants: tenants || { starken: { name: 'Starken Performance' }, alpha: { name: 'Alpha Assessoria' } },
+        tenants: tenants || { starken: { name: 'Fenix Performance' }, alpha: { name: 'Alpha Assessoria' } },
         updated_at: new Date().toISOString(),
       };
 

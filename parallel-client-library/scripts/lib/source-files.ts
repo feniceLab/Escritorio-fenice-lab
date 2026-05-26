@@ -145,7 +145,7 @@ export function loadOperationalClients(rootDir = repoRootFrom()) {
   const sqlPath = path.join(rootDir, "SQL_GESTAO_PROJETOS_v2.sql");
   const sql = fs.readFileSync(sqlPath, "utf-8");
   const pattern =
-    /\(\(SELECT id FROM spaces WHERE name = '(Starken|Alpha)'\),\s*'((?:''|[^'])+)',\s*'((?:''|[^'])*)',\s*\(SELECT id FROM users WHERE name = '((?:''|[^'])+)'\)\)/g;
+    /\(\(SELECT id FROM spaces WHERE name = '(Fenix|Alpha)'\),\s*'((?:''|[^'])+)',\s*'((?:''|[^'])*)',\s*\(SELECT id FROM users WHERE name = '((?:''|[^'])+)'\)\)/g;
 
   const rows: OperationalClient[] = [];
   for (const match of sql.matchAll(pattern)) {

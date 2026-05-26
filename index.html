@@ -6,19 +6,19 @@
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="0">
-<title>Starken OS</title>
+<title>Fenix OS</title>
 <script>
 (function() {
   var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
   window.STARKEN_OFFICE_GAME_PATH = OFFICE_GAME_PATH;
   window.STARKEN_OS_BUILD = '20260519-2038-client-memory';
 
-  // Se por qualquer cache/clique antigo o Starken OS for carregado dentro do proprio iframe,
+  // Se por qualquer cache/clique antigo o Fenix OS for carregado dentro do proprio iframe,
   // troca imediatamente para o escritorio real. Isso evita o efeito "menu dentro de menu".
   try {
     var isFramed = window.self !== window.top;
-    var isStarkenOsShell = /^\/starken-os\/?$/.test(window.location.pathname);
-    if (isFramed && isStarkenOsShell) {
+    var isFenixOsShell = /^\/starken-os\/?$/.test(window.location.pathname);
+    if (isFramed && isFenixOsShell) {
       document.documentElement.className += ' starken-framed-shell';
       window.location.replace(OFFICE_GAME_PATH);
     }
@@ -40,7 +40,7 @@
     document.body.appendChild(notice);
     var btn = document.getElementById('starkenOsReloadBtn');
     if (btn) btn.onclick = function() { window.location.reload(); };
-    console.warn('[Starken OS] Nova versão detectada:', latestBuild);
+    console.warn('[Fenix OS] Nova versão detectada:', latestBuild);
   }
 
   function starkenOsStartBuildWatcher() {
@@ -841,7 +841,7 @@ html.starken-framed-shell body > * {
   border: 1px solid rgba(255,255,255,0.08);
 }
 
-/* Headers/labels (e.g. "Starken", "Alpha") dentro de Progresso */
+/* Headers/labels (e.g. "Fenix", "Alpha") dentro de Progresso */
 [data-theme="emerald"] .progress-bar { background: rgba(255,255,255,0.06) !important; }
 
 /* Stats grid gap maior no emerald pra dar respiro */
@@ -3994,7 +3994,7 @@ textarea.ca-input { resize:vertical; min-height:90px; line-height:1.5; }
   .cp-post-modal-media { min-height: 300px; }
 }
 
-/* Client Portal - Starken Design System */
+/* Client Portal - Fenix Design System */
 #tab-client-portal {
   min-height: calc(100vh - 52px);
   background: var(--bg-app);
@@ -7368,6 +7368,420 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
   .meta-config-primary,
   .meta-config-test-btn { width: 100%; }
 }
+
+.cp-brandkit-hero {
+  grid-column: span 12;
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(300px, 0.9fr);
+  gap: 22px;
+  align-items: stretch;
+  padding: 0;
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 78% 18%, rgba(240,224,176,0.16), transparent 32%),
+    linear-gradient(135deg, #101723 0%, #171b22 52%, #251f18 100%);
+  border: 1px solid rgba(240,224,176,0.32);
+}
+.cp-brandkit-hero-copy {
+  padding: 28px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 24px;
+}
+.cp-brandkit-hero-copy h2 {
+  color: #f8ecd0 !important;
+  font-size: clamp(2rem, 4vw, 4.5rem);
+  line-height: 0.95;
+  letter-spacing: 0;
+  text-transform: uppercase;
+}
+.cp-brandkit-hero-copy p {
+  color: #d8c79d !important;
+  max-width: 680px;
+}
+.cp-brandkit-hero-logo {
+  min-height: 360px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  background:
+    linear-gradient(135deg, rgba(240,224,176,0.08), rgba(16,23,35,0.1)),
+    repeating-linear-gradient(45deg, rgba(240,224,176,0.04) 0 1px, transparent 1px 18px);
+  border-left: 1px solid rgba(240,224,176,0.16);
+}
+.cp-brandkit-hero-logo img {
+  width: min(390px, 88%);
+  max-height: 300px;
+  object-fit: contain;
+  filter: drop-shadow(0 22px 40px rgba(0,0,0,0.38));
+}
+.cp-brandkit-tagrow,
+.cp-brandkit-asset-actions,
+.cp-brandkit-rules {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+}
+.cp-brandkit-tag {
+  border: 1px solid rgba(240,224,176,0.35);
+  background: rgba(240,224,176,0.08);
+  color: #f3dfaa;
+  border-radius: 999px;
+  padding: 7px 11px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.cp-brandkit-section-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: flex-start;
+  margin-bottom: 16px;
+}
+.cp-brandkit-section-head p {
+  margin: 5px 0 0;
+}
+.cp-brandkit-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+}
+.cp-brandkit-gallery.compact {
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+}
+.cp-brandkit-image-card {
+  display: block;
+  min-width: 0;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+  color: inherit;
+  text-decoration: none;
+  transition: transform .16s ease, border-color .16s ease;
+}
+.cp-brandkit-image-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--brand-border);
+}
+.cp-brandkit-image-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+  background: #0f1723;
+}
+.cp-brandkit-image-card.wide img {
+  aspect-ratio: 16 / 9;
+}
+.cp-brandkit-image-card.tall img {
+  aspect-ratio: 9 / 16;
+}
+.cp-brandkit-image-card.logo img {
+  object-fit: contain;
+  padding: 20px;
+  background: #101723;
+}
+.cp-brandkit-image-card div {
+  padding: 12px;
+}
+.cp-brandkit-image-card strong {
+  display: block;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.cp-brandkit-image-card span {
+  display: block;
+  margin-top: 4px;
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+}
+.cp-brandkit-color-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+.cp-brandkit-color-card {
+  min-height: 154px;
+  border-radius: 14px;
+  padding: 14px;
+  border: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.12);
+}
+.cp-brandkit-color-card strong,
+.cp-brandkit-color-card span,
+.cp-brandkit-color-card small {
+  color: inherit;
+}
+.cp-brandkit-color-card span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  opacity: 0.88;
+}
+.cp-brandkit-color-card small {
+  margin-top: 8px;
+  opacity: 0.8;
+}
+.cp-brandkit-rule-card {
+  flex: 1 1 220px;
+  min-height: 126px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px;
+  background: var(--bg-elevated);
+}
+.cp-brandkit-rule-card .mso {
+  color: var(--brand);
+}
+.cp-brandkit-rule-card strong {
+  display: block;
+  margin: 10px 0 4px;
+  color: var(--text-primary);
+}
+.cp-brandkit-assets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 12px;
+}
+.cp-brandkit-asset-chip {
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 13px;
+  background: var(--bg-elevated);
+}
+.cp-brandkit-asset-chip strong {
+  display: block;
+}
+.cp-brandkit-asset-chip span {
+  color: var(--text-secondary);
+  font-size: 0.82rem;
+}
+
+.cp-brand-subnav {
+		  display: flex;
+		  gap: 10px;
+		  flex-wrap: wrap;
+		  align-items: center;
+		  margin: -4px 0 22px;
+		}
+		.cp-brand-subnav button {
+		  border: 1px solid var(--border);
+		  background: var(--bg-elevated);
+		  color: var(--text-secondary);
+		  border-radius: 999px;
+		  padding: 10px 14px;
+		  font: inherit;
+		  font-weight: 900;
+		  cursor: pointer;
+		  display: inline-flex;
+		  align-items: center;
+		  gap: 7px;
+		  transition: border-color .16s ease, color .16s ease, background .16s ease;
+		}
+		.cp-brand-subnav button.active,
+		.cp-brand-subnav button:hover {
+		  border-color: var(--brand-border);
+		  color: var(--brand);
+		  background: var(--brand-light);
+		}
+		@media (max-width: 980px) {
+		  .cp-brandkit-hero {
+		    grid-template-columns: 1fr;
+		  }
+	    .cp-brandkit-hero-logo {
+	      border-left: 0;
+	      border-top: 1px solid rgba(240,224,176,0.16);
+	    }
+	  }
+	.cp-photo-hero {
+	  grid-column: span 12;
+	  display: grid;
+	  grid-template-columns: minmax(0, 1fr) minmax(260px, 380px);
+	  gap: 18px;
+	  align-items: stretch;
+	  padding: 22px;
+	  border: 1px solid var(--brand-border);
+	  border-radius: 18px;
+	  background: linear-gradient(135deg, rgba(70,238,205,0.12), rgba(15,23,35,0.92) 48%, rgba(91,141,239,0.12));
+	}
+	.cp-photo-hero h2 {
+	  margin: 8px 0;
+	  color: var(--text-primary);
+	  font-size: clamp(1.9rem, 3vw, 3.2rem);
+	  line-height: 1.02;
+	  letter-spacing: 0;
+	}
+	.cp-photo-hero p {
+	  max-width: 760px;
+	  color: var(--text-secondary);
+	}
+	.cp-photo-hero-panel {
+	  border: 1px solid var(--border);
+	  border-radius: 16px;
+	  background: rgba(2, 8, 23, 0.48);
+	  padding: 16px;
+	  display: grid;
+	  gap: 12px;
+	}
+	.cp-photo-hero-stat {
+	  display: flex;
+	  align-items: center;
+	  justify-content: space-between;
+	  gap: 12px;
+	  padding: 12px;
+	  border-radius: 12px;
+	  background: var(--bg-elevated);
+	  border: 1px solid var(--border);
+	}
+	.cp-photo-controls {
+	  grid-column: span 12;
+	  display: flex;
+	  gap: 9px;
+	  align-items: center;
+	  flex-wrap: wrap;
+	}
+	.cp-photo-filter {
+	  border: 1px solid var(--border);
+	  background: var(--bg-elevated);
+	  color: var(--text-secondary);
+	  border-radius: 999px;
+	  padding: 8px 12px;
+	  font: inherit;
+	  font-weight: 900;
+	  cursor: pointer;
+	  transition: border-color .16s ease, color .16s ease, background .16s ease;
+	}
+	.cp-photo-filter.active,
+	.cp-photo-filter:hover {
+	  border-color: var(--brand-border);
+	  color: var(--brand);
+	  background: var(--brand-light);
+	}
+	.cp-photo-grid {
+	  grid-column: span 12;
+	  display: grid;
+	  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+	  gap: 16px;
+	}
+	.cp-photo-card {
+	  border: 1px solid var(--border);
+	  border-radius: 16px;
+	  background: var(--bg-elevated);
+	  padding: 16px;
+	  min-height: 310px;
+	  display: flex;
+	  flex-direction: column;
+	  gap: 13px;
+	  transition: transform .16s ease, border-color .16s ease, background .16s ease;
+	}
+	.cp-photo-card:hover {
+	  transform: translateY(-2px);
+	  border-color: var(--brand-border);
+	  background: linear-gradient(180deg, rgba(70,238,205,0.06), var(--bg-elevated));
+	}
+	.cp-photo-card-head {
+	  display: flex;
+	  justify-content: space-between;
+	  gap: 12px;
+	  align-items: flex-start;
+	}
+	.cp-photo-card h3 {
+	  margin: 0;
+	  color: var(--text-primary);
+	  font-size: 1.1rem;
+	}
+	.cp-photo-badge {
+	  display: inline-flex;
+	  align-items: center;
+	  gap: 5px;
+	  border: 1px solid var(--brand-border);
+	  border-radius: 999px;
+	  padding: 5px 8px;
+	  color: var(--brand);
+	  background: var(--brand-light);
+	  font-size: .72rem;
+	  font-weight: 900;
+	  letter-spacing: .05em;
+	  text-transform: uppercase;
+	  white-space: nowrap;
+	}
+	.cp-photo-preview {
+	  min-height: 118px;
+	  border: 1px dashed var(--border);
+	  border-radius: 14px;
+	  background:
+	    linear-gradient(135deg, rgba(70,238,205,0.08), rgba(91,141,239,0.08)),
+	    var(--bg-secondary);
+	  display: grid;
+	  place-items: center;
+	  color: var(--text-tertiary);
+	  text-align: center;
+	  padding: 18px;
+	}
+	.cp-photo-preview .mso {
+	  color: var(--brand);
+	  font-size: 2rem;
+	  margin-bottom: 6px;
+	}
+	.cp-photo-folder-id {
+	  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	  color: var(--text-muted);
+	  font-size: .72rem;
+	  overflow: hidden;
+	  text-overflow: ellipsis;
+	  white-space: nowrap;
+	}
+	.cp-photo-agent-row,
+	.cp-photo-actions {
+	  display: flex;
+	  flex-wrap: wrap;
+	  gap: 8px;
+	}
+	.cp-photo-agent {
+	  border: 1px solid var(--border);
+	  background: var(--bg-secondary);
+	  color: var(--text-secondary);
+	  border-radius: 999px;
+	  padding: 5px 8px;
+	  font-size: .72rem;
+	  font-weight: 900;
+	}
+	.cp-photo-context {
+	  grid-column: span 12;
+	  display: grid;
+	  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	  gap: 14px;
+	}
+	.cp-photo-context-card {
+	  border: 1px solid var(--border);
+	  background: var(--bg-elevated);
+	  border-radius: 16px;
+	  padding: 16px;
+	}
+	.cp-photo-context-card .mso {
+	  color: var(--brand);
+	}
+	@media (max-width: 980px) {
+	  .cp-photo-hero {
+	    grid-template-columns: 1fr;
+	  }
+	}
+	
+@media (max-width: 980px) {
+  .cp-brandkit-hero {
+    grid-template-columns: 1fr;
+  }
+  .cp-brandkit-hero-logo {
+    border-left: 0;
+    border-top: 1px solid rgba(240,224,176,0.16);
+  }
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js" defer></script>
@@ -7475,8 +7889,8 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 <div id="loginPage" class="login-wrap">
   <div class="login-card">
     <div class="login-logo">
-      <img src="logo-starken-tecnologia.png" alt="Starken Tecnologia">
-      <h1>Starken OS</h1>
+      <img src="logo-fenix-tecnologia.png" alt="Fenix Tecnologia">
+      <h1>Fenix OS</h1>
       <p>Gestão &amp; Performance</p>
     </div>
     <div style="margin-bottom:14px">
@@ -7506,8 +7920,8 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 <div class="app hidden" id="mainApp">
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-brand">
-      <img class="sidebar-brand-logo" src="favicon.svg" alt="Starken">
-      <h1>Starken OS</h1>
+      <img class="sidebar-brand-logo" src="favicon.svg" alt="Fenix">
+      <h1>Fenix OS</h1>
       <div class="sidebar-brand-text" aria-label="Sistema Operacional">
         <span>Sistema</span>
         <span>Operacional</span>
@@ -7557,7 +7971,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
         <div class="office-embed-shell">
           <iframe
             id="officeEmbedFrame"
-            title="Escritório Virtual Starken"
+            title="Escritório Virtual Fenix"
             src="about:blank"
             data-office-src="/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1"
             loading="eager"
@@ -7788,7 +8202,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
           <div class="legacy-clients-filters">
             <select id="clientCompanyFilter" onchange="renderClients()">
               <option value="all">Todas empresas</option>
-              <option value="Starken">Starken</option>
+              <option value="Fenix">Fenix</option>
               <option value="Alpha">Alpha Assessoria</option>
             </select>
             <select id="clientSegmentFilter" onchange="renderClients()">
@@ -7848,7 +8262,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
           <div class="filter-bar" style="margin-bottom:14px">
             <select id="historyCompanyFilter" onchange="renderHistory()">
               <option value="all">Todas empresas</option>
-              <option value="Starken">Starken</option>
+              <option value="Fenix">Fenix</option>
               <option value="Alpha">Alpha Assessoria</option>
             </select>
             <select id="historyClientFilter" onchange="renderHistory()">
@@ -7889,7 +8303,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             <div>
               <div class="org-kicker">Mapa vivo da empresa</div>
               <h2>Organograma operacional dos NPCs</h2>
-              <p>Veja quem fala com cliente, quem trabalha só dentro do app, quais squads existem e como cada especialista entra no fluxo de campanhas, cronogramas, publicações, relatórios e evolução do Starken OS.</p>
+              <p>Veja quem fala com cliente, quem trabalha só dentro do app, quais squads existem e como cada especialista entra no fluxo de campanhas, cronogramas, publicações, relatórios e evolução do Fenix OS.</p>
             </div>
             <div class="org-chiprow" style="justify-content:flex-end">
               <span class="org-chip">24+ agentes</span>
@@ -7937,7 +8351,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             <div class="card-header">
               <div class="card-title"><span class="mso">account_balance_wallet</span> Financeiro</div>
             </div>
-            <p>Área reservada para a gestão financeira do Starken OS.</p>
+            <p>Área reservada para a gestão financeira do Fenix OS.</p>
           </div>
         </div>
       </div>
@@ -8053,8 +8467,8 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
 
           <!-- Tenant Selector -->
           <div style="display:flex;gap:12px;margin-bottom:24px">
-            <button id="metaBiTenantStarken" class="meta-bi-tenant-btn active" onclick="metaBiSelectTenant('starken')" style="flex:1;padding:14px 16px;border:2px solid var(--starken-border);border-radius:12px;background:var(--starken-bg);color:var(--text);font-weight:600;cursor:pointer;transition:all 0.2s">
-              <span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Starken Performance
+            <button id="metaBiTenantFenix" class="meta-bi-tenant-btn active" onclick="metaBiSelectTenant('starken')" style="flex:1;padding:14px 16px;border:2px solid var(--starken-border);border-radius:12px;background:var(--starken-bg);color:var(--text);font-weight:600;cursor:pointer;transition:all 0.2s">
+              <span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Fenix Performance
             </button>
             <button id="metaBiTenantAlpha" class="meta-bi-tenant-btn" onclick="metaBiSelectTenant('alpha')" style="flex:1;padding:14px 16px;border:2px solid var(--alpha-border);border-radius:12px;background:transparent;color:var(--text);font-weight:600;cursor:pointer;transition:all 0.2s">
               <span class="mso" style="color:#eab308;font-size:10px">fiber_manual_record</span> Alpha Assessoria
@@ -9172,7 +9586,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
         <div class="cp-shell">
           <div class="cp-topbar">
             <div class="cp-brand-title">
-              <span class="cp-logo-mark has-logo"><img class="client-logo-img" src="favicon.svg" alt="Starken"></span>
+              <span class="cp-logo-mark has-logo"><img class="client-logo-img" src="favicon.svg" alt="Fenix"></span>
               <div>
                 <strong>Portal do Cliente</strong>
                 <small>Visão conectada ao escritório operacional</small>
@@ -9182,7 +9596,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
               <button class="active" data-cp-tab="overview" onclick="clientPortalSwitchTab('overview')">Visão Geral</button>
               <button data-cp-tab="social" onclick="clientPortalSwitchTab('social')">Redes Sociais</button>
               <button data-cp-tab="ads" onclick="clientPortalSwitchTab('ads')">Meta Ads</button>
-              <button data-cp-tab="brand" onclick="clientPortalSwitchTab('brand')">Identidade Visual</button>
+              <button data-cp-tab="brand" onclick="clientPortalSwitchBrandSection('brandbook')">Identidade Visual</button>
               <button data-cp-tab="schedule" onclick="clientPortalSwitchTab('schedule')">Cronograma</button>
               <button data-cp-tab="memory" onclick="clientPortalSwitchTab('memory')">Memória</button>
               <button data-cp-tab="contents" onclick="clientPortalSwitchTab('contents')">Conteúdos</button>
@@ -9226,7 +9640,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
               <input id="ccSearch" class="cc-search" type="search" placeholder="Buscar cliente..." oninput="clientCentralRender()">
               <select id="ccTenantFilter" class="cc-select" onchange="clientCentralRender()">
                 <option value="all">Todos os núcleos</option>
-                <option value="starken">Starken Performance</option>
+                <option value="starken">Fenix Performance</option>
                 <option value="alpha">Alpha Assessoria</option>
               </select>
               <select id="ccStatusFilter" class="cc-select" onchange="clientCentralRender()">
@@ -9872,7 +10286,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
                     <span class="ch-chevron">▶</span>
                   </div>
                   <div class="ch-card-body">
-                    <div class="ch-flow-step"><b>1.</b> Starken monta o cronograma e agenda conteúdos.</div>
+                    <div class="ch-flow-step"><b>1.</b> Fenix monta o cronograma e agenda conteúdos.</div>
                     <div class="ch-flow-step"><b>2.</b> Cliente acessa o portal e aprova, pede ajuste ou comenta.</div>
                     <div class="ch-flow-step"><b>3.</b> Equipe recebe a pendência no escritório e atualiza a task.</div>
                     <div class="ch-flow-step"><b>4.</b> Conteúdo aprovado segue para publicação e relatório.</div>
@@ -10350,7 +10764,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
     <div class="form-group">
       <label class="form-label">Empresa</label>
       <select class="form-input" id="clientCompany">
-        <option value="Starken">Starken</option>
+        <option value="Fenix">Fenix</option>
         <option value="Alpha">Alpha Assessoria</option>
       </select>
     </div>
@@ -10727,7 +11141,7 @@ function ensureOfficeEmbed() {
   if (frame.src !== expectedUrl) frame.src = expectedUrl;
   frame.dataset.expectedSrc = expectedUrl;
 
-  function removeNestedStarkenShell() {
+  function removeNestedFenixShell() {
     try {
       var win = frame.contentWindow;
       var doc = win && win.document;
@@ -10772,10 +11186,10 @@ function ensureOfficeEmbed() {
         frame.contentWindow.location.replace(frame.dataset.expectedSrc || expectedUrl);
       }
     } catch(e) {}
-    removeNestedStarkenShell();
+    removeNestedFenixShell();
   });
-  removeNestedStarkenShell();
-  window.setInterval(removeNestedStarkenShell, 700);
+  removeNestedFenixShell();
+  window.setInterval(removeNestedFenixShell, 700);
 }
 
 function starkenOfficeGamePath(channelId, characterId) {
@@ -11223,7 +11637,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
       // Web Notification (visível mesmo com aba minimizada)
       if ('Notification' in window && Notification.permission === 'granted') {
-        const n = new Notification('Starken OS — ' + alert.title, {
+        const n = new Notification('Fenix OS — ' + alert.title, {
           body: alert.message,
           icon: '/favicon.ico',
           tag: 'starken-alert-' + alert.key,
@@ -11428,34 +11842,34 @@ const SEED_CLIENTS = [
   { name: 'Saporito Pizzaria',            company: 'Alpha',   segment: 'Gastronomia' },
   { name: "D' Britos",                    company: 'Alpha',   segment: 'Gastronomia' },
   { name: 'Fratellis Pizzaria',           company: 'Alpha',   segment: 'Gastronomia' },
-  // ── Starken · Gastronomia ─────────────────────────────────────────────
-  { name: 'Mortadella Blumenau',          company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Hamburgueria Feio',            company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Rosa Mexicano Blumenau',       company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Rosa Mexicano Brusque',        company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Suprema Pizza',                company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Arena Gourmet',                company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Super X - Garuva',             company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Super X - Guaratuba',          company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Madrugão - Centro',            company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Madrugão - Garcia',            company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Madrugão - Fortaleza',         company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Restaurante Oca',              company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Aseyori Restaurante',          company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Super X - Itapoa',             company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Oklahoma Burger',              company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Pizzaria Super X',             company: 'Starken', segment: 'Gastronomia' },
-  { name: 'Sr Salsicha',                  company: 'Starken', segment: 'Gastronomia' },
-  // ── Starken · Outros segmentos ────────────────────────────────────────
-  { name: 'The Garrison',                 company: 'Starken', segment: 'Eventos' },
-  { name: 'JPR Móveis Rústicos',          company: 'Starken', segment: 'Mesas p/ Área de Festas' },
-  { name: 'Estilo Tulipa',                company: 'Starken', segment: 'Artigos de Tênis' },
-  { name: 'Academia São Pedro',           company: 'Starken', segment: 'Academia' },
-  { name: 'New Service',                  company: 'Starken', segment: 'Indústria' },
-  { name: 'Melhor Visão',                 company: 'Starken', segment: 'Clínica Ótica' },
-  { name: 'Bengers - Empresa',            company: 'Starken', segment: 'Eventos' },
-  { name: 'Dommus Smart Home',            company: 'Starken', segment: 'Automação Residencial' },
-  { name: 'Dilokas Pizzaria Delivery',   company: 'Starken', segment: 'Gastronomia' },
+  // ── Fenix · Gastronomia ─────────────────────────────────────────────
+  { name: 'Mortadella Blumenau',          company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Hamburgueria Feio',            company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Rosa Mexicano Blumenau',       company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Rosa Mexicano Brusque',        company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Suprema Pizza',                company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Arena Gourmet',                company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Super X - Garuva',             company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Super X - Guaratuba',          company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Madrugão - Centro',            company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Madrugão - Garcia',            company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Madrugão - Fortaleza',         company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Restaurante Oca',              company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Aseyori Restaurante',          company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Super X - Itapoa',             company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Oklahoma Burger',              company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Pizzaria Super X',             company: 'Fenix', segment: 'Gastronomia' },
+  { name: 'Sr Salsicha',                  company: 'Fenix', segment: 'Gastronomia' },
+  // ── Fenix · Outros segmentos ────────────────────────────────────────
+  { name: 'The Garrison',                 company: 'Fenix', segment: 'Eventos' },
+  { name: 'JPR Móveis Rústicos',          company: 'Fenix', segment: 'Mesas p/ Área de Festas' },
+  { name: 'Estilo Tulipa',                company: 'Fenix', segment: 'Artigos de Tênis' },
+  { name: 'Academia São Pedro',           company: 'Fenix', segment: 'Academia' },
+  { name: 'New Service',                  company: 'Fenix', segment: 'Indústria' },
+  { name: 'Melhor Visão',                 company: 'Fenix', segment: 'Clínica Ótica' },
+  { name: 'Bengers - Empresa',            company: 'Fenix', segment: 'Eventos' },
+  { name: 'Dommus Smart Home',            company: 'Fenix', segment: 'Automação Residencial' },
+  { name: 'Dilokas Pizzaria Delivery',   company: 'Fenix', segment: 'Gastronomia' },
 ];
 
 function loadData() {
@@ -11504,7 +11918,7 @@ function saveData(d) {
 let data = loadData();
 
 // ============ PER-COLUMN SEGMENT FILTERS ============
-const segFilters = { weekly: { Starken: 'all', Alpha: 'all' }, monthly: { Starken: 'all', Alpha: 'all' } };
+const segFilters = { weekly: { Fenix: 'all', Alpha: 'all' }, monthly: { Fenix: 'all', Alpha: 'all' } };
 function setSegFilter(tabType, company, val) {
   segFilters[tabType][company] = val;
   if (tabType === 'weekly') renderWeeklyChecklist();
@@ -11768,18 +12182,18 @@ function sidebarPinPrimaryItems() {
   SIDEBAR_MENU = pinned.concat(rest, bottom);
 }
 
-// Renders the folder structure for Starken / Alpha
+// Renders the folder structure for Fenix / Alpha
 function renderSidebarFolder(folderId) {
   var folderSvg = typeof iconSvg === 'function' ? iconSvg('folder', { size: 15 }) : '';
   if (folderId === 'folder-starken') {
-    return '<div class="sidebar-folder" id="sidebarStarken">' +
+    return '<div class="sidebar-folder" id="sidebarFenix">' +
       '<button class="sidebar-folder-header" onclick="toggleSidebarFolder(\'starken\')">' +
-        '<span class="sidebar-folder-chevron" id="chevronStarken">▸</span>' +
+        '<span class="sidebar-folder-chevron" id="chevronFenix">▸</span>' +
         '<span class="icon" style="color:#46eecd">' + folderSvg + '</span> Clientes ativos' +
-        '<span class="sidebar-folder-count" id="countStarken">25</span>' +
+        '<span class="sidebar-folder-count" id="countFenix">25</span>' +
       '</button>' +
-      '<input type="text" id="searchStarken" placeholder="Buscar..." style="display:none;width:100%;padding:6px 12px;margin:6px 0;border:1px solid rgba(255,255,255,0.2);border-radius:4px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:0.75rem" oninput="sidebarFilterClients(\'starken\')">' +
-      '<div class="sidebar-folder-items" id="itemsStarken" style="display:none"></div>' +
+      '<input type="text" id="searchFenix" placeholder="Buscar..." style="display:none;width:100%;padding:6px 12px;margin:6px 0;border:1px solid rgba(255,255,255,0.2);border-radius:4px;background:rgba(255,255,255,0.05);color:rgba(255,255,255,0.9);font-size:0.75rem" oninput="sidebarFilterClients(\'starken\')">' +
+      '<div class="sidebar-folder-items" id="itemsFenix" style="display:none"></div>' +
     '</div>';
   }
   if (folderId === 'folder-alpha') {
@@ -12568,7 +12982,7 @@ function pubHistoryRender() {
       var metaEntry = clientId && metaCl[clientId] ? metaCl[clientId] : null;
       var cName = metaEntry ? (metaEntry.name || clientId) : (clientId || ('Grupo ' + (t.group_id || '?')));
       var cKey = clientId || ('g_' + (t.group_id || 'x'));
-      var cCompany = metaEntry && metaEntry.tenant ? (metaEntry.tenant === 'alpha' ? 'Alpha' : 'Starken') : '';
+      var cCompany = metaEntry && metaEntry.tenant ? (metaEntry.tenant === 'alpha' ? 'Alpha' : 'Fenix') : '';
 
       if (!clientMap[cKey]) {
         clientMap[cKey] = {
@@ -12753,7 +13167,7 @@ function emPubHistRender(pub, sch, fail, total, sorted) {
       '<div class="em-hero" style="margin-bottom:16px">'
       + '<div>'
       + '<h2 class="em-hero-title" style="font-size:1.6rem">Publicações &amp; Agendamentos</h2>'
-      + '<p class="em-hero-sub">Controle centralizado de toda a rede de publicações Starken OS.</p>'
+      + '<p class="em-hero-sub">Controle centralizado de toda a rede de publicações Fenix OS.</p>'
       + '</div>'
       + '<div class="em-hero-actions">'
       + '<button class="em-btn-primary" onclick="pubHistoryRefresh()">' + iconSvg('refresh',{size:14}) + ' Atualizar</button>'
@@ -13294,7 +13708,7 @@ async function pubHistRetryInMetaPub(clientKey, platform, caption, mode, schedul
 }
 
 const TAB_TITLES = {
-  escritorio:    'Starken HQ',
+  escritorio:    'Fenix HQ',
   'client-portal':    'Portal do Cliente',
   gestao:        'Gestão de Projetos',
   dashboard:     'Dashboard',
@@ -13507,7 +13921,7 @@ function ctContentGenerationClients(options) {
       metaKey: key,
       slug: key,
       name: c.name || key,
-      company: tenant === 'alpha' ? 'Alpha' : 'Starken',
+      company: tenant === 'alpha' ? 'Alpha' : 'Fenix',
       tenant: tenant,
       status: status,
       logo_url: c.logo_url || c.logoUrl || c.logo
@@ -13542,7 +13956,7 @@ function renderSidebarContentClients() {
 function populateSidebarClients() {
   renderSidebarContentClients();
   const clients = _metaClients || {};
-  const starkenItems = document.getElementById('itemsStarken');
+  const starkenItems = document.getElementById('itemsFenix');
   const alphaItems = document.getElementById('itemsAlpha');
   const arquivadosItems = document.getElementById('itemsArquivados');
   if (!starkenItems) return;
@@ -13597,7 +14011,7 @@ function populateSidebarClients() {
 
   starkenItems.innerHTML = starkenHtml || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 20px">Nenhum cliente</div>';
   if (alphaItems) alphaItems.innerHTML = alphaHtml || '<div style="color:rgba(255,255,255,0.25);font-size:0.7rem;padding:5px 20px">Nenhum cliente</div>';
-  document.getElementById('countStarken').textContent = starkenClients.length;
+  document.getElementById('countFenix').textContent = starkenClients.length;
   var countAlphaEl = document.getElementById('countAlpha');
   if (countAlphaEl) countAlphaEl.textContent = alphaClients.length;
 
@@ -14088,7 +14502,7 @@ function getMonthPeriodKey() {
 // ============ RENDER TWO-COLUMN CHECKLIST ============
 function renderTwoColumnChecklist(containerId, type, periodKey) {
   const companies = [
-    { key: 'Starken', label: 'Starken', css: 'starken' },
+    { key: 'Fenix', label: 'Fenix', css: 'starken' },
     { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }
   ];
 
@@ -14278,11 +14692,11 @@ function renderTwoColumnChecklist(containerId, type, periodKey) {
         }
       }
 
-      var metaKey = findMetaClientKey(c.name, co.key === 'Starken' ? 'starken' : 'alpha');
+      var metaKey = findMetaClientKey(c.name, co.key === 'Fenix' ? 'starken' : 'alpha');
 
       // BI link button — only for report tabs
       if (type !== 'sched-weekly' && metaKey) {
-        html += '<button class="btn btn-sm" style="background:#eff6ff;color:#1877f2;border:1px solid #bfdbfe;padding:4px 8px" onclick="metaBiOpenFromReport(\'' + metaKey + '\',\'' + (co.key === 'Starken' ? 'starken' : 'alpha') + '\')" title="Ver no BI Campanhas"><span class="mso">bar_chart</span></button>';
+        html += '<button class="btn btn-sm" style="background:#eff6ff;color:#1877f2;border:1px solid #bfdbfe;padding:4px 8px" onclick="metaBiOpenFromReport(\'' + metaKey + '\',\'' + (co.key === 'Fenix' ? 'starken' : 'alpha') + '\')" title="Ver no BI Campanhas"><span class="mso">bar_chart</span></button>';
       }
 
       // Cronograma PDF button + download last PDF
@@ -14296,7 +14710,7 @@ function renderTwoColumnChecklist(containerId, type, periodKey) {
       }
 
       // Zappfy WhatsApp button
-      var _zClientTenant = co.key === 'Starken' ? 'starken' : 'alpha';
+      var _zClientTenant = co.key === 'Fenix' ? 'starken' : 'alpha';
       var _zMetaKey = findMetaClientKey(c.name, _zClientTenant);
       var _zHasGroup = _zMetaKey && _metaClients[_zMetaKey] && _metaClients[_zMetaKey].whatsappGroupJid;
       if (_zHasGroup) {
@@ -14500,7 +14914,7 @@ function _renderSwPremium(periodKey) {
   }
 
   var companies = [
-    { key: 'Starken', label: 'Starken', sub: 'GRUPO DE ATENDIMENTO A' },
+    { key: 'Fenix', label: 'Fenix', sub: 'GRUPO DE ATENDIMENTO A' },
     { key: 'Alpha', label: 'Alpha Assessoria', sub: 'GRUPO ESTRATÉGICO' }
   ];
   var totalClients = 0, totalGerados = 0, totalAguardando = 0, totalEnviados = 0;
@@ -14838,7 +15252,7 @@ function dashCronoResetWeek() {
 
 function renderDashboard() {
   var active = data.clients.filter(function(c) { return c.active && (typeof ctIsClientOperational !== 'function' || ctIsClientOperational(c.id)); });
-  var starken = active.filter(function(c) { return c.company === 'Starken'; });
+  var starken = active.filter(function(c) { return c.company === 'Fenix'; });
   var alpha = active.filter(function(c) { return c.company === 'Alpha'; });
 
   var mk = getCurrentMonthKey();
@@ -14859,7 +15273,7 @@ function renderDashboard() {
   var mSent = data.reports.filter(function(r) { return r.type === 'monthly' && r.period === mk && r.status === 2; }).length;
 
   document.getElementById('dashboardStats').innerHTML =
-    '<div class="stat-card starken"><div class="stat-icon starken">S</div><div class="stat-label">Clientes Starken</div><div class="stat-value">' + starken.length + '</div></div>' +
+    '<div class="stat-card starken"><div class="stat-icon starken">S</div><div class="stat-label">Clientes Fenix</div><div class="stat-value">' + starken.length + '</div></div>' +
     '<div class="stat-card alpha"><div class="stat-icon alpha">A</div><div class="stat-label">Clientes Alpha</div><div class="stat-value">' + alpha.length + '</div></div>' +
     '<div class="stat-card warning" onclick="switchTab(\'sched-weekly\')" style="cursor:pointer" title="Ver cronogramas pendentes de envio"><div class="stat-icon" style="background:var(--warning-bg)">!</div><div class="stat-label">Cronogramas Pendentes</div><div class="stat-value">' + wPending + '</div></div>' +
     '<div class="stat-card success"><div class="stat-icon" style="background:var(--success-bg)"><span class="mso">check</span></div><div class="stat-label">Cronogramas Enviados</div><div class="stat-value">' + wSent + '/' + active.length + '</div></div>';
@@ -14894,7 +15308,7 @@ async function dashExportPdf() {
     }
 
     var active = data.clients.filter(function(c) { return c.active && (typeof ctIsClientOperational !== 'function' || ctIsClientOperational(c.id)); });
-    var starken = active.filter(function(c) { return c.company === 'Starken'; });
+    var starken = active.filter(function(c) { return c.company === 'Fenix'; });
     var alpha = active.filter(function(c) { return c.company === 'Alpha'; });
     var wk = _dashGetCurrentWeekKey();
     var wGen = 0, wSent = 0;
@@ -14918,7 +15332,7 @@ async function dashExportPdf() {
     var monthName = now.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' });
     monthName = monthName.charAt(0).toUpperCase() + monthName.slice(1);
 
-    var sPct = bc.Starken.t > 0 ? Math.round((bc.Starken.p / bc.Starken.t) * 100) : 0;
+    var sPct = bc.Fenix.t > 0 ? Math.round((bc.Fenix.p / bc.Fenix.t) * 100) : 0;
     var aPct = bc.Alpha.t > 0 ? Math.round((bc.Alpha.p / bc.Alpha.t) * 100) : 0;
     var totalDue = bd.onTime.length + bd.late.length + bd.failed.length;
 
@@ -14948,10 +15362,10 @@ async function dashExportPdf() {
       analysisParagraphs.push('O mês de <strong>' + monthName + '</strong> apresentou <strong style="color:#ffb4ab">performance crítica</strong> com score operacional de <strong style="color:#ffb4ab">' + score + '%</strong>, ' + _trendText + '. Ação imediata é necessária para regularizar o fluxo de entregas.');
     }
 
-    // Parágrafo 2 — Breakdown Starken vs Alpha
-    if (bc.Starken.t > 0 || bc.Alpha.t > 0) {
+    // Parágrafo 2 — Breakdown Fenix vs Alpha
+    if (bc.Fenix.t > 0 || bc.Alpha.t > 0) {
       var compTxt = '';
-      if (bc.Starken.t > 0) compTxt += 'Starken Performance: <strong>' + bc.Starken.p + '/' + bc.Starken.t + ' posts</strong> publicados (' + sPct + '%)';
+      if (bc.Fenix.t > 0) compTxt += 'Fenix Performance: <strong>' + bc.Fenix.p + '/' + bc.Fenix.t + ' posts</strong> publicados (' + sPct + '%)';
       if (bc.Alpha.t > 0)   compTxt += (compTxt ? '; ' : '') + 'Alpha Assessoria: <strong>' + bc.Alpha.p + '/' + bc.Alpha.t + ' posts</strong> publicados (' + aPct + '%)';
       analysisParagraphs.push('Distribuição por empresa — ' + compTxt + '. Total de <strong>' + active.length + ' clientes ativos</strong> na carteira.');
     }
@@ -15043,7 +15457,7 @@ async function dashExportPdf() {
 
       // ── KPIs
       + '<section><h3>Visão Geral</h3><div class="kpi-grid">'
-      + '<div class="kpi kpi-teal"><div class="kpi-val">' + starken.length + '</div><div class="kpi-lbl">Clientes Starken</div></div>'
+      + '<div class="kpi kpi-teal"><div class="kpi-val">' + starken.length + '</div><div class="kpi-lbl">Clientes Fenix</div></div>'
       + '<div class="kpi kpi-cyan"><div class="kpi-val">' + alpha.length + '</div><div class="kpi-lbl">Clientes Alpha</div></div>'
       + '<div class="kpi kpi-yellow"><div class="kpi-val">' + wPending + '</div><div class="kpi-lbl">Cronogramas Pendentes</div></div>'
       + '<div class="kpi kpi-teal"><div class="kpi-val">' + wSent + '/' + wGen + '</div><div class="kpi-lbl">Cronogramas Enviados</div></div>'
@@ -15054,7 +15468,7 @@ async function dashExportPdf() {
       + '<div class="score-box" style="border-color:' + emScoreBdr + ';background:' + emScoreBg + '">'
       + '<div class="score-num" style="color:' + emScoreColor + '">' + score + '<span style="font-size:1.3rem">%</span></div>'
       + '<div class="score-badge" style="color:' + emScoreColor + ';background:' + emScoreBadgeBg + ';border:1px solid ' + emScoreBdr + '">' + scoreLabel + '</div>'
-      + (bc.Starken.t > 0 ? '<div class="score-row"><span>Starken</span><b style="color:' + emScoreColor + '">' + bc.Starken.p + '/' + bc.Starken.t + ' · ' + sPct + '%</b></div>' : '')
+      + (bc.Fenix.t > 0 ? '<div class="score-row"><span>Fenix</span><b style="color:' + emScoreColor + '">' + bc.Fenix.p + '/' + bc.Fenix.t + ' · ' + sPct + '%</b></div>' : '')
       + (bc.Alpha.t > 0   ? '<div class="score-row"><span>Alpha</span><b style="color:' + emScoreColor + '">'   + bc.Alpha.p   + '/' + bc.Alpha.t   + ' · ' + aPct + '%</b></div>' : '')
       + '</div>'
       + '<table class="data-table"><thead><tr><th>Status</th><th style="text-align:center">Total</th><th style="text-align:right">%</th></tr></thead><tbody>' + bdRows + '</tbody></table>'
@@ -15081,7 +15495,7 @@ async function dashExportPdf() {
       + '</section>'
 
       // ── Rodapé
-      + '<footer>Starken OS · Relatório Operacional Automatizado · ' + dateStr + '</footer>';
+      + '<footer>Fenix OS · Relatório Operacional Automatizado · ' + dateStr + '</footer>';
 
     var fullHtml = '<!DOCTYPE html><html lang="pt-BR"><head><meta charset="UTF-8">'
       + '<title>Dashboard-' + mk + '</title>'
@@ -15225,7 +15639,7 @@ function emUpgradeStatCards(sCount, aCount, pending, sent, gen, active, wk) {
   if (!grid) return;
 
   // Sparklines com dados reais: últimas 6 semanas de posts publicados por tenant, e histórico semanal de envios
-  var sSpark = emGetWeeklySeriesByCompany('Starken', 6);
+  var sSpark = emGetWeeklySeriesByCompany('Fenix', 6);
   var aSpark = emGetWeeklySeriesByCompany('Alpha', 6);
   var pSpark = emGetWeeklyPendingSeries(active, 6);
   var sentSpark = emGetWeeklySentSeries(active, 6);
@@ -15242,13 +15656,13 @@ function emUpgradeStatCards(sCount, aCount, pending, sent, gen, active, wk) {
   var peak = function(arr) { var m = -1, idx = 0; arr.forEach(function(v,i){ if (v > m) { m = v; idx = i; } }); return idx; };
 
   grid.innerHTML =
-    // Starken
+    // Fenix
     '<div class="stat-card starken">'
     + '<div class="em-stat-top">'
     + '<div class="stat-icon">' + iconSvg('users') + '</div>'
     + emDelta(sDelta)
     + '</div>'
-    + '<div class="stat-label">Clientes Starken</div>'
+    + '<div class="stat-label">Clientes Fenix</div>'
     + '<div class="stat-value">' + sCount + '</div>'
     + emSparkline(sSpark, peak(sSpark))
     + '</div>'
@@ -15690,12 +16104,12 @@ async function renderOperationalScore(monthKey, active) {
 
       // Classify each task
       var breakdown = { onTime: [], late: [], pending: [], failed: [], skipped: [] };
-      var byCompany = { Starken: { t: 0, p: 0 }, Alpha: { t: 0, p: 0 } };
+      var byCompany = { Fenix: { t: 0, p: 0 }, Alpha: { t: 0, p: 0 } };
 
       tasks.forEach(function(t) {
         var clientId = groupToClient[t.group_id];
         var metaEntrySc = (typeof _metaClients !== 'undefined' && _metaClients && clientId) ? _metaClients[clientId] : null;
-        var company = metaEntrySc ? (metaEntrySc.tenant === 'alpha' ? 'Alpha' : 'Starken') : null;
+        var company = metaEntrySc ? (metaEntrySc.tenant === 'alpha' ? 'Alpha' : 'Fenix') : null;
 
         // post_date = data real da publicação (não a entrega do design)
         var postDate = (t.publish_config && t.publish_config.post_date) || t.due_date || null;
@@ -15827,11 +16241,11 @@ async function renderOperationalScore(monthKey, active) {
     h += '<div style="font-size:3.2rem;font-weight:800;color:' + scoreColor + ';line-height:1;font-family:system-ui,-apple-system">' + score + '<span style="font-size:1.5rem;font-weight:600">%</span></div>';
     h += '<div style="display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:4px 12px;border-radius:20px;background:' + scoreColor + ';color:white;font-size:0.75rem;font-weight:700">' + scoreEmoji + ' ' + scoreLabel + '</div>';
     // Split by company
-    if (bc.Starken.t > 0 || bc.Alpha.t > 0) {
+    if (bc.Fenix.t > 0 || bc.Alpha.t > 0) {
       h += '<div style="margin-top:14px;width:100%;display:flex;flex-direction:column;gap:4px;font-size:0.7rem">';
-      if (bc.Starken.t > 0) {
-        var sPct = Math.round((bc.Starken.p / bc.Starken.t) * 100);
-        h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Starken</span><b>' + bc.Starken.p + '/' + bc.Starken.t + ' · ' + sPct + '%</b></div>';
+      if (bc.Fenix.t > 0) {
+        var sPct = Math.round((bc.Fenix.p / bc.Fenix.t) * 100);
+        h += '<div style="display:flex;justify-content:space-between"><span style="color:var(--text-muted)">Fenix</span><b>' + bc.Fenix.p + '/' + bc.Fenix.t + ' · ' + sPct + '%</b></div>';
       }
       if (bc.Alpha.t > 0) {
         var aPct = Math.round((bc.Alpha.p / bc.Alpha.t) * 100);
@@ -15961,7 +16375,7 @@ function dashOpDrilldown(type, monthKey) {
     return html;
   }
   function companyPill(company) {
-    if (company === 'Starken') return em
+    if (company === 'Fenix') return em
       ? '<span style="background:rgba(70,238,205,0.12);color:#46eecd;border:1px solid rgba(70,238,205,0.25);padding:2px 8px;border-radius:5px;font-size:0.6rem;font-weight:800;letter-spacing:0.5px">STARKEN</span>'
       : '<span style="background:#dbeafe;color:#1e40af;padding:2px 8px;border-radius:5px;font-size:0.6rem;font-weight:800;letter-spacing:0.3px">STARKEN</span>';
     if (company === 'Alpha') return em
@@ -16122,7 +16536,7 @@ function renderProgress(containerId, periodKey, active) {
   // Detect type: sched-weekly for periodKey with -S, monthly for YYYY-MM
   var isSched = periodKey.includes('-S');
   var type = isSched ? 'sched-weekly' : 'monthly';
-  var cos = [{ key: 'Starken', label: 'Starken', css: 'starken' }, { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }];
+  var cos = [{ key: 'Fenix', label: 'Fenix', css: 'starken' }, { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }];
   var h = '';
   for (var ci = 0; ci < cos.length; ci++) {
     var co = cos[ci];
@@ -16250,7 +16664,7 @@ async function renderContentProgress(containerId, periodKey, active, mode) {
 
 function _renderContentProgressUI(el, clientStats, active) {
   var cos = [
-    { key: 'Starken', label: 'Starken', css: 'starken' },
+    { key: 'Fenix', label: 'Fenix', css: 'starken' },
     { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }
   ];
   var h = '';
@@ -16348,7 +16762,7 @@ function renderDashWeekCronoList(weekKey, active) {
   // Scrollable list container
   // ── Render client row helper
   function renderClientRow(item, groupKey) {
-    var css = item.company === 'Starken' ? 'starken' : 'alpha';
+    var css = item.company === 'Fenix' ? 'starken' : 'alpha';
     var onclick = 'switchTab(\'sched-weekly\')';
     if (item.metaKey && groupKey === 'pendentes') {
       onclick = 'cronogramaFromSchedule(' + JSON.stringify(item.metaKey) + ',' + JSON.stringify(item.id) + ',\'sched-weekly\',' + JSON.stringify(weekKey) + ')';
@@ -16575,7 +16989,7 @@ function renderRecentSends() {
     var statusLabel = r.status === 2 ? 'Enviado' : r.status >= 1 ? 'Gerado' : 'Pendente';
     var statusColor = r.status === 2 ? '#22c55e' : r.status >= 1 ? '#3b82f6' : '#f59e0b';
     rh += '<div style="display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--border-light)">';
-    rh += clientLogoAvatarHtml(r, 'client-avatar ' + (co === 'Starken' ? 'starken' : 'alpha'), 'width:30px;height:30px;font-size:0.65rem');
+    rh += clientLogoAvatarHtml(r, 'client-avatar ' + (co === 'Fenix' ? 'starken' : 'alpha'), 'width:30px;height:30px;font-size:0.65rem');
     rh += '<div style="flex:1"><span style="font-weight:600;font-size:0.85rem">' + esc(r.name) + '</span> <span style="font-size:0.72rem;color:var(--text-muted)">' + typeL + ' - ' + r.periodKey + '</span></div>';
     rh += '<span style="font-size:0.72rem;font-weight:600;color:' + statusColor + '">' + statusLabel + '</span>';
     rh += '<span style="font-size:0.75rem;color:var(--text-muted)">' + dateStr + '</span>';
@@ -16933,7 +17347,7 @@ function renderClients() {
     }
   }
 
-  const cos = [{ key: 'Starken', label: 'Starken', css: 'starken' }, { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }];
+  const cos = [{ key: 'Fenix', label: 'Fenix', css: 'starken' }, { key: 'Alpha', label: 'Alpha Assessoria', css: 'alpha' }];
   let html = '';
 
   for (const co of cos) {
@@ -17149,7 +17563,7 @@ function renderHistory() {
     const c = data.clients.find(x => x.id === r.clientId);
     const name = c ? c.name : '(Removido)';
     const co = c ? c.company : '—';
-    const bCls = co === 'Starken' ? 'badge-starken' : 'badge-alpha';
+    const bCls = co === 'Fenix' ? 'badge-starken' : 'badge-alpha';
     const tl = r.type === 'weekly' ? 'Semanal' : 'Mensal';
     const ds = (r.sentDate || r.createdAt) ? new Date(r.sentDate || r.createdAt).toLocaleString('pt-BR') : '—';
     h += '<tr><td><strong>' + esc(name) + '</strong></td><td><span class="badge ' + bCls + '">' + (co === 'Alpha' ? 'Alpha' : co) + '</span></td><td>' + tl + '</td><td>' + r.period + '</td><td><span class="status-badge ' + STATUS_BADGE_CLASSES[r.status] + '"><span class="dot"></span>' + STATUS_LABELS_SHORT[r.status] + '</span></td><td>' + ds + '</td><td>' + esc(r.notes || '—') + '</td></tr>';
@@ -17262,7 +17676,7 @@ function renderSyncModal(syncData) {
       );
     }
 
-    const badgeCls = r.company === 'Starken' ? 'badge-starken' : 'badge-alpha';
+    const badgeCls = r.company === 'Fenix' ? 'badge-starken' : 'badge-alpha';
     const statusTag = alreadyExists
       ? '<span style="color:var(--alpha-dark);font-size:0.72rem;font-weight:600"><span class="mso">check</span> Já registrado</span>'
       : (!matched ? '<span style="color:var(--danger);font-size:0.72rem;font-weight:600"><span class="mso">warning</span> Cliente não encontrado</span>' : '');
@@ -17635,7 +18049,7 @@ function caPopulateClientSelect(selEl) {
   sorted.forEach(c => {
     if (c.company !== lastCo) {
       const og = document.createElement('optgroup');
-      og.label = c.company === 'Alpha' ? 'Alpha Assessoria' : 'Starken';
+      og.label = c.company === 'Alpha' ? 'Alpha Assessoria' : 'Fenix';
       selEl.appendChild(og);
       lastCo = c.company;
     }
@@ -17673,7 +18087,7 @@ function caRenderDashboard() {
     const postCount = (s.posts || []).length;
     const compBadge = company === 'Alpha'
       ? '<span class="ca-company-badge ca-company-alpha">Alpha</span>'
-      : company === 'Starken' ? '<span class="ca-company-badge ca-company-starken">Starken</span>' : '';
+      : company === 'Fenix' ? '<span class="ca-company-badge ca-company-starken">Fenix</span>' : '';
     const lastDate = s.approvedAt || s.sentAt || s.updatedAt;
     const lastLabel = s.approvedAt ? 'Aprovado ' : s.sentAt ? 'Enviado ' : 'Atualizado ';
     const dateStr = lastDate ? lastLabel + new Date(lastDate).toLocaleDateString('pt-BR') : '';
@@ -19414,7 +19828,7 @@ let _metaDiscoveredData = null;
 
 // Tenants disponíveis (fixos)
 const _metaTenants = {
-  starken: { name: 'Starken Performance' },
+  starken: { name: 'Fenix Performance' },
   alpha:   { name: 'Alpha Assessoria' },
 };
 
@@ -19776,14 +20190,14 @@ function metaConfigRenderClientList() {
   }
 
   const tenantSections = [
-    { key: 'starken', label: '<span class="mso">star</span> Starken Performance', badge: 'Starken' },
+    { key: 'starken', label: '<span class="mso">star</span> Fenix Performance', badge: 'Fenix' },
     { key: 'alpha',   label: '<span class="mso">eco</span> Alpha Assessoria',   badge: 'Alpha'   },
   ];
 
   // Função auxiliar que gera o HTML de um card individual
   function renderCard(key, c) {
     const tenant = c.tenant === 'alpha' ? 'alpha' : 'starken';
-    const badgeLabel = tenant === 'alpha' ? 'Alpha' : 'Starken';
+    const badgeLabel = tenant === 'alpha' ? 'Alpha' : 'Fenix';
     const clientNameSafe = (c.name || '').replace(/"/g, '&quot;');
 
     // Opções de páginas Facebook
@@ -20074,7 +20488,7 @@ function zappfySendReport(clientId, type, periodKey) {
   var client = data.clients.find(function(c) { return c.id === clientId; });
   if (!client) { alert('Cliente não encontrado'); return; }
 
-  var tenant = client.company === 'Starken' ? 'starken' : 'alpha';
+  var tenant = client.company === 'Fenix' ? 'starken' : 'alpha';
   var metaKey = findMetaClientKey(client.name, tenant);
   var metaClient = metaKey ? _metaClients[metaKey] : null;
   var groupJid = metaClient ? metaClient.whatsappGroupJid : null;
@@ -20627,7 +21041,7 @@ async function zappfyConfirmSend() {
 
     // Append report link
     if (uploadUrl && !finalMsg.includes(uploadUrl)) {
-      finalMsg = finalMsg.replace(/\n\n_Starken Performance_/, '\n<span class="mso">link</span> *Relatório completo:*\n' + uploadUrl + '\n\n_Starken Performance_');
+      finalMsg = finalMsg.replace(/\n\n_Fenix Performance_/, '\n<span class="mso">link</span> *Relatório completo:*\n' + uploadUrl + '\n\n_Fenix Performance_');
     }
 
     // Send text message
@@ -20770,7 +21184,7 @@ function zappfyBuildTextMessage(client, rows, periodLabel, typeLabel, sistemaDat
     }
     msg += '\n';
   }
-  msg += '\n_Starken Performance_';
+  msg += '\n_Fenix Performance_';
   return msg;
 }
 
@@ -21101,7 +21515,7 @@ async function metaBalanceFetch() {
       const res = await fetch(metaApiBase() + '/api/meta/balance?tenant=' + tenant);
       const data = await res.json();
       if (data.error) {
-        results.push({ tenant, tenant_name: tenant === 'starken' ? 'Starken Performance' : 'Alpha Assessoria', error: data.message });
+        results.push({ tenant, tenant_name: tenant === 'starken' ? 'Fenix Performance' : 'Alpha Assessoria', error: data.message });
       } else {
         results.push(data);
       }
@@ -21120,8 +21534,8 @@ function metaBalanceRender(results) {
   let html = '';
 
   results.forEach(r => {
-    const isStarken = r.tenant === 'starken';
-    const accent = isStarken ? 'starken' : 'alpha';
+    const isFenix = r.tenant === 'starken';
+    const accent = isFenix ? 'starken' : 'alpha';
     const tenantName = r.tenant_name || r.tenant;
 
     if (r.error) {
@@ -21231,19 +21645,19 @@ function metaBiSelectTenant(tenant) {
   _metaBiState.currentClient = null;
 
   // Update button styles
-  document.getElementById('metaBiTenantStarken').classList.remove('active');
+  document.getElementById('metaBiTenantFenix').classList.remove('active');
   document.getElementById('metaBiTenantAlpha').classList.remove('active');
-  document.getElementById('metaBiTenant' + (tenant === 'starken' ? 'Starken' : 'Alpha')).classList.add('active');
+  document.getElementById('metaBiTenant' + (tenant === 'starken' ? 'Fenix' : 'Alpha')).classList.add('active');
 
   // Update button styling
   if (tenant === 'starken') {
-    document.getElementById('metaBiTenantStarken').style.borderColor = 'var(--starken)';
-    document.getElementById('metaBiTenantStarken').style.background = 'var(--starken-bg)';
+    document.getElementById('metaBiTenantFenix').style.borderColor = 'var(--starken)';
+    document.getElementById('metaBiTenantFenix').style.background = 'var(--starken-bg)';
     document.getElementById('metaBiTenantAlpha').style.borderColor = 'var(--border)';
     document.getElementById('metaBiTenantAlpha').style.background = 'transparent';
   } else {
-    document.getElementById('metaBiTenantStarken').style.borderColor = 'var(--border)';
-    document.getElementById('metaBiTenantStarken').style.background = 'transparent';
+    document.getElementById('metaBiTenantFenix').style.borderColor = 'var(--border)';
+    document.getElementById('metaBiTenantFenix').style.background = 'transparent';
     document.getElementById('metaBiTenantAlpha').style.borderColor = 'var(--alpha)';
     document.getElementById('metaBiTenantAlpha').style.background = 'var(--alpha-bg)';
   }
@@ -21741,7 +22155,7 @@ async function metaBiGeneratePdfReport() {
   html += '<div style="margin-bottom:20px"><div style="font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:#64748b;margin-bottom:14px">Desempenho das Campanhas — Meta Ads</div>'
     + campaignRows + '</div>'
     // Footer
-    + '<div style="text-align:center;padding:20px 0;border-top:1px solid #e2e8f0;margin-top:20px;font-size:11px;color:#94a3b8">Relatório gerado automaticamente por Starken OS · ' + new Date().toLocaleDateString('pt-BR') + '</div>'
+    + '<div style="text-align:center;padding:20px 0;border-top:1px solid #e2e8f0;margin-top:20px;font-size:11px;color:#94a3b8">Relatório gerado automaticamente por Fenix OS · ' + new Date().toLocaleDateString('pt-BR') + '</div>'
     // Print button
     + '<div class="no-print" style="text-align:center;margin-top:20px"><button id="printBtn" onclick="window.print()" style="padding:12px 28px;border:none;border-radius:10px;background:linear-gradient(135deg,#1877f2,#8b5cf6);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit"><span class="mso">print</span> Imprimir / Salvar PDF</button><div id="imgStatus" style="font-size:11px;color:#64748b;margin-top:8px">Carregando imagens dos criativos...</div></div>'
     + '</div><script>(function(){var imgs=[].slice.call(document.images);var done=0;function update(){done++;var s=document.getElementById("imgStatus");if(s)s.textContent=done>=imgs.length?"Imagens prontas para PDF":"Carregando imagens dos criativos... "+done+"/"+imgs.length;}if(!imgs.length){update();return;}imgs.forEach(function(img){if(img.complete){update();return;}img.addEventListener("load",update,{once:true});img.addEventListener("error",update,{once:true});});setTimeout(function(){var s=document.getElementById("imgStatus");if(s)s.textContent="PDF pronto. Algumas imagens podem depender da Meta.";},5000);})();<\/script></body></html>';
@@ -22939,7 +23353,7 @@ function metaPublishLoadClients() {
   alpha.sort((a, b) => a.name.localeCompare(b.name));
 
   if (starken.length) {
-    html += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Starken Performance (' + starken.length + ')">';
+    html += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Fenix Performance (' + starken.length + ')">';
     starken.forEach(c => {
       const icons = [];
       if (c.pageId) icons.push('FB');
@@ -24382,7 +24796,7 @@ async function ctCheckForgottenPosts() {
 
     // Web Notification
     if ('Notification' in window && Notification.permission === 'granted') {
-      var n = new Notification('Starken OS — Validar publicações', {
+      var n = new Notification('Fenix OS — Validar publicações', {
         body: tasks.length + ' publicação(ões) agendada(s) passaram da data de post sem evidência. Clique para ver.',
         icon: '/favicon.ico',
         requireInteraction: true,
@@ -24410,7 +24824,7 @@ function ctLoadClientDropdown() {
   starken.sort((a,b) => a.name.localeCompare(b.name));
   alpha.sort((a,b) => a.name.localeCompare(b.name));
   if (starken.length) {
-    html += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Starken">';
+    html += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Fenix">';
     starken.forEach(c => html += '<option value="' + c.key + '">' + c.name + '</option>');
     html += '</optgroup>';
   }
@@ -25925,7 +26339,7 @@ function ctShowDuplicateGroupModal(groupId, groupName) {
   alpha.sort((a,b) => a.name.localeCompare(b.name));
   let optHtml = '';
   if (starken.length) {
-    optHtml += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Starken">';
+    optHtml += '<optgroup label="<span class="mso" style="color:#22c55e;font-size:10px">fiber_manual_record</span> Fenix">';
     starken.forEach(c => optHtml += '<option value="' + c.key + '"' + (c.key === ctCurrentClient ? ' selected' : '') + '>' + c.name + '</option>');
     optHtml += '</optgroup>';
   }
@@ -30424,7 +30838,7 @@ function ctOpenLightbox(url, isVideo) {
 
 // ============================================================
 // CLIENT PORTAL MODULE
-// A client-facing view powered by existing Starken OS data.
+// A client-facing view powered by existing Fenix OS data.
 // ============================================================
 
 var _cpState = {
@@ -30457,6 +30871,10 @@ function cpEsc(v) {
   return String(v == null ? '' : v).replace(/[&<>"']/g, function(c) {
     return ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' })[c];
   });
+}
+
+function cpJsArg(v) {
+  return cpEsc(JSON.stringify(v == null ? '' : v));
 }
 
 function cpSlugify(name) {
@@ -30648,7 +31066,7 @@ function clientPortalPopulateSelect() {
     }).join('');
   }
   select.innerHTML =
-    '<optgroup label="Starken Performance">' + opts(groups.starken || []) + '</optgroup>' +
+    '<optgroup label="Fenix Performance">' + opts(groups.starken || []) + '</optgroup>' +
     '<optgroup label="Alpha Assessoria">' + opts(groups.alpha || []) + '</optgroup>';
   if (_cpState.clientSlug) select.value = _cpState.clientSlug;
   select.disabled = !!_cpState.publicMode;
@@ -30882,7 +31300,7 @@ function clientPortalUpdateClientChrome() {
     logo_url: hub.logo_url
   });
   if (meta) {
-    var tenant = client.tenant === 'alpha' ? 'Alpha Assessoria' : 'Starken Performance';
+    var tenant = client.tenant === 'alpha' ? 'Alpha Assessoria' : 'Fenix Performance';
     var segment = hub.segment || 'Sem segmento';
     var responsible = hub.responsible || 'Sem gestor';
     var pending = _cpState.tasks.filter(function(t) { return clientPortalBucket(t.status) !== 'done'; }).length;
@@ -30895,12 +31313,22 @@ function clientPortalUpdateClientChrome() {
 }
 
 function clientPortalSwitchTab(tab) {
-  _cpState.tab = tab;
-  document.querySelectorAll('#cpTabs button').forEach(function(btn) {
-    btn.classList.toggle('active', btn.getAttribute('data-cp-tab') === tab);
-  });
-  clientPortalRender();
-}
+		  if (tab === 'photos') {
+		    _cpBrandSection = 'photos';
+		    tab = 'brand';
+		  }
+		  if (tab === 'brand' && !_cpBrandSection) _cpBrandSection = 'brandbook';
+		  if (isDesignerUser() && !designerCanAccessPortalTab(tab)) {
+		    if (typeof showToast === 'function') showToast('Designer acessa apenas Conteúdos e Identidade Visual no Portal do Cliente.', 'warning');
+		    tab = designerDefaultPortalTab();
+		  }
+	  _cpState.tab = tab;
+	  clientPortalApplyDesignerChrome();
+	  document.querySelectorAll('#cpTabs button').forEach(function(btn) {
+	    btn.classList.toggle('active', btn.getAttribute('data-cp-tab') === tab);
+	  });
+	  clientPortalRender();
+	}
 
 function clientPortalRenderLoading() {
   var panel = document.getElementById('cpPanel');
@@ -30916,7 +31344,7 @@ function clientPortalRenderLogin() {
       '<div class="cp-logo-placeholder" style="justify-content:flex-start;margin-bottom:22px;color:var(--text);font-size:1.1rem">' + logo + cpEsc(title) + '</div>' +
       '<div class="cp-kicker">Acesso seguro</div>' +
       '<h1 style="font-size:2rem;margin:8px 0;color:var(--text)">Portal do Cliente</h1>' +
-      '<p style="color:var(--text-secondary);margin-bottom:22px">Entre com o PIN fornecido pela Starken para visualizar métricas, calendário, galeria e aprovar cronogramas.</p>' +
+      '<p style="color:var(--text-secondary);margin-bottom:22px">Entre com o PIN fornecido pela Fenix para visualizar métricas, calendário, galeria e aprovar cronogramas.</p>' +
       '<label style="display:block;color:var(--text-secondary);font-weight:900;text-transform:uppercase;letter-spacing:.12em;font-size:.72rem;margin-bottom:8px">PIN de acesso</label>' +
       '<input id="cpPortalPinInput" type="password" inputmode="numeric" autocomplete="one-time-code" placeholder="Digite seu PIN" onkeydown="if(event.key===&quot;Enter&quot;)clientPortalLogin()" style="width:100%;box-sizing:border-box;background:var(--bg-secondary);border:1px solid var(--border);border-radius:10px;color:var(--text);padding:14px 16px;font-size:1.05rem;font-family:inherit;outline:none">' +
       '<button class="cp-action-btn primary" onclick="clientPortalLogin()" style="width:100%;justify-content:center;margin-top:16px"><span class="mso">lock_open</span>Entrar no portal</button>' +
@@ -30962,6 +31390,11 @@ async function clientPortalLogin() {
     clientPortalRender();
   }
 }
+
+function clientPortalSwitchBrandSection(section) {
+	  _cpBrandSection = section === 'photos' ? 'photos' : 'brandbook';
+	  clientPortalSwitchTab('brand');
+	}
 
 function clientPortalRender() {
   var panel = document.getElementById('cpPanel');
@@ -31166,7 +31599,7 @@ function clientPortalRenderOverview() {
   var progress = counts.total ? Math.round((counts.done / counts.total) * 100) : 0;
   var title = hub.client_name || client.name || _cpState.clientSlug;
   var recent = clientPortalRecentActivity();
-  return clientPortalHeader(title, hub.segment || 'Resumo operacional conectado ao escritório Starken.') +
+  return clientPortalHeader(title, hub.segment || 'Resumo operacional conectado ao escritório Fenix.') +
     '<div class="cp-grid">' +
       clientPortalStatCard('pending_actions', counts.pending, 'Tarefas Pendentes') +
       clientPortalStatCard('photo_camera', (ig.publicados || 0) + '/' + (ig.agendados || 0), 'Instagram pub./agend.') +
@@ -31523,9 +31956,363 @@ function clientPortalRenderAds() {
     '</div>';
 }
 
+var CLIENT_PORTAL_ARENA_BRAND = {
+  base: 'assets/arena-gourmet/',
+  colors: [
+    { name:'Carvão Gourmet', hex:'#202020', text:'#f8ecd0', use:'Base principal, fundos, cardápio e peças premium.' },
+    { name:'Preto Profundo', hex:'#050505', text:'#f8ecd0', use:'Contraste máximo, posts noturnos e aplicação negativa.' },
+    { name:'Creme Queimado', hex:'#F0E0B0', text:'#202020', use:'Logo, detalhes vintage, fundos claros e destaques.' },
+    { name:'Dourado Vintage', hex:'#C0A45A', text:'#202020', use:'Selos, chamadas especiais, bordas e materiais impressos.' },
+    { name:'Areia Escura', hex:'#B0A080', text:'#202020', use:'Texturas, embalagens e áreas de respiro.' },
+    { name:'Branco Cardápio', hex:'#F7F2E7', text:'#202020', use:'Menus, fichas técnicas, documentos e legibilidade.' }
+  ],
+  logos: [
+    { file:'logo-principal.png', title:'Logo principal', note:'Uso oficial em perfis, aprovações e materiais institucionais.' },
+    { file:'logo-emblema-dourado.jpg', title:'Emblema dourado', note:'Aplicação premium para peças de alto contraste.' },
+    { file:'logo-selo.jpg', title:'Selo circular', note:'Assinatura para embalagens, adesivos e mockups.' },
+    { file:'logo-grafico.jpg', title:'Versão gráfica', note:'Variação para campanhas e composições editoriais.' },
+    { file:'logo-minimal.jpg', title:'Minimal', note:'Quando a leitura precisa ser rápida e compacta.' },
+    { file:'logo-neon.jpg', title:'Neon', note:'Uso para fachada, noite, stories e atmosfera urbana.' }
+  ],
+  facades: [
+    { file:'fachada-principal.jpg', title:'Fachada principal', note:'Referência de presença de rua e sinalização externa.' },
+    { file:'fachada-vitrine.jpg', title:'Fachada vitrine', note:'Aplicação em vitrine, entrada e reconhecimento local.' },
+    { file:'letreiro-neon.jpg', title:'Letreiro neon', note:'Peças noturnas, stories e chamadas de experiência.' },
+    { file:'letreiro-circular.jpg', title:'Letreiro circular', note:'Selo físico, ambiente interno e ponto instagramável.' }
+  ],
+  operation: [
+    { file:'camiseta-preta.jpg', title:'Camiseta preta', note:'Uniforme casual da equipe.' },
+    { file:'polo-premium.jpg', title:'Polo premium', note:'Atendimento, eventos e representação oficial.' },
+    { file:'avental-preto.jpg', title:'Avental preto', note:'Cozinha, bastidores e conteúdo artesanal.' },
+    { file:'caixa-delivery.jpg', title:'Caixa delivery', note:'Embalagem principal para entregas.' },
+    { file:'porta-hamburguer.jpg', title:'Porta-hambúrguer', note:'Experiência individual do produto.' },
+    { file:'guardanapo.jpg', title:'Guardanapo', note:'Detalhe de mesa e embalagem.' },
+    { file:'copo-cafe.jpg', title:'Copo café', note:'Bebidas, combos e produto complementar.' },
+    { file:'bag-delivery.jpg', title:'Bag delivery', note:'Operação de entrega e logística visual.' },
+    { file:'moto-delivery.jpg', title:'Moto delivery', note:'Entrega própria e frota.' },
+    { file:'capacete.jpg', title:'Capacete', note:'Identidade no deslocamento.' },
+    { file:'bandeja-jogo-americano.jpg', title:'Bandeja e jogo americano', note:'Mesa, experiência presencial e fotos de produto.' },
+    { file:'porta-copos-display.jpg', title:'Display e porta-copos', note:'Ponto de venda, balcão e ambientação.' }
+  ],
+  social: [
+    { file:'feed-burger.jpg', title:'Feed burger', note:'Produto hero para venda direta.' },
+    { file:'feed-combo.jpg', title:'Feed combo', note:'Oferta, volume e desejo.' },
+    { file:'feed-tipografia.jpg', title:'Feed tipográfico', note:'Campanhas com mensagem principal.' },
+    { file:'feed-promocao.jpg', title:'Feed promoção', note:'Preço, chamada e conversão.' },
+    { file:'story-promo.jpg', title:'Story promoção', note:'Ativação rápida e CTA.' },
+    { file:'story-delivery.jpg', title:'Story delivery', note:'Pedido, entrega e urgência.' },
+    { file:'story-menu.jpg', title:'Story menu', note:'Escolha de produto e cardápio.' }
+  ],
+  highlights: [
+    { file:'highlight-burger.jpg', title:'Destaque burgers', note:'Capa de destaques para produtos.' },
+    { file:'highlight-horarios.jpg', title:'Destaque horários', note:'Informações rápidas.' },
+    { file:'highlight-avaliacoes.jpg', title:'Destaque avaliações', note:'Prova social.' },
+    { file:'highlight-promos.jpg', title:'Destaque promoções', note:'Ofertas recorrentes.' }
+  ],
+  print: [
+    { file:'cardapio-capa.jpg', title:'Cardápio capa', note:'Primeira impressão e hierarquia visual.' },
+    { file:'cardapio-hamburgueres.jpg', title:'Hambúrgueres', note:'Linha principal de produtos.' },
+    { file:'cardapio-combos.jpg', title:'Combos', note:'Aumento de ticket médio.' },
+    { file:'cardapio-bebidas.jpg', title:'Bebidas', note:'Complementos e upsell.' },
+    { file:'cartao-visita.jpg', title:'Cartão de visita', note:'Contato e presença local.' },
+    { file:'cartao-avaliacao.jpg', title:'Cartão avaliação', note:'Pedido de review e reputação.' },
+    { file:'banner-whatsapp.jpg', title:'Banner WhatsApp', note:'Atendimento e pedido direto.' },
+    { file:'capa-facebook.jpg', title:'Capa Facebook', note:'Presença social horizontal.' },
+    { file:'capa-youtube.jpg', title:'Capa YouTube', note:'Canal e vídeo.' }
+  ],
+  rules: [
+    { icon:'verified', title:'Logo principal', note:'Use em materiais oficiais, perfis, aprovações do cliente e peças onde a marca precisa aparecer inteira.' },
+    { icon:'contrast', title:'Versão negativa', note:'Use em fundo preto, carvão ou fotografia escura. Preserve contraste e não aplique sombra pesada.' },
+    { icon:'storefront', title:'Selo e neon', note:'Use para fachada, embalagens, stories noturnos e campanhas com clima de hamburgueria premium.' },
+    { icon:'local_shipping', title:'Delivery', note:'Embalagens devem manter logo, cor escura dominante e detalhes creme/dourado para valor percebido.' },
+    { icon:'photo_camera', title:'Social media', note:'Feed deve priorizar produto grande, textura, contraste e CTA direto. Story pode ser mais promocional.' },
+    { icon:'restaurant_menu', title:'Cardápio', note:'Use fundo claro para leitura, títulos fortes e divisão por linhas de produto.' }
+  ]
+};
+
+function clientPortalIsArenaGourmetBrand(title) {
+  var text = (String(title || '') + ' ' + String(_cpState.clientSlug || '')).toLowerCase();
+  return text.indexOf('arena') >= 0 && text.indexOf('gourmet') >= 0;
+}
+
+function clientPortalArenaAsset(file) {
+  return CLIENT_PORTAL_ARENA_BRAND.base + file;
+}
+
+function clientPortalArenaCard(item, kind) {
+  var cls = kind || '';
+  return '<a class="cp-brandkit-image-card ' + cpEsc(cls) + '" href="' + cpEsc(clientPortalArenaAsset(item.file)) + '" target="_blank" rel="noopener">' +
+    '<img src="' + cpEsc(clientPortalArenaAsset(item.file)) + '" alt="' + cpEsc(item.title || 'Asset Arena Gourmet') + '" loading="lazy">' +
+    '<div><strong>' + cpEsc(item.title || 'Asset') + '</strong><span>' + cpEsc(item.note || '') + '</span></div>' +
+  '</a>';
+}
+
+function clientPortalArenaSection(title, description, items, classes, kind) {
+  return '<div class="cp-card cp-span-12">' +
+    '<div class="cp-brandkit-section-head"><div><h2>' + cpEsc(title) + '</h2><p>' + cpEsc(description) + '</p></div><span class="cp-pill blue">' + items.length + ' assets</span></div>' +
+    '<div class="cp-brandkit-gallery ' + cpEsc(classes || '') + '">' + items.map(function(item) { return clientPortalArenaCard(item, kind || ''); }).join('') + '</div>' +
+  '</div>';
+}
+
+function clientPortalArenaColorCard(color) {
+  return '<div class="cp-brandkit-color-card" style="background:' + cpEsc(color.hex) + ';color:' + cpEsc(color.text || '#fff') + '">' +
+    '<strong>' + cpEsc(color.name) + '</strong><span>' + cpEsc(color.hex) + '</span><small>' + cpEsc(color.use) + '</small>' +
+  '</div>';
+}
+
+function clientPortalArenaRuleCard(rule) {
+  return '<div class="cp-brandkit-rule-card"><span class="mso">' + cpEsc(rule.icon) + '</span><strong>' + cpEsc(rule.title) + '</strong><p>' + cpEsc(rule.note) + '</p></div>';
+}
+
+function clientPortalRenderArenaBrand(hub, title) {
+  var kit = CLIENT_PORTAL_ARENA_BRAND;
+  var totalAssets = kit.logos.length + kit.facades.length + kit.operation.length + kit.social.length + kit.highlights.length + kit.print.length;
+  var subnav = clientPortalRenderBrandSubnav();
+  if (_cpBrandSection === 'photos') {
+    return clientPortalHeader('Identidade Visual', 'Brand book operacional, ativos, fotos profissionais e regras de uso de ' + title + '.') +
+      subnav +
+      clientPortalRenderPhotoLibraryBody();
+  }
+  return clientPortalHeader('Identidade Visual', 'Brand book operacional, ativos, regras de uso e aplicações reais de ' + title + '.') +
+    subnav +
+    '<div class="cp-grid cp-brandkit">' +
+      '<div class="cp-brandkit-hero">' +
+        '<div class="cp-brandkit-hero-copy">' +
+          '<div><span class="cp-kicker">Arena Gourmet</span><h2>Hamburgueria premium com pegada vintage</h2><p>Marca com presença forte, contraste alto, estética artesanal e elementos de delivery pensados para gerar desejo em redes sociais, fachada, cardápio e operação.</p></div>' +
+          '<div class="cp-brandkit-tagrow"><span class="cp-brandkit-tag">Gastronomia</span><span class="cp-brandkit-tag">Delivery</span><span class="cp-brandkit-tag">Vintage premium</span><span class="cp-brandkit-tag">Burger house</span></div>' +
+          '<div class="cp-brandkit-assets-grid">' +
+            '<div class="cp-brandkit-asset-chip"><strong>' + totalAssets + '</strong><span>assets organizados</span></div>' +
+            '<div class="cp-brandkit-asset-chip"><strong>' + kit.logos.length + '</strong><span>variações de logo</span></div>' +
+            '<div class="cp-brandkit-asset-chip"><strong>6</strong><span>cores oficiais</span></div>' +
+            '<div class="cp-brandkit-asset-chip"><strong>4</strong><span>linhas de aplicação</span></div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="cp-brandkit-hero-logo"><img src="' + cpEsc(clientPortalArenaAsset('logo-principal.png')) + '" alt="Logo Arena Gourmet"></div>' +
+      '</div>' +
+      '<div class="cp-card cp-span-8"><div class="cp-brandkit-section-head"><div><h2>Sistema de logotipo</h2><p>Versões para perfil, fachada, embalagem, social media e materiais de aprovação.</p></div><a class="cp-action-btn primary" href="' + cpEsc(clientPortalArenaAsset('logo-principal.png')) + '" target="_blank" rel="noopener"><span class="mso">download</span>Logo</a></div><div class="cp-brandkit-gallery compact">' + kit.logos.map(function(item) { return clientPortalArenaCard(item, 'logo'); }).join('') + '</div></div>' +
+      '<div class="cp-card cp-project-card cp-span-4"><span class="cp-pill blue">Manual da Marca</span><h2 style="margin-top:14px;color:#fff">Regras de aplicação</h2><p>Use esta página como brand book vivo: logo correto, paleta, tom, aplicações e mockups reais do cliente.</p><div class="cp-brandkit-asset-actions" style="margin-top:24px"><a class="cp-action-btn primary" href="' + cpEsc(clientPortalArenaAsset('fachada-principal.jpg')) + '" target="_blank" rel="noopener"><span class="mso">storefront</span>Fachada</a><a class="cp-action-btn" href="' + cpEsc(clientPortalArenaAsset('cardapio-capa.jpg')) + '" target="_blank" rel="noopener"><span class="mso">restaurant_menu</span>Cardápio</a></div></div>' +
+      '<div class="cp-card cp-span-12"><div class="cp-brandkit-section-head"><div><h2>Paleta de cores</h2><p>Cores extraídas da identidade da Arena Gourmet para manter consistência entre digital, impresso e operação.</p></div></div><div class="cp-brandkit-color-row">' + kit.colors.map(clientPortalArenaColorCard).join('') + '</div></div>' +
+      '<div class="cp-card cp-span-7"><div class="cp-brandkit-section-head"><div><h2>Tipografia e tom</h2><p>Como a marca deve soar e como a hierarquia visual deve se comportar.</p></div></div><div class="cp-brandkit-rules"><div class="cp-brandkit-rule-card"><span class="mso">title</span><strong>Display vintage</strong><p>Use fonte serifada, forte e condensada em títulos de campanha, cardápio e peças de impacto.</p></div><div class="cp-brandkit-rule-card"><span class="mso">format_size</span><strong>Inter Semibold</strong><p>Use para UI, cards, títulos internos e materiais operacionais do portal.</p></div><div class="cp-brandkit-rule-card"><span class="mso">notes</span><strong>Tom de voz</strong><p>Direto, apetitoso, artesanal e local. Menos institucional, mais vontade de pedir agora.</p></div></div></div>' +
+      '<div class="cp-card cp-span-5"><div class="cp-brandkit-section-head"><div><h2>Quando usar</h2><p>Guia rápido para evitar aplicações soltas.</p></div></div><div class="cp-brandkit-rules">' + kit.rules.slice(0, 3).map(clientPortalArenaRuleCard).join('') + '</div></div>' +
+      clientPortalArenaSection('Fachada e sinalização', 'Aplicações físicas para reconhecimento local, vitrine e presença noturna.', kit.facades, 'wide', 'wide') +
+      clientPortalArenaSection('Uniformes, delivery e operação', 'Mockups que conectam equipe, embalagem, logística e experiência de entrega.', kit.operation, '', '') +
+      clientPortalArenaSection('Redes sociais', 'Modelos de feed, stories, destaques e peças promocionais para acelerar produção.', kit.social.concat(kit.highlights), 'compact', '') +
+      clientPortalArenaSection('Cardápio e impressos', 'Materiais de menu, contato, avaliação e capas de canais.', kit.print, 'wide', 'wide') +
+      '<div class="cp-card cp-span-12"><div class="cp-brandkit-section-head"><div><h2>Regras de uso completas</h2><p>Checklist visual para aprovar peças antes de publicar ou enviar para o cliente.</p></div></div><div class="cp-brandkit-rules">' + kit.rules.map(clientPortalArenaRuleCard).join('') + '</div></div>' +
+    '</div>';
+}
+
+var CLIENT_PORTAL_PHOTO_LIBRARY = [
+  {
+    id: 'arena-photo-01',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 01 - Produtos principais',
+    category: 'Produtos',
+    icon: 'lunch_dining',
+    driveUrl: 'https://drive.google.com/drive/folders/1Tk5QKWKi7egHFFTpY1QF7jd80NiWbKkz',
+    description: 'Fotos base para feeds de venda, cardapio visual, combos, ofertas e campanhas de performance.',
+    usage: ['Feed', 'Cardapio', 'Ads'],
+    agents: ['Sneider', 'Claude', 'Nina']
+  },
+  {
+    id: 'arena-photo-02',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 02 - Ambiente e experiencia',
+    category: 'Ambiente',
+    icon: 'storefront',
+    driveUrl: 'https://drive.google.com/drive/folders/1h1q7Mvwafw05NVOpZUC9pbNfaDdvovSl',
+    description: 'Fotos para mostrar loja, atmosfera, mesa, consumo local e fortalecer percepcao de marca.',
+    usage: ['Institucional', 'Stories', 'Reels'],
+    agents: ['Priscila', 'Sneider', 'Nina']
+  },
+  {
+    id: 'arena-photo-03',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 03 - Delivery e embalagens',
+    category: 'Delivery',
+    icon: 'local_shipping',
+    driveUrl: 'https://drive.google.com/drive/folders/11TBiNZjeCJs0uHqk51Sep41PCQ-hGTe_',
+    description: 'Materiais para posts de pedido, entrega, combos para viagem e campanhas de WhatsApp.',
+    usage: ['Delivery', 'WhatsApp', 'Stories'],
+    agents: ['Frank', 'Sneider', 'Zezin']
+  },
+  {
+    id: 'arena-photo-04',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 04 - Equipe e bastidores',
+    category: 'Equipe',
+    icon: 'groups',
+    driveUrl: 'https://drive.google.com/drive/folders/1TXLT0Fve_GAhYSHizs3XqEYxBsKI_-by',
+    description: 'Fotos humanas para bastidores, confianca, prova de preparo e conteudo de relacionamento.',
+    usage: ['Bastidores', 'Reels', 'Humanizacao'],
+    agents: ['Priscila', 'Maya', 'Nina']
+  },
+  {
+    id: 'arena-photo-05',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 05 - Campanhas e promocoes',
+    category: 'Campanhas',
+    icon: 'campaign',
+    driveUrl: 'https://drive.google.com/drive/folders/1HhlnAnqDsOv7U4lbDpB7gh1lCZCTN66e',
+    description: 'Banco para banners, criativos promocionais, datas comerciais e anuncios de conversao.',
+    usage: ['Promocao', 'Meta Ads', 'Banner'],
+    agents: ['Pedro', 'Claude', 'Joao']
+  },
+  {
+    id: 'arena-photo-06',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 06 - Texturas e detalhes',
+    category: 'Bastidores',
+    icon: 'photo_camera',
+    driveUrl: 'https://drive.google.com/drive/folders/1DoRKU25aQF0TCXa_iTLpv1czlOBjsRZr',
+    description: 'Close-ups de ingredientes, finalizacao, chapa, molhos e detalhes para criativos premium.',
+    usage: ['Reels', 'Story', 'Criativo'],
+    agents: ['Sneider', 'Nina', 'Claude']
+  },
+  {
+    id: 'arena-photo-07',
+    clientSlug: 'arena-gourmet',
+    title: 'Ensaio 07 - Banco geral aprovado',
+    category: 'Eventos',
+    icon: 'collections',
+    driveUrl: 'https://drive.google.com/drive/folders/14nnpW80u96t3YmTkIaW-0jrKIn5nO_Sg',
+    description: 'Colecao geral para pesquisa criativa, reposicao de midia e montagem de novas campanhas.',
+    usage: ['Banco geral', 'Referencia', 'Campanha'],
+    agents: ['Sneider', 'Maya', 'Gaia']
+  }
+];
+
+var _cpPhotoFilter = 'Todos';
+var _cpBrandSection = 'brandbook';
+
+function clientPortalRenderBrandSubnav() {
+  var sections = [
+    { id: 'brandbook', label: 'Brand book', icon: 'palette' },
+    { id: 'photos', label: 'Fotos profissionais', icon: 'photo_library' }
+  ];
+  return '<div class="cp-brand-subnav" aria-label="Submenu de identidade visual">' + sections.map(function(section) {
+    return '<button class="' + (_cpBrandSection === section.id ? 'active' : '') + '" onclick="clientPortalSwitchBrandSection(' + cpJsArg(section.id) + ')"><span class="mso">' + cpEsc(section.icon) + '</span>' + cpEsc(section.label) + '</button>';
+  }).join('') + '</div>';
+}
+
+function clientPortalPhotoCollections() {
+  var slug = _cpState.clientSlug || '';
+  return CLIENT_PORTAL_PHOTO_LIBRARY.filter(function(item) {
+    return item.clientSlug === slug;
+  });
+}
+
+function clientPortalFindPhotoCollection(id) {
+  return CLIENT_PORTAL_PHOTO_LIBRARY.find(function(item) { return item.id === id; }) || null;
+}
+
+function clientPortalPhotoDriveId(url) {
+  var match = String(url || '').match(/folders\/([^/?#]+)/);
+  return match ? match[1] : String(url || '').replace(/^https?:\/\//, '');
+}
+
+function clientPortalSetPhotoFilter(filter) {
+  _cpPhotoFilter = filter || 'Todos';
+  clientPortalRender();
+}
+
+function clientPortalPhotoToast(message, type) {
+  if (typeof showToast === 'function') showToast(message, type || 'success');
+}
+
+async function clientPortalCopyPhotoLink(id, silent) {
+  var item = clientPortalFindPhotoCollection(id);
+  if (!item) return;
+  try {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      await navigator.clipboard.writeText(item.driveUrl);
+    } else {
+      window.prompt('Copie o link da pasta:', item.driveUrl);
+    }
+    if (!silent) clientPortalPhotoToast('Link da pasta copiado.');
+  } catch(e) {
+    window.prompt('Copie o link da pasta:', item.driveUrl);
+  }
+}
+
+async function clientPortalUsePhotoCollection(id) {
+  var item = clientPortalFindPhotoCollection(id);
+  if (!item) return;
+  _cpState.selectedPhotoCollection = item;
+  try {
+    localStorage.setItem('starken_last_photo_collection', JSON.stringify({
+      clientSlug: _cpState.clientSlug,
+      clientName: cpClientName(_cpState.clientSlug),
+      collection: item,
+      selectedAt: new Date().toISOString()
+    }));
+  } catch(e) {}
+  await clientPortalCopyPhotoLink(id, true);
+  clientPortalPhotoToast('Colecao selecionada para briefing de conteudo.');
+  if (!_cpState.publicMode) clientPortalSwitchTab('contents');
+}
+
+function clientPortalPhotoCard(item) {
+  var driveId = clientPortalPhotoDriveId(item.driveUrl);
+  return '<article class="cp-photo-card">' +
+    '<div class="cp-photo-card-head"><div><span class="cp-photo-badge"><span class="mso">' + cpEsc(item.icon || 'folder') + '</span>' + cpEsc(item.category || 'Fotos') + '</span><h3 style="margin-top:10px">' + cpEsc(item.title) + '</h3></div><a class="cp-action-btn" href="' + cpEsc(item.driveUrl) + '" target="_blank" rel="noopener" title="Abrir pasta no Google Drive"><span class="mso">open_in_new</span></a></div>' +
+    '<div class="cp-photo-preview"><div><span class="mso">' + cpEsc(item.icon || 'photo_library') + '</span><strong>Google Drive</strong><div class="cp-photo-folder-id">' + cpEsc(driveId) + '</div></div></div>' +
+    '<p style="margin:0;color:var(--text-secondary);line-height:1.45">' + cpEsc(item.description || '') + '</p>' +
+    '<div class="cp-photo-agent-row">' + (item.usage || []).map(function(tag) { return '<span class="cp-photo-agent">' + cpEsc(tag) + '</span>'; }).join('') + '</div>' +
+    '<div class="cp-photo-agent-row" style="margin-top:auto">' + (item.agents || []).map(function(agent) { return '<span class="cp-pill"><span class="mso">smart_toy</span>' + cpEsc(agent) + '</span>'; }).join('') + '</div>' +
+    '<div class="cp-photo-actions">' +
+      '<a class="cp-action-btn primary" href="' + cpEsc(item.driveUrl) + '" target="_blank" rel="noopener"><span class="mso">folder_open</span>Abrir no Drive</a>' +
+      '<button class="cp-action-btn" onclick="clientPortalCopyPhotoLink(' + cpJsArg(item.id) + ')"><span class="mso">content_copy</span>Copiar link</button>' +
+      '<button class="cp-action-btn" onclick="clientPortalUsePhotoCollection(' + cpJsArg(item.id) + ')"><span class="mso">add_task</span>Usar em conteudo</button>' +
+    '</div>' +
+  '</article>';
+}
+
+function clientPortalRenderPhotoLibraryBody() {
+  var collections = clientPortalPhotoCollections();
+  var filters = ['Todos', 'Produtos', 'Ambiente', 'Delivery', 'Equipe', 'Bastidores', 'Campanhas', 'Eventos'];
+  var visible = collections.filter(function(item) {
+    return _cpPhotoFilter === 'Todos' || item.category === _cpPhotoFilter;
+  });
+  var empty = '<div class="cp-card cp-span-12"><div class="cp-empty">Nenhuma pasta de fotos profissionais foi vinculada para este cliente ainda.</div></div>';
+  return '<div class="cp-grid">' +
+      '<section class="cp-photo-hero">' +
+        '<div><span class="cp-kicker">Banco fotografico</span><h2>Fotos reais prontas para virar criativo</h2><p>Esta area organiza os links do Drive em colecoes por finalidade. A equipe e os NPCs conseguem localizar rapidamente fotos de produto, ambiente, delivery, bastidores e campanha sem misturar com logos ou cronogramas.</p><div class="cp-brandkit-tagrow"><span class="cp-brandkit-tag">Google Drive</span><span class="cp-brandkit-tag">Fotografia profissional</span><span class="cp-brandkit-tag">Contexto para agentes</span></div></div>' +
+        '<div class="cp-photo-hero-panel"><div class="cp-photo-hero-stat"><span>Pastas vinculadas</span><strong>' + collections.length + '</strong></div><div class="cp-photo-hero-stat"><span>Categorias ativas</span><strong>' + Array.from(new Set(collections.map(function(i) { return i.category; }))).length + '</strong></div><div class="cp-photo-hero-stat"><span>Uso principal</span><strong>Conteudo e Ads</strong></div></div>' +
+      '</section>' +
+      '<div class="cp-photo-controls"><span class="cp-kicker" style="margin-right:4px">Filtrar</span>' + filters.map(function(filter) {
+        var count = filter === 'Todos' ? collections.length : collections.filter(function(item) { return item.category === filter; }).length;
+        return '<button class="cp-photo-filter ' + (_cpPhotoFilter === filter ? 'active' : '') + '" onclick="clientPortalSetPhotoFilter(' + cpJsArg(filter) + ')">' + cpEsc(filter) + ' ' + count + '</button>';
+      }).join('') + '</div>' +
+      (visible.length ? '<div class="cp-photo-grid">' + visible.map(clientPortalPhotoCard).join('') + '</div>' : empty) +
+      '<section class="cp-photo-context">' +
+        '<div class="cp-photo-context-card"><span class="mso">auto_awesome</span><h3>Para os agentes</h3><p>Sneider usa como fonte visual, Claude e Frank transformam em copy, Nina valida qualidade e Pedro/Joao conectam a performance quando virar anuncio.</p></div>' +
+        '<div class="cp-photo-context-card"><span class="mso">rule</span><h3>Regra de uso</h3><p>Antes de publicar, cada foto precisa ter cliente, categoria, canal, formato e status de aprovacao registrados na task ou no conteudo.</p></div>' +
+        '<div class="cp-photo-context-card"><span class="mso">hub</span><h3>Proximo passo</h3><p>No futuro esta pagina pode ler o Drive automaticamente, gerar miniaturas, tags por IA e sugerir criativos a partir das fotos.</p></div>' +
+      '</section>' +
+    '</div>';
+}
+
+function clientPortalRenderPhotoLibrary() {
+  var title = (_cpState.hub && _cpState.hub.client_name) || cpClientName(_cpState.clientSlug);
+  var action = '<button class="cp-action-btn primary" onclick="clientPortalSwitchTab(&quot;contents&quot;)"><span class="mso">add_photo_alternate</span>Criar conteudo</button>';
+  return clientPortalHeader('Identidade Visual', 'Banco de imagens fotografadas, aprovado para criacao de posts, anuncios, mockups e novas pecas de ' + title + '.', action) +
+    clientPortalRenderBrandSubnav() +
+    clientPortalRenderPhotoLibraryBody();
+}
+
 function clientPortalRenderBrand() {
   var hub = _cpState.hub || {};
   var title = hub.client_name || cpClientName(_cpState.clientSlug);
+  if (clientPortalIsArenaGourmetBrand(title)) {
+    return clientPortalRenderArenaBrand(hub, title);
+  }
+  var subnav = clientPortalRenderBrandSubnav();
+  if (_cpBrandSection === 'photos') {
+    return clientPortalHeader('Identidade Visual', 'Brand book, materiais de marca e fotos profissionais de ' + title + '.') +
+      subnav +
+      clientPortalRenderPhotoLibraryBody();
+  }
   var colors = Array.isArray(hub.brand_colors) && hub.brand_colors.length ? hub.brand_colors : [
     { name:'Primária', hex:'#000000' },
     { name:'Secundária', hex:'#515F74' },
@@ -31536,6 +32323,7 @@ function clientPortalRenderBrand() {
   var assetCats = ['logo','template','mockup','uniform','feed','stories','reels','document'];
   var assets = mats.filter(function(m) { return assetCats.indexOf(m.category) >= 0; }).slice(0, 10);
   return clientPortalHeader('Identidade Visual', 'Diretrizes de marca, ativos visuais e especificações técnicas de ' + title + '.') +
+    subnav +
     '<div class="cp-grid">' +
       '<div class="cp-card cp-span-8"><div style="display:flex;justify-content:space-between;gap:12px;margin-bottom:16px"><div><h2>Logotipo Principal</h2><p>Versão preferencial para materiais e aprovações.</p></div>' + (hub.logo_url ? '<a class="cp-action-btn primary" href="' + cpEsc(hub.logo_url) + '" target="_blank"><span class="mso">download</span>Logo</a>' : '') + '</div><div class="cp-logo-stage">' + (hub.logo_url ? '<img src="' + cpEsc(hub.logo_url) + '" alt="Logo">' : '<div class="cp-logo-placeholder">' + clientLogoAvatarHtml({ slug:_cpState.clientSlug, name:title }, 'cp-logo-mark') + cpEsc(title) + '</div>') + '</div></div>' +
       '<div class="cp-card cp-project-card cp-span-4"><span class="cp-pill blue">Brand Book</span><h2 style="margin-top:14px;color:#fff">Manual da Marca</h2><p>Guia com aplicações, tons de voz, restrições e materiais do cliente.</p><button class="cp-action-btn primary" onclick="clientPortalSwitchTab(&quot;contents&quot;)" style="margin-top:28px;width:100%;background:#fff;color:#131b2e"><span class="mso">folder</span>Ver assets</button></div>' +
@@ -32308,7 +33096,7 @@ function clientCentralRender() {
   var disabledCount = all.filter(function(c) { return c.status === 'desativado'; }).length;
   stats.innerHTML =
     '<div class="cc-stat"><small>Total</small><strong>' + all.length + '</strong></div>' +
-    '<div class="cc-stat"><small>Starken</small><strong>' + starkenCount + '</strong></div>' +
+    '<div class="cc-stat"><small>Fenix</small><strong>' + starkenCount + '</strong></div>' +
     '<div class="cc-stat"><small>Alpha</small><strong>' + alphaCount + '</strong></div>' +
     '<div class="cc-stat"><small>Arquivados</small><strong>' + archivedCount + '</strong></div>' +
     '<div class="cc-stat"><small>Desativados</small><strong>' + disabledCount + '</strong></div>' +
@@ -32322,7 +33110,7 @@ function clientCentralRender() {
   function renderCard(c) {
     var safeSlug = ccEsc(c.slug);
     var safeName = ccEsc(c.name);
-    var tenantLabel = c.tenant === 'alpha' ? 'Alpha Assessoria' : 'Starken Performance';
+    var tenantLabel = c.tenant === 'alpha' ? 'Alpha Assessoria' : 'Fenix Performance';
     var statusLabel = typeof ctClientStatusLabel === 'function' ? ctClientStatusLabel(c.status) : 'Ativo';
     var isHidden = c.status === 'arquivado' || c.status === 'desativado';
     var lifecycleActions = isHidden
@@ -32355,7 +33143,7 @@ function clientCentralRender() {
 
   var grouped = {};
   filtered.forEach(function(c) {
-    var key = c.tenant === 'alpha' ? 'Alpha Assessoria' : 'Starken Performance';
+    var key = c.tenant === 'alpha' ? 'Alpha Assessoria' : 'Fenix Performance';
     if (!grouped[key]) grouped[key] = [];
     grouped[key].push(c);
   });
@@ -32475,7 +33263,7 @@ function clientTimelineLoadClients() {
     grouped.starken.push(c);
   });
   [
-    { key:'starken', label:'Starken Performance' },
+    { key:'starken', label:'Fenix Performance' },
   ].forEach(function(group) {
     if (!grouped[group.key].length) return;
     html += '<optgroup label="' + ctlEsc(group.label) + '">';
@@ -32664,14 +33452,14 @@ function clientTimelineActiveClients() {
   var list = [];
   if (typeof ctContentGenerationClients === 'function') {
     list = ctContentGenerationClients({ includeAlpha:false, includeProcess:false }).map(function(c) {
-      return { id:c.id, metaKey:c.metaKey || c.id, slug:c.slug || c.id, name:c.name, company:c.company || 'Starken', tenant:c.tenant || 'starken', status:c.status, logo_url:c.logo_url };
+      return { id:c.id, metaKey:c.metaKey || c.id, slug:c.slug || c.id, name:c.name, company:c.company || 'Fenix', tenant:c.tenant || 'starken', status:c.status, logo_url:c.logo_url };
     }).filter(clientTimelineIsOperationalClient);
   }
   if (!list.length && typeof _metaClients !== 'undefined') {
     Object.keys(_metaClients || {}).forEach(function(key) {
       var c = _metaClients[key] || {};
       var tenant = c.tenant === 'alpha' ? 'alpha' : 'starken';
-      var item = { id: key, metaKey: key, slug: key, name: c.name || key, company: 'Starken', tenant: tenant, status: c.status, logo_url: c.logo_url || c.logoUrl || c.logo };
+      var item = { id: key, metaKey: key, slug: key, name: c.name || key, company: 'Fenix', tenant: tenant, status: c.status, logo_url: c.logo_url || c.logoUrl || c.logo };
       if (clientTimelineIsOperationalClient(item)) list.push(item);
     });
   }
@@ -32679,7 +33467,7 @@ function clientTimelineActiveClients() {
     list = data.clients.filter(function(c) { return c && c.active; }).map(function(c) {
       var tenant = c.company === 'Alpha' ? 'alpha' : 'starken';
       var metaKey = (typeof findMetaClientKey === 'function') ? findMetaClientKey(c.name, tenant) : c.id;
-      return { id: c.id, metaKey: metaKey || c.id, slug: metaKey || c.id, name: c.name || c.id, company: c.company || 'Starken', tenant: tenant };
+      return { id: c.id, metaKey: metaKey || c.id, slug: metaKey || c.id, name: c.name || c.id, company: c.company || 'Fenix', tenant: tenant };
     }).filter(clientTimelineIsOperationalClient);
   }
   return list.sort(function(a,b) { return a.name.localeCompare(b.name, 'pt-BR'); });
@@ -33148,7 +33936,7 @@ function clientTimelineRenderHome() {
   var contentActive = snap.contentActive || [];
   var weekPosts = snap.scheduled.length + snap.published.length;
   stats.innerHTML = [
-    ['Clientes ativos', active.length, 'Starken operacional'],
+    ['Clientes ativos', active.length, 'Fenix operacional'],
     ['Cronos pendentes', snap.crono.pending, snap.crono.sent + '/' + contentActive.length + ' enviados'],
     ['Posts da semana', weekPosts, snap.published.length + ' pub · ' + snap.scheduled.length + ' agend'],
     ['Aguardando aprovação', snap.approvals.length, 'revisão/cliente'],
@@ -33271,7 +34059,7 @@ function clientTimelineRenderHome() {
       '<div class="ctl-next-action">' + ctlEsc(a.action || 'Abrir') + '</div>' +
     '</div>';
   }).join('') : '<div class="ctl-empty">Nenhuma ação crítica agora.</div>';
-  ai.innerHTML = '<div class="ctl-next-item"><strong>Visão geral · ' + (snap.overdue.length ? 'Atenção' : 'OK') + '</strong><small>' + ctlEsc('Semana: ' + (snap.weekInfo.label || snap.weekKey) + '. Base Starken operacional: ' + active.length + ' clientes; ' + contentActive.length + ' com conteúdo na semana. Há ' + snap.crono.pending + ' cronogramas pendentes, ' + (snap.complements || 0) + ' complementos, ' + snap.overdue.length + ' tasks atrasadas e ' + snap.approvals.length + ' aprovações abertas.') + '</small></div>' +
+  ai.innerHTML = '<div class="ctl-next-item"><strong>Visão geral · ' + (snap.overdue.length ? 'Atenção' : 'OK') + '</strong><small>' + ctlEsc('Semana: ' + (snap.weekInfo.label || snap.weekKey) + '. Base Fenix operacional: ' + active.length + ' clientes; ' + contentActive.length + ' com conteúdo na semana. Há ' + snap.crono.pending + ' cronogramas pendentes, ' + (snap.complements || 0) + ' complementos, ' + snap.overdue.length + ' tasks atrasadas e ' + snap.approvals.length + ' aprovações abertas.') + '</small></div>' +
     '<button class="ctl-btn primary" style="width:100%;margin-top:8px" onclick="clientTimelineHomeAnalyze()">Gerar análise geral</button>' +
     '<button class="ctl-btn" style="width:100%;margin-top:8px" onclick="npcOpenDrawer(\'lurdinha\', {scope:\'global\', section:\'client-timeline\', title:\'Timeline geral da operação\'})"><span class="mso">chat</span> Conversar com Lurdinha</button>';
   if (notes) notes.innerHTML = '<div class="ctl-empty" style="padding:12px">Selecione um cliente para notas rápidas individuais.</div>';
@@ -33280,7 +34068,7 @@ function clientTimelineRenderHome() {
 async function clientTimelineHomeAnalyze() {
   var snap = clientTimelineHomeSnapshot();
   var msg = 'Lurdinha - visão geral da operação\n\n' +
-    '- Clientes Starken operacionais: ' + snap.active.length + '\n' +
+    '- Clientes Fenix operacionais: ' + snap.active.length + '\n' +
     '- Semana analisada: ' + ((snap.weekInfo && snap.weekInfo.label) || snap.weekKey || 'atual') + '\n' +
     '- Clientes com conteúdo na semana: ' + ((snap.contentActive || []).length) + '\n' +
     '- Cronogramas pendentes: ' + snap.crono.pending + '\n' +
@@ -33358,7 +34146,7 @@ function clientTimelineSelectedClientRecord() {
     metaKey: meta.metaKey || meta.slug || key,
     slug: meta.slug || key,
     name: meta.name || meta.pageName || key,
-    company: meta.company || 'Starken',
+    company: meta.company || 'Fenix',
     logo_url: meta.logo_url || meta.logoUrl || meta.logo
   };
 }
@@ -39827,7 +40615,7 @@ function cronogramaTaskHasCreativeAttachment(task) {
 }
 
 function cronogramaBuildPages(clientName, clientLogo, tenant, tasks) {
-  var tenantLabel = tenant === 'alpha' ? 'Alpha' : 'Starken';
+  var tenantLabel = tenant === 'alpha' ? 'Alpha' : 'Fenix';
   var tenantColor = tenant === 'alpha' ? '#10b981' : '#3b82f6';
   var bgColor = '#b5aa9a';
   // html2pdf uses 96dpi internally. A4 landscape = 297x210mm
@@ -41824,7 +42612,7 @@ const NPC_PROFILES = [
       "Mapear causa raiz",
       "Evitar recorrência"
     ],
-    "seed": "Guardião técnico do Starken OS e do escritório. Deve proteger estabilidade, diagnosticar falhas e validar correções antes de considerar resolvido."
+    "seed": "Guardião técnico do Fenix OS e do escritório. Deve proteger estabilidade, diagnosticar falhas e validar correções antes de considerar resolvido."
   },
   {
     "id": "nina-qa-publicacoes",
@@ -41993,10 +42781,10 @@ const STRATEGIC_NPC_PROFILES = [
   { id:'daniel-kahneman-decisao', name:'Daniel Kahneman - Decisão & Comportamento', initials:'DK', agentId:'strategic-daniel-kahneman', memorySlug:'daniel-kahneman-decisao-comportamento', role:'Vieses, fricção cognitiva e arquitetura de escolha', squad:'Estratégia & Risco', access:'app', telegramMode:'interno', clientFacing:false, color:'#f59e0b', domains:['Decisão','Comportamento','UX','Risco'], menus:['Tráfego Pago','Relatórios','Portal do Cliente','Produto'], tools:['Mapear viés','Reduzir fricção','Validar decisão','Revisar escolha'], actions:['Apontar confusão na oferta','Simplificar decisão do cliente','Validar hipótese de campanha','Reduzir atrito de aprovação'], seed:'Especialista interno para melhorar decisões e reduzir ruído cognitivo.' },
   { id:'james-clear-processos', name:'James Clear - Processos & Hábitos', initials:'JC', agentId:'strategic-james-clear', memorySlug:'james-clear-processos-habitos', role:'Processos pequenos, checklists e rotina executável', squad:'Operação & Processo', access:'app', telegramMode:'interno', clientFacing:false, color:'#14b8a6', domains:['Processos','Rotina','Checklist','Hábitos'], menus:['Timeline Cliente','Minhas Tasks','Configurações','Operação'], tools:['Criar checklist','Padronizar rotina','Reduzir atrito','Medir hábito'], actions:['Transformar caos em checklist','Criar rotina semanal','Definir gatilho operacional','Simplificar tarefa recorrente'], seed:'Especialista interno para transformar melhoria em rotina que o time realmente executa.' },
   { id:'cal-newport-foco', name:'Cal Newport - Foco & Operação Profunda', initials:'CN', agentId:'strategic-cal-newport', memorySlug:'cal-newport-foco-operacao-profunda', role:'Prioridade, foco e redução de interrupção', squad:'Operação & Processo', access:'app', telegramMode:'interno', clientFacing:false, color:'#64748b', domains:['Foco','Prioridade','Deep Work','Operação'], menus:['Timeline Cliente','Dashboard','Minhas Tasks','Configurações'], tools:['Priorizar dia','Remover ruído','Criar bloco de foco','Definir não fazer'], actions:['Escolher prioridade única','Organizar fila de execução','Diminuir dispersão','Proteger trabalho profundo'], seed:'Especialista interno para proteger foco e evitar que a operação vire muitas frentes abertas.' },
-  { id:'sam-altman-ia-produto', name:'Sam Altman - IA & Produto', initials:'SA', agentId:'strategic-sam-altman', memorySlug:'sam-altman-ia-produto', role:'IA, agentes, automação e alavancagem de produto', squad:'Produto & IA', access:'app', telegramMode:'interno', clientFacing:false, color:'#0ea5e9', domains:['IA','Produto','Automação','Roadmap'], menus:['NPCs','Configurações','Produto','Escritório Virtual'], tools:['Mapear automação','Priorizar IA','Desenhar agente','Avaliar escala'], actions:['Sugerir automação real','Desenhar experimento de IA','Priorizar roadmap de agentes','Reduzir trabalho repetitivo'], seed:'Especialista interno para transformar Starken OS em produto com alavancagem de IA.' },
+  { id:'sam-altman-ia-produto', name:'Sam Altman - IA & Produto', initials:'SA', agentId:'strategic-sam-altman', memorySlug:'sam-altman-ia-produto', role:'IA, agentes, automação e alavancagem de produto', squad:'Produto & IA', access:'app', telegramMode:'interno', clientFacing:false, color:'#0ea5e9', domains:['IA','Produto','Automação','Roadmap'], menus:['NPCs','Configurações','Produto','Escritório Virtual'], tools:['Mapear automação','Priorizar IA','Desenhar agente','Avaliar escala'], actions:['Sugerir automação real','Desenhar experimento de IA','Priorizar roadmap de agentes','Reduzir trabalho repetitivo'], seed:'Especialista interno para transformar Fenix OS em produto com alavancagem de IA.' },
   { id:'taleb-risco-antifragilidade', name:'Taleb - Risco & Antifragilidade', initials:'NT', agentId:'strategic-nassim-taleb', memorySlug:'taleb-risco-antifragilidade', role:'Risco escondido, fragilidade e robustez operacional', squad:'Estratégia & Risco', access:'app', telegramMode:'interno', clientFacing:false, color:'#ef4444', domains:['Risco','Antifragilidade','Dependência','Estratégia'], menus:['Dashboard','Financeiro','Relatórios','Escritório Virtual'], tools:['Apontar fragilidade','Mapear dependência','Testar robustez','Definir perda máxima'], actions:['Encontrar risco oculto','Avaliar dependência de pessoa','Alertar fragilidade de processo','Sugerir proteção operacional'], seed:'Especialista interno para impedir que riscos invisíveis virem crise.' },
   { id:'tony-robbins-vendas', name:'Tony Robbins - Vendas & Energia', initials:'TR', agentId:'strategic-tony-robbins', memorySlug:'tony-robbins-vendas-energia', role:'Pitch, follow-up, energia comercial e fechamento', squad:'Comercial & Relacionamento', access:'hybrid', telegramMode:'sugere', clientFacing:false, color:'#fb7185', domains:['Vendas','Pitch','Follow-up','Energia'], menus:['CRM','Portal do Cliente','Atendimento','Reuniões'], tools:['Criar pitch','Tratar objeção','Gerar follow-up','Preparar fechamento'], actions:['Sugerir mensagem comercial','Preparar reunião','Criar resposta de objeção','Apoiar proposta'], seed:'Especialista interno comercial. Sugere falas e follow-ups, mas não deve aparecer diretamente no grupo do cliente.' },
-  { id:'priscila-zillo-branding', name:'Priscila Zillo - Branding Humanizado', initials:'PZ', agentId:'strategic-priscila-zillo', memorySlug:'priscila-zillo-branding-humanizado', role:'Tom de voz, branding humano, Instagram e narrativa', squad:'Cliente & Marca', access:'client', telegramMode:'sugere', clientFacing:true, color:'#f472b6', domains:['Branding','Instagram','Tom de voz','Conteúdo'], menus:['Identidade Visual','Redes Sociais','Conteúdos','Portal do Cliente'], tools:['Revisar tom','Humanizar legenda','Sugerir narrativa','Ajustar marca'], actions:['Sugerir ideia de conteúdo','Ajustar tom para cliente','Criar observação de marca','Apoiar campanha institucional'], seed:'Especialista de branding humanizado. Pode apoiar grupos como voz Starken de marca, com envio assistido.' },
+  { id:'priscila-zillo-branding', name:'Priscila Zillo - Branding Humanizado', initials:'PZ', agentId:'strategic-priscila-zillo', memorySlug:'priscila-zillo-branding-humanizado', role:'Tom de voz, branding humano, Instagram e narrativa', squad:'Cliente & Marca', access:'client', telegramMode:'sugere', clientFacing:true, color:'#f472b6', domains:['Branding','Instagram','Tom de voz','Conteúdo'], menus:['Identidade Visual','Redes Sociais','Conteúdos','Portal do Cliente'], tools:['Revisar tom','Humanizar legenda','Sugerir narrativa','Ajustar marca'], actions:['Sugerir ideia de conteúdo','Ajustar tom para cliente','Criar observação de marca','Apoiar campanha institucional'], seed:'Especialista de branding humanizado. Pode apoiar grupos como voz Fenix de marca, com envio assistido.' },
   { id:'steve-jobs-experiencia', name:'Steve Jobs - Produto & Experiência', initials:'SJ', agentId:'strategic-steve-jobs', memorySlug:'steve-jobs-produto-experiencia', role:'Simplicidade, experiência, apresentação e qualidade percebida', squad:'Produto & IA', access:'app', telegramMode:'interno', clientFacing:false, color:'#94a3b8', domains:['Produto','Experiência','Simplicidade','Design'], menus:['Produto','Identidade Visual','Portal do Cliente','Conteúdos','Dashboard'], tools:['Revisar experiência','Remover excesso','Elevar apresentação','Criticar detalhe'], actions:['Melhorar entrega ao cliente','Revisar primeira impressão','Simplificar interface','Aumentar qualidade percebida'], seed:'Especialista interno de experiência. Ajuda a elevar o padrão antes de mostrar ao cliente.' }
 ];
 
@@ -42644,7 +43432,7 @@ window.addEventListener('message', function(event) {
 });
 
 function npcCardSummary(npc) {
-  var text = (npc && (npc.role || npc.description)) || 'NPC real do Escritório Virtual conectado ao Starken OS.';
+  var text = (npc && (npc.role || npc.description)) || 'NPC real do Escritório Virtual conectado ao Fenix OS.';
   text = String(text).replace(/\s+/g, ' ').trim();
   return text.length > 150 ? text.slice(0, 147).trim() + '...' : text;
 }
@@ -42726,7 +43514,7 @@ function orgCard(npc) {
     '<div class="org-card-head"><div class="org-avatar" style="border-color:' + npcEsc(npc.color || '#46eecd') + '">' + npcEsc(npc.initials || '?') + '</div>' +
       '<div><h3>' + npcEsc(npc.name) + '</h3><p>' + npcEsc(npc.role || '') + '</p></div></div>' +
     '<div class="org-chiprow">' + orgAccessChip(npc) + '<span class="org-chip muted">' + npcEsc(meta.squad) + '</span><span class="org-chip ' + (meta.clientFacing ? '' : 'muted') + '">' + npcEsc(canTalk) + '</span></div>' +
-    '<p>' + npcEsc(npc.role || 'Especialista conectado ao Starken OS.') + '</p>' +
+    '<p>' + npcEsc(npc.role || 'Especialista conectado ao Fenix OS.') + '</p>' +
     '<div class="org-chiprow">' + (npc.domains || []).slice(0, 4).map(function(d) { return '<span class="org-chip muted">' + npcEsc(d) + '</span>'; }).join('') + '</div>' +
   '</div>';
 }
@@ -42740,7 +43528,7 @@ function orgRenderSummary() {
   var hybrid = NPC_PROFILES.filter(function(n) { return orgNpcMeta(n).access === 'hybrid'; }).length;
   var squads = Object.keys(orgGroupedBySquad()).length;
   var stats = [
-    ['Total', total, 'NPCs mapeados no Starken OS'],
+    ['Total', total, 'NPCs mapeados no Fenix OS'],
     ['Cliente', clientFacing, 'podem aparecer no grupo com controle'],
     ['Só app', appOnly, 'especialistas internos'],
     ['Sugestão', hybrid, 'criam mensagem, mas não enviam direto'],
@@ -42783,7 +43571,7 @@ function orgRenderClientFacing() {
 function orgRenderAppOnly() {
   var rows = NPC_PROFILES.filter(function(n) { return orgNpcMeta(n).access === 'app'; });
   return '<section class="org-section"><h3><span class="mso">apps</span> Especialistas internos do aplicativo</h3>' +
-    '<p style="color:var(--text-secondary);margin:0 0 12px">Eles melhoram decisão, campanha, copy, produto e processo dentro do Starken OS, sem aparecer diretamente para o cliente.</p>' +
+    '<p style="color:var(--text-secondary);margin:0 0 12px">Eles melhoram decisão, campanha, copy, produto e processo dentro do Fenix OS, sem aparecer diretamente para o cliente.</p>' +
     '<div class="org-grid">' + rows.map(orgCard).join('') + '</div></section>';
 }
 
@@ -43436,11 +44224,11 @@ function npcClearConversation() {
 
 
 
-<aside id="globalAgentDock" class="global-agent-dock" aria-label="Agentes Starken HQ">
+<aside id="globalAgentDock" class="global-agent-dock" aria-label="Agentes Fenix HQ">
   <button class="global-agent-host-toggle global-agent-host-toggle-expanded" onclick="globalAgentDockToggle()" title="Recolher agentes">
     <span data-global-agent-toggle-icon class="mso">chevron_right</span>
   </button>
-  <iframe id="globalAgentDockFrame" class="global-agent-frame" title="Agentes Starken HQ" loading="lazy"></iframe>
+  <iframe id="globalAgentDockFrame" class="global-agent-frame" title="Agentes Fenix HQ" loading="lazy"></iframe>
   <div class="global-agent-collapse-rail">
     <button class="global-agent-host-toggle" onclick="globalAgentDockToggle()" title="Mostrar agentes">
       <span data-global-agent-toggle-icon class="mso">chevron_left</span>

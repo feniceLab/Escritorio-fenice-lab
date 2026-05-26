@@ -1,0 +1,16 @@
+/* src/styles/theme-web.css - Fenix Lab web UI surfaces */
+
+.theme-web,
+:root {
+  --bg: #020617;
+  --bg-deep: #020617;
+  --surface: #0f172a;
+  --surface-raised: #1e293b;
+  --surface-hover: #334155;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-subtle: rgba(255, 255, 255, 0.06);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+  --shadow-brand: 0 4px 20px rgba(16, 185, 129, 0.25);
+}

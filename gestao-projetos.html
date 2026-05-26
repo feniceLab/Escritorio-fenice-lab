@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gestão de Projetos - Starken & Alpha</title>
+<title>Gestão de Projetos - Fenix & Alpha</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root {
@@ -241,7 +241,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
     <div class="login-logo">
       <div style="font-size:36px">🚀</div>
       <h1>Gestão de Projetos</h1>
-      <p>Starken & Alpha Assessoria</p>
+      <p>Fenix & Alpha Assessoria</p>
     </div>
     <form id="loginForm">
       <div class="form-group">
@@ -275,7 +275,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
     <div class="sb-space">
       <label>Space</label>
       <select id="spaceSelector">
-        <option value="starken">⭐ Starken</option>
+        <option value="starken">⭐ Fenix</option>
         <option value="alpha">🌿 Alpha</option>
       </select>
     </div>
@@ -303,7 +303,7 @@ body { font-family:var(--font); background:var(--gray-50); color:var(--gray-900)
     <!-- TOPBAR -->
     <div class="topbar">
       <div class="topbar-breadcrumb" id="breadcrumb">
-        <span id="breadSpace">Starken</span>
+        <span id="breadSpace">Fenix</span>
         <span class="topbar-sep">/</span>
         <span id="breadPage">Conteúdo & Design</span>
       </div>
@@ -737,7 +737,7 @@ async function initApp() {
   // Space selector
   document.getElementById('spaceSelector').addEventListener('change', e => {
     state.space = e.target.value;
-    document.getElementById('breadSpace').textContent = state.space === 'starken' ? 'Starken' : 'Alpha';
+    document.getElementById('breadSpace').textContent = state.space === 'starken' ? 'Fenix' : 'Alpha';
     populateClientFilter();
     renderCurrentView();
   });
