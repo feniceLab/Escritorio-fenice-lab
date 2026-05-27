@@ -1,0 +1,38 @@
+module.exports = {
+  apps: [
+    {
+      name: 'fenix-lab',
+      script: 'node_modules/.bin/next',
+      args: 'start',
+      cwd: '/var/www/fenix-lab/escritorio',
+      env: { NODE_ENV: 'production', PORT: 3000 },
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 10,
+    },
+    {
+      name: 'fenix-publish-worker',
+      script: 'npx',
+      args: 'tsx src/workers/publishWorker.ts',
+      cwd: '/var/www/fenix-lab/escritorio',
+      env: { NODE_ENV: 'production' },
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 5,
+      restart_delay: 5000,
+    },
+    {
+      name: 'fenix-daily-report',
+      script: 'npx',
+      args: 'tsx src/workers/dailyReportWorker.ts',
+      cwd: '/var/www/fenix-lab/escritorio',
+      env: { NODE_ENV: 'production' },
+      instances: 1,
+      exec_mode: 'fork',
+      autorestart: true,
+      max_restarts: 5,
+    },
+  ],
+};

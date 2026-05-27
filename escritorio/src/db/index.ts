@@ -564,3 +564,12 @@ export const db = new Proxy({} as DbInstance, {
 });
 
 export type DB = ReturnType<typeof getDb>;
+
+// Content & Social Media module exports
+export const officeMetaConfig = activeSchema.officeMetaConfig;
+export const officeContentPieces = activeSchema.officeContentPieces;
+export const officePublishQueue = activeSchema.officePublishQueue;
+export const officePublishHistory = activeSchema.officePublishHistory;
+export const officeTelegramBots = activeSchema.officeTelegramBots;
+
+export const officeClientSessions = activeSchema.officeClientSessions;

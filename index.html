@@ -9,7 +9,7 @@
 <title>Fenix OS</title>
 <script>
 (function() {
-  var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
+  var OFFICE_GAME_PATH = '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=fenix-lab&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
   window.STARKEN_OFFICE_GAME_PATH = OFFICE_GAME_PATH;
   window.STARKEN_OS_BUILD = '20260519-2038-client-memory';
 
@@ -17,7 +17,7 @@
   // troca imediatamente para o escritorio real. Isso evita o efeito "menu dentro de menu".
   try {
     var isFramed = window.self !== window.top;
-    var isFenixOsShell = /^\/starken-os\/?$/.test(window.location.pathname);
+    var isFenixOsShell = /^\/fenix-lab\/?$/.test(window.location.pathname);
     if (isFramed && isFenixOsShell) {
       document.documentElement.className += ' starken-framed-shell';
       window.location.replace(OFFICE_GAME_PATH);
@@ -47,7 +47,7 @@
     if (window.__starkenOsBuildWatcherStarted) return;
     window.__starkenOsBuildWatcherStarted = true;
     setInterval(function() {
-      fetch('/starken-os/?_build_check=' + Date.now(), { cache: 'no-store' })
+      fetch('/fenix-lab/?_build_check=' + Date.now(), { cache: 'no-store' })
         .then(function(res) { return res.ok ? res.text() : ''; })
         .then(function(html) {
           var latest = starkenOsBuildFromHtml(html);
@@ -7973,7 +7973,7 @@ select.ch-field-value { appearance: auto; cursor: pointer; }
             id="officeEmbedFrame"
             title="Escritório Virtual Fenix"
             src="about:blank"
-            data-office-src="/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1"
+            data-office-src="/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=fenix-lab&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1"
             loading="eager"
           ></iframe>
         </div>
@@ -11136,7 +11136,7 @@ function setTheme(theme) {
 function ensureOfficeEmbed() {
   var frame = document.getElementById('officeEmbedFrame');
   if (!frame) return;
-  var path = frame.dataset.officeSrc || window.STARKEN_OFFICE_GAME_PATH || '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
+  var path = frame.dataset.officeSrc || window.STARKEN_OFFICE_GAME_PATH || '/game?channelId=24219fff-5008-465b-994d-077db53e554a&characterId=e6b344b1-780d-4332-9412-59b73066e121&embedHost=fenix-lab&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
   var expectedUrl = new URL(path, window.location.origin).href;
   if (frame.src !== expectedUrl) frame.src = expectedUrl;
   frame.dataset.expectedSrc = expectedUrl;
@@ -11148,7 +11148,7 @@ function ensureOfficeEmbed() {
       if (!doc) return;
 
       var childPath = win.location && win.location.pathname;
-      var isNestedShell = /^\/starken-os\/?$/.test(childPath || '') ||
+      var isNestedShell = /^\/fenix-lab\/?$/.test(childPath || '') ||
         !!doc.querySelector('#sidebarNav, .sidebar-brand, .sb-space-tabs');
 
       if (isNestedShell) {
@@ -11168,7 +11168,7 @@ function ensureOfficeEmbed() {
           (doc.head || doc.documentElement).appendChild(style);
         }
 
-        if (/^\/starken-os\/?$/.test(childPath || '')) {
+        if (/^\/fenix-lab\/?$/.test(childPath || '')) {
           var nestedFrame = doc.getElementById('officeEmbedFrame');
           if (nestedFrame && nestedFrame.src !== currentExpectedUrl) nestedFrame.src = currentExpectedUrl;
         }
@@ -11181,7 +11181,7 @@ function ensureOfficeEmbed() {
   frame.addEventListener('load', function() {
     try {
       var childPath = frame.contentWindow && frame.contentWindow.location && frame.contentWindow.location.pathname;
-      if (/^\/starken-os\/?$/.test(childPath || '')) {
+      if (/^\/fenix-lab\/?$/.test(childPath || '')) {
         try { frame.contentWindow.document.documentElement.classList.add('starken-framed-shell'); } catch(_) {}
         frame.contentWindow.location.replace(frame.dataset.expectedSrc || expectedUrl);
       }
@@ -11195,7 +11195,7 @@ function ensureOfficeEmbed() {
 function starkenOfficeGamePath(channelId, characterId) {
   return '/game?channelId=' + encodeURIComponent(channelId)
     + '&characterId=' + encodeURIComponent(characterId)
-    + '&embedHost=starken-os&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
+    + '&embedHost=fenix-lab&frame=clean&embedMode=starken-shell&shellFix=6&chatDock=20260517&hideNpcDock=1';
 }
 
 async function setupOfficeEmbedForUser(user) {
@@ -13740,7 +13740,7 @@ const TAB_TITLES = {
   'pub-history':       'Publicações & Agendamentos'
 };
 
-const STARKEN_OS_BASE_PATH = '/starken-os';
+const STARKEN_OS_BASE_PATH = '/fenix-lab';
 const STARKEN_TAB_ROUTES = {
   escritorio: 'escritorio-virtual',
   'client-portal': 'portal-cliente',
@@ -15545,7 +15545,7 @@ async function dashExportPdf() {
 
     var win = window.open('', '_blank', 'width=850,height=700,scrollbars=yes');
     if (!win) {
-      showToast('<span class="mso">warning</span> Pop-up bloqueado! Permita pop-ups para starken-os.vercel.app');
+      showToast('<span class="mso">warning</span> Pop-up bloqueado! Permita pop-ups para escritorio.fenicelab.com.br');
       return;
     }
     win.document.open();
@@ -34851,7 +34851,7 @@ function hubGetBrandApplications() {
 
 function hubPortalUrl() {
   var slug = encodeURIComponent(_hubCurrentSlug || '');
-  var base = 'https://escritorio.starkentecnologia.com.br/starken-os/';
+  var base = 'https://escritorio.fenicelab.com.br/fenix-lab/';
   try {
     if (location.protocol !== 'file:') {
       base = location.origin + location.pathname.replace(/checklist-relatorios\.html.*$/, '').replace(/\/?$/, '/');
@@ -43402,7 +43402,7 @@ function npcCommandEmbedUrl(npc) {
   if (!officeNpcId) return '';
   var channelId = (npc && npc.officeChannelId) || NPC_OFFICE_CHANNEL_ID;
   var version = '20260516-command-real-' + Date.now();
-  return '/game?embedHost=starken-os&npcCommandOnly=1&channelId=' + encodeURIComponent(channelId) + '&npcCommandId=' + encodeURIComponent(officeNpcId) + '&v=' + encodeURIComponent(version);
+  return '/game?embedHost=fenix-lab&npcCommandOnly=1&channelId=' + encodeURIComponent(channelId) + '&npcCommandId=' + encodeURIComponent(officeNpcId) + '&v=' + encodeURIComponent(version);
 }
 
 function npcRenderCommandEmbed(npcId) {
@@ -43426,7 +43426,7 @@ function npcRenderCommandEmbed(npcId) {
 
 window.addEventListener('message', function(event) {
   if (event.origin !== window.location.origin) return;
-  if (event.data && event.data.type === 'starken-os:npc-command-close') {
+  if (event.data && event.data.type === 'fenix-lab:npc-command-close') {
     npcCloseCommandModal();
   }
 });
@@ -43646,7 +43646,7 @@ function globalAgentDockIsAvailable() {
 
 function globalAgentDockBuildUrl() {
   var channel = (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a';
-  return '/game?embedHost=starken-os&npcDockOnly=1&channelId=' + encodeURIComponent(channel) + '&v=' + encodeURIComponent(GLOBAL_AGENT_DOCK_VERSION);
+  return '/game?embedHost=fenix-lab&npcDockOnly=1&channelId=' + encodeURIComponent(channel) + '&v=' + encodeURIComponent(GLOBAL_AGENT_DOCK_VERSION);
 }
 
 function globalAgentDockEnsureFrame(force) {
@@ -43757,15 +43757,15 @@ function globalAgentDockOpenChat(npcId, npcName) {
 window.addEventListener('message', function(event) {
   if (event.origin !== window.location.origin) return;
   var data = event.data || {};
-  if (data.type === 'starken-os:npc-dock-chat-state') {
+  if (data.type === 'fenix-lab:npc-dock-chat-state') {
     var chatOpen = Boolean(data.open) && !document.body.classList.contains('agent-dock-collapsed');
     document.body.classList.toggle('agent-dock-chat-open', chatOpen);
     return;
   }
-  if (data.type === 'starken-os:npc-dock-manage') globalAgentDockOpenNpc(data.npcId, 'resumo');
-  if (data.type === 'starken-os:npc-dock-talk') globalAgentDockOpenChat(data.npcId, data.npcName);
-  if (data.type === 'starken-os:npc-dock-edit') globalAgentDockOpenNpc(data.npcId, 'config');
-  if (data.type === 'starken-os:npc-dock-hire') {
+  if (data.type === 'fenix-lab:npc-dock-manage') globalAgentDockOpenNpc(data.npcId, 'resumo');
+  if (data.type === 'fenix-lab:npc-dock-talk') globalAgentDockOpenChat(data.npcId, data.npcName);
+  if (data.type === 'fenix-lab:npc-dock-edit') globalAgentDockOpenNpc(data.npcId, 'config');
+  if (data.type === 'fenix-lab:npc-dock-hire') {
     var channel = (typeof NPC_OFFICE_CHANNEL_ID !== 'undefined' && NPC_OFFICE_CHANNEL_ID) ? NPC_OFFICE_CHANNEL_ID : '24219fff-5008-465b-994d-077db53e554a';
     window.open('/game?channelId=' + encodeURIComponent(channel), '_blank');
   }

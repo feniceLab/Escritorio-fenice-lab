@@ -719,3 +719,95 @@ export const tokenUsageLogs = pgTable("token_usage_logs", {
   index("idx_token_usage_created").on(table.createdAt),
   index("idx_token_usage_kind").on(table.contextKind),
 ]);
+
+// ─── CONTENT & SOCIAL MEDIA MODULE ───────────────────────────────────────────
+
+export const officeMetaConfig = pgTable("office_meta_config", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull().references(() => officeClients.id, { onDelete: "cascade" }),
+  accessToken: text("access_token").notNull(),
+  fbPageId: varchar("fb_page_id", { length: 50 }),
+  igUserId: varchar("ig_user_id", { length: 50 }),
+  tokenExpiresAt: timestamp("token_expires_at", { withTimezone: true }),
+  notifChatIds: text("notif_chat_ids").array().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  unique("uq_meta_config_client").on(t.clientId),
+]);
+
+export const officeContentPieces = pgTable("office_content_pieces", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull().references(() => officeClients.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 200 }).notNull(),
+  caption: text("caption"),
+  mediaUrls: text("media_urls").array().default([]),
+  platform: varchar("platform", { length: 20 }).default("both").notNull(),
+  status: varchar("status", { length: 30 }).default("draft").notNull(),
+  scheduledAt: timestamp("scheduled_at", { withTimezone: true }),
+  publishedAt: timestamp("published_at", { withTimezone: true }),
+  createdBy: uuid("created_by").references(() => users.id, { onDelete: "set null" }),
+  approvedBy: uuid("approved_by").references(() => users.id, { onDelete: "set null" }),
+  approvedAt: timestamp("approved_at", { withTimezone: true }),
+  revisionNote: text("revision_note"),
+  npcId: uuid("npc_id").references(() => npcs.id, { onDelete: "set null" }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index("idx_content_pieces_client").on(t.clientId),
+  index("idx_content_pieces_status").on(t.status),
+  index("idx_content_pieces_scheduled").on(t.scheduledAt),
+]);
+
+export const officePublishQueue = pgTable("office_publish_queue", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  contentPieceId: uuid("content_piece_id").notNull().references(() => officeContentPieces.id, { onDelete: "cascade" }),
+  runAt: timestamp("run_at", { withTimezone: true }).notNull(),
+  status: varchar("status", { length: 20 }).default("pending").notNull(),
+  attempts: integer("attempts").default(0).notNull(),
+  maxAttempts: integer("max_attempts").default(3).notNull(),
+  lastError: text("last_error"),
+  lockedAt: timestamp("locked_at", { withTimezone: true }),
+  lockedBy: varchar("locked_by", { length: 50 }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index("idx_publish_queue_run_at").on(t.runAt),
+  index("idx_publish_queue_status").on(t.status),
+]);
+
+export const officePublishHistory = pgTable("office_publish_history", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  contentPieceId: uuid("content_piece_id").notNull().references(() => officeContentPieces.id, { onDelete: "cascade" }),
+  platform: varchar("platform", { length: 10 }).notNull(),
+  externalPostId: varchar("external_post_id", { length: 100 }),
+  status: varchar("status", { length: 20 }).default("published").notNull(),
+  errorMessage: text("error_message"),
+  publishedAt: timestamp("published_at", { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index("idx_publish_history_piece").on(t.contentPieceId),
+  index("idx_publish_history_published_at").on(t.publishedAt),
+]);
+
+export const officeTelegramBots = pgTable("office_telegram_bots", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  slug: varchar("slug", { length: 50 }).unique().notNull(),
+  displayName: varchar("display_name", { length: 100 }).notNull(),
+  botToken: text("bot_token").notNull(),
+  purpose: varchar("purpose", { length: 100 }),
+  clientId: uuid("client_id").references(() => officeClients.id, { onDelete: "set null" }),
+  defaultChatIds: text("default_chat_ids").array().default([]),
+  isActive: boolean("is_active").default(true).notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export const officeClientSessions = pgTable("office_client_sessions", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  clientId: uuid("client_id").notNull().references(() => officeClients.id, { onDelete: "cascade" }),
+  token: varchar("token", { length: 64 }).unique().notNull(),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+  usedAt: timestamp("used_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (t) => [
+  index("idx_client_sessions_token").on(t.token),
+  index("idx_client_sessions_client").on(t.clientId),
+]);

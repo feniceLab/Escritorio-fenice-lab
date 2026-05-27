@@ -1,0 +1,45 @@
+﻿{
+    "generatedAt":  "2026-03-17T00:00:30.0824639-03:00",
+    "totalReports":  3,
+    "reports":  [
+                    {
+                        "clientName":  "Mestre do Frango Passo Fundo",
+                        "company":  "Alpha",
+                        "filename":  "Relato╠ürio Performance - Mestre do Frango.pdf",
+                        "filepath":  "C:\\Users\\juanf\\OneDrive\\Documents\\ASSESSORIA\\ASSESSORIA\\CLIENTES\\ALPHA\\Mestre_do_Frango_Passo_Fundo\\2026\\03_MARCO\\Relato╠ürio Performance - Mestre do Frango.pdf",
+                        "year":  "2026",
+                        "month":  "03",
+                        "monthName":  "Marco",
+                        "periodLabel":  "Marco 2026",
+                        "periodFromFilename":  null,
+                        "fileDate":  "2026-03-16T19:53:24.4044444-03:00",
+                        "fileSize":  71201
+                    },
+                    {
+                        "clientName":  "Patricia Salgados",
+                        "company":  "Alpha",
+                        "filename":  "Relato╠ürio Performance - Patricia Salgados.pdf",
+                        "filepath":  "C:\\Users\\juanf\\OneDrive\\Documents\\ASSESSORIA\\ASSESSORIA\\CLIENTES\\ALPHA\\Patricia_Salgados\\2026\\03_MARCO\\Relato╠ürio Performance - Patricia Salgados.pdf",
+                        "year":  "2026",
+                        "month":  "03",
+                        "monthName":  "Marco",
+                        "periodLabel":  "Marco 2026",
+                        "periodFromFilename":  null,
+                        "fileDate":  "2026-03-16T19:53:24.2924383-03:00",
+                        "fileSize":  40312
+                    },
+                    {
+                        "clientName":  "Pizzaria do Nei",
+                        "company":  "Alpha",
+                        "filename":  "RELATORIO_PDN_20260303_20260315.pdf",
+                        "filepath":  "C:\\Users\\juanf\\OneDrive\\Documents\\ASSESSORIA\\ASSESSORIA\\CLIENTES\\ALPHA\\Pizzaria_do_Nei\\2026\\03_MARCO\\RELATORIO_PDN_20260303_20260315.pdf",
+                        "year":  "2026",
+                        "month":  "03",
+                        "monthName":  "Marco",
+                        "periodLabel":  "Marco 2026",
+                        "periodFromFilename":  "03/03/2026 a 15/03/2026",
+                        "fileDate":  "2026-03-16T22:32:30.4375553-03:00",
+                        "fileSize":  37335
+                    }
+                ]
+}

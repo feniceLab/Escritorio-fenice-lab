@@ -1,0 +1,20 @@
+{
+  "Starken": {
+    "gid": "1213731462448245",
+    "secoes": {
+      "Conteudo & Design": "1213723424328337",
+      "Hub dos Clientes": "1213723821021983",
+      "Relatorios": "1213723424057075",
+      "Cronogramas": "1213731459441957"
+    }
+  },
+  "Alpha": {
+    "gid": "1213723428420275",
+    "secoes": {
+      "Conteudo & Design": "1213723428427809",
+      "Hub dos Clientes": "1213723833081212",
+      "Relatorios": "1213723424406905",
+      "Cronogramas": "1213723820869478"
+    }
+  }
+}

@@ -1,0 +1,52 @@
+# syntax=docker/dockerfile:1.4
+# =============================================================================
+# ASSESSORIA API — Multi-stage Dockerfile
+# Node.js 20 Alpine | Target image < 150 MB
+#
+# Stage 1 (deps):    installs production npm dependencies
+# Stage 2 (runtime): lean image, non-root user, no build tools
+# =============================================================================
+
+# -----------------------------------------------------------------------------
+# Stage 1 — deps
+# -----------------------------------------------------------------------------
+FROM node:20-alpine AS deps
+
+WORKDIR /app
+
+# Copy only the dependency manifests so this layer is cached unless they change.
+COPY api/package.json api/package-lock.json ./
+
+# Install production dependencies only.
+# BuildKit cache mount keeps the npm cache between builds for faster rebuilds.
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --only=production --ignore-scripts
+
+# -----------------------------------------------------------------------------
+# Stage 2 — runtime
+# -----------------------------------------------------------------------------
+FROM node:20-alpine AS runtime
+
+WORKDIR /app
+
+# Pull the pre-installed node_modules from the deps stage.
+COPY --from=deps /app/node_modules ./node_modules
+
+# Copy the API source code.
+COPY api/ ./
+
+# Create a non-root user for running the application.
+RUN addgroup -g 1002 -S apiuser \
+    && adduser -u 1002 -S -G apiuser -s /bin/sh apiuser \
+    && chown -R apiuser:apiuser /app
+
+ENV NODE_ENV=production
+
+EXPOSE 3000
+
+USER apiuser
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
+    CMD wget -qO- http://localhost:3000/health || exit 1
+
+CMD ["node", "server.js"]

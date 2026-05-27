@@ -1,0 +1,48 @@
+# ============================================================
+# ASSESSORIA AI Agents — Merged Python Dependencies
+# ============================================================
+# Sources:
+#   [marketing] AGENTES CLAUDE CODE/ai-marketing-claude-main
+#   [sales]     AGENTES 2/ai-sales-team-claude-main
+#   [geoseo]    AGENTES 3/geo-seo-claude-main
+#
+# NOTE: playwright is intentionally excluded from this file.
+#       Browser automation is handled by the playwright-service
+#       sidecar container. The agents connect to it via CDP/WS
+#       using the PLAYWRIGHT_WS_ENDPOINT environment variable.
+# ============================================================
+
+# ------ PDF report generation --------------------------------
+# [marketing, sales, geoseo]
+# geo-seo pins the tightest upper bound; use that range for all.
+reportlab>=4.4.0,<5.0.0
+
+# ------ HTML parsing & scraping ------------------------------
+# [sales, geoseo]
+beautifulsoup4>=4.12.0,<5.0.0
+
+# ------ HTTP client ------------------------------------------
+# [sales, geoseo]
+requests>=2.32.4,<3.0.0
+
+# ------ XML / HTML tree processing ---------------------------
+# [geoseo]
+lxml>=6.0.2,<7.0.0
+
+# ------ Image processing -------------------------------------
+# [geoseo]
+Pillow>=12.1.0,<13.0.0
+
+# ------ HTTP utilities ---------------------------------------
+# [geoseo]
+urllib3>=2.6.3,<3.0.0
+
+# ------ URL / data validation --------------------------------
+# [geoseo]
+validators>=0.22.0,<1.0.0
+
+# ------ playwright (sidecar — DO NOT install browsers here) --
+# [geoseo] The playwright Python package is still required so
+#          the agent can import it and connect to the remote
+#          endpoint; only browser binaries are omitted.
+# playwright>=1.56.0,<2.0.0

@@ -1,0 +1,8 @@
+1. M4 Comunicação e Expressão o (agent-memory/_obsidian-clones/Claude Hopkins/M4 - Comunicação e Expressão o.md)
+2. M5 Valores e Princípios (agent-memory/_obsidian-clones/Claude Hopkins/M5 - Valores e Princípios.md)
+3. M6 Contexto e Perspectiva (agent-memory/_obsidian-clones/Claude Hopkins/M6 - Contexto e Perspectiva.md)
+4. M2 Sistemas de Pensamento (agent-memory/_obsidian-clones/Claude Hopkins/M2 - Sistemas de Pensamento.md)
+5. M3 Domínio e Expertise (agent-memory/_obsidian-clones/Claude Hopkins/M3 - Domínio e Expertise.md)
+6. Claude Hopkins (agent-memory/_obsidian-clones/Claude Hopkins/Claude Hopkins.md)
+7. M1 História de Vida e Formação (agent-memory/_obsidian-clones/Claude Hopkins/M1 - História de Vida e Formação.md)
+8. M8 Fontes e Referências (agent-memory/_obsidian-clones/Claude Hopkins/M8 - Fontes e Referências.md)

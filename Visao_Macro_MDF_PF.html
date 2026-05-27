@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Visão Macro — MDF Passo Fundo</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #0f1117;
+    color: #e4e4e7;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #f59e0b, #ef4444);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+  }
+
+  .header .subtitle {
+    font-size: 14px;
+    color: #71717a;
+    font-weight: 500;
+  }
+
+  /* Record Banner */
+  .record-banner {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border: 1px solid #f59e0b33;
+    border-radius: 16px;
+    padding: 32px;
+    text-align: center;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .record-banner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #f59e0b, #ef4444, #f59e0b);
+  }
+
+  .record-badge {
+    display: inline-block;
+    background: #f59e0b22;
+    color: #f59e0b;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 12px;
+  }
+
+  .record-value {
+    font-size: 48px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+  }
+
+  .record-label {
+    font-size: 14px;
+    color: #a1a1aa;
+    margin-top: 8px;
+  }
+
+  .record-compare {
+    font-size: 13px;
+    color: #71717a;
+    margin-top: 12px;
+  }
+
+  .record-compare strong {
+    color: #22c55e;
+  }
+
+  /* KPI Grid */
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .kpi-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+  }
+
+  .kpi-card .label {
+    font-size: 11px;
+    color: #71717a;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .kpi-card .value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #fff;
+  }
+
+  .kpi-card .change {
+    font-size: 12px;
+    margin-top: 6px;
+    font-weight: 600;
+  }
+
+  .change.positive { color: #22c55e; }
+  .change.negative { color: #ef4444; }
+
+  /* Comparison table */
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 16px;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title .icon {
+    font-size: 20px;
+  }
+
+  .comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 40px;
+    background: #18181b;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #27272a;
+  }
+
+  .comparison-table th {
+    background: #1f1f23;
+    padding: 14px 16px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #a1a1aa;
+    font-weight: 600;
+  }
+
+  .comparison-table th:not(:first-child) {
+    text-align: right;
+  }
+
+  .comparison-table td {
+    padding: 12px 16px;
+    font-size: 14px;
+    border-top: 1px solid #27272a;
+  }
+
+  .comparison-table td:not(:first-child) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .comparison-table td.metric-name {
+    font-weight: 500;
+    color: #d4d4d8;
+  }
+
+  .highlight-row {
+    background: #f59e0b0a;
+  }
+
+  .highlight-row td {
+    color: #f59e0b !important;
+    font-weight: 600 !important;
+  }
+
+  .green { color: #22c55e; font-weight: 600; }
+  .red { color: #ef4444; font-weight: 600; }
+
+  /* Chart sections */
+  .chart-section {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 32px;
+  }
+
+  .chart-section h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #fff;
+  }
+
+  .chart-container {
+    position: relative;
+    height: 280px;
+  }
+
+  /* Insight box */
+  .insight-box {
+    background: linear-gradient(135deg, #0c2d1a 0%, #18181b 100%);
+    border: 1px solid #22c55e33;
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 32px;
+  }
+
+  .insight-box h3 {
+    color: #22c55e;
+    font-size: 16px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  .insight-box p {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #d4d4d8;
+    margin-bottom: 12px;
+  }
+
+  .insight-box p:last-child {
+    margin-bottom: 0;
+  }
+
+  .insight-box strong {
+    color: #fff;
+  }
+
+  /* Flywheel section */
+  .flywheel {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 32px;
+    text-align: center;
+  }
+
+  .flywheel h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 24px;
+  }
+
+  .flywheel-steps {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .flywheel-step {
+    background: #27272a;
+    border-radius: 10px;
+    padding: 16px 20px;
+    min-width: 140px;
+  }
+
+  .flywheel-step .step-icon {
+    font-size: 24px;
+    margin-bottom: 6px;
+  }
+
+  .flywheel-step .step-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #d4d4d8;
+  }
+
+  .flywheel-step .step-value {
+    font-size: 16px;
+    font-weight: 700;
+    color: #f59e0b;
+    margin-top: 4px;
+  }
+
+  .arrow {
+    font-size: 20px;
+    color: #52525b;
+  }
+
+  /* Cumulative customers */
+  .cumulative-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .cumulative-card {
+    background: #18181b;
+    border: 1px solid #27272a;
+    border-radius: 12px;
+    padding: 24px;
+    text-align: center;
+  }
+
+  .cumulative-card .big-number {
+    font-size: 42px;
+    font-weight: 800;
+    color: #f59e0b;
+  }
+
+  .cumulative-card .big-label {
+    font-size: 13px;
+    color: #a1a1aa;
+    margin-top: 4px;
+  }
+
+  .footer {
+    text-align: center;
+    color: #52525b;
+    font-size: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #27272a;
+  }
+
+  @media (max-width: 640px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .cumulative-section { grid-template-columns: 1fr; }
+    .flywheel-steps { flex-direction: column; }
+    .arrow { transform: rotate(90deg); }
+    .record-value { font-size: 36px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>MESTRE DO FRANGO — PASSO FUNDO</h1>
+    <div class="subtitle">VISÃO MACRO DE CRESCIMENTO · Canal Próprio (Cardápio Digital)</div>
+  </div>
+
+  <!-- RECORD BANNER -->
+  <div class="record-banner">
+    <div class="record-badge">Recorde Histórico</div>
+    <div class="record-value">R$ 16.923,98</div>
+    <div class="record-label">Faturamento em Março/2026 — o maior mês desde o início da operação</div>
+    <div class="record-compare">Recorde anterior: R$ 16.218 (Jun/2025) · <strong>+4,4% acima do recorde</strong></div>
+  </div>
+
+  <!-- KPIs FEV vs MAR -->
+  <div class="section-title"><span class="icon">📊</span> Março vs Fevereiro — Evolução Real</div>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Faturamento</div>
+      <div class="value">+34%</div>
+      <div class="change positive">R$ 12.583 → R$ 16.923</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Pedidos</div>
+      <div class="value">+47%</div>
+      <div class="change positive">127 → 187</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">ROAS</div>
+      <div class="value">7,06</div>
+      <div class="change positive">6,60 → 7,06 (+7%)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">CPA</div>
+      <div class="value">R$12</div>
+      <div class="change positive">R$ 12,91 → R$ 11,99</div>
+    </div>
+  </div>
+
+  <!-- COMPARISON TABLE -->
+  <div class="section-title"><span class="icon">📋</span> Comparativo Detalhado Fev × Mar 2026</div>
+  <table class="comparison-table">
+    <thead>
+      <tr>
+        <th>Métrica</th>
+        <th>Fev/2026</th>
+        <th>Mar/2026</th>
+        <th>Variação</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="highlight-row">
+        <td class="metric-name">Faturamento Total (Sistema)</td>
+        <td>R$ 12.583,79</td>
+        <td>R$ 16.923,98</td>
+        <td class="green">+34,5%</td>
+      </tr>
+      <tr>
+        <td class="metric-name">Pedidos Totais</td>
+        <td>127</td>
+        <td>187</td>
+        <td class="green">+47,2%</td>
+      </tr>
+      <tr>
+        <td class="metric-name">Receita Rastreada (Meta)</td>
+        <td>R$ 7.493,68</td>
+        <td>R$ 8.042,11</td>
+        <td class="green">+7,3%</td>
+      </tr>
+      <tr>
+        <td class="metric-name">Investimento em Ads</td>
+        <td>R$ 1.136,17</td>
+        <td>R$ 1.138,63</td>
+        <td style="color:#a1a1aa">≈ igual</td>
+      </tr>
+      <tr>
+        <td class="metric-name">ROAS</td>
+        <td>6,60</td>
+        <td>7,06</td>
+        <td class="green">+7,0%</td>
+      </tr>
+      <tr>
+        <td class="metric-name">CPA</td>
+        <td>R$ 12,91</td>
+        <td>R$ 11,99</td>
+        <td class="green">-7,1%</td>
+      </tr>
+      <tr>
+        <td class="metric-name">Ticket Médio</td>
+        <td>R$ 85,16</td>
+        <td>R$ 84,65</td>
+        <td style="color:#a1a1aa">≈ estável</td>
+      </tr>
+      <tr>
+        <td class="metric-name">Novos Clientes</td>
+        <td>73</td>
+        <td>64</td>
+        <td style="color:#a1a1aa">-12,3%</td>
+      </tr>
+      <tr class="highlight-row">
+        <td class="metric-name">Clientes Recorrentes</td>
+        <td>78</td>
+        <td>99</td>
+        <td class="green">+26,9%</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- CHART: Revenue Timeline -->
+  <div class="chart-section">
+    <h3>Evolução do Faturamento — Canal Próprio</h3>
+    <div class="chart-container">
+      <canvas id="revenueChart"></canvas>
+    </div>
+  </div>
+
+  <!-- CHART: Customers -->
+  <div class="chart-section">
+    <h3>Novos Clientes vs Recorrentes — A Máquina de Crescimento</h3>
+    <div class="chart-container">
+      <canvas id="customersChart"></canvas>
+    </div>
+  </div>
+
+  <!-- FLYWHEEL -->
+  <div class="flywheel">
+    <h3>O Motor de Crescimento Escalável</h3>
+    <div class="flywheel-steps">
+      <div class="flywheel-step">
+        <div class="step-icon">🎯</div>
+        <div class="step-label">Tráfego Pago</div>
+        <div class="step-value">Novos Clientes</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flywheel-step">
+        <div class="step-icon">🛒</div>
+        <div class="step-label">1ª Compra</div>
+        <div class="step-value">Conversão</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flywheel-step">
+        <div class="step-icon">🔁</div>
+        <div class="step-label">Recompra</div>
+        <div class="step-value">Retenção</div>
+      </div>
+      <div class="arrow">→</div>
+      <div class="flywheel-step">
+        <div class="step-icon">📈</div>
+        <div class="step-label">Base Cresce</div>
+        <div class="step-value">Faturamento ↑</div>
+      </div>
+    </div>
+    <p style="color: #a1a1aa; font-size: 13px; margin-top: 20px; max-width: 600px; margin-left: auto; margin-right: auto; line-height: 1.6;">
+      Cada novo cliente adquirido hoje gera vendas recorrentes nos meses seguintes <strong style="color:#fff">sem custo adicional de aquisição</strong>.
+      É por isso que em março tivemos <strong style="color:#22c55e">99 clientes recorrentes</strong> comprando — fruto direto da aquisição dos meses anteriores.
+    </p>
+  </div>
+
+  <!-- CUMULATIVE -->
+  <div class="cumulative-section">
+    <div class="cumulative-card">
+      <div class="big-number">176</div>
+      <div class="big-label">Novos clientes adquiridos em 3 meses (Jan–Mar/2026)</div>
+    </div>
+    <div class="cumulative-card">
+      <div class="big-number">R$ 37.069</div>
+      <div class="big-label">Faturamento acumulado Jan–Mar/2026 no canal próprio</div>
+    </div>
+  </div>
+
+  <!-- INSIGHT -->
+  <div class="insight-box">
+    <h3>Por que o ROAS de 7x é excelente?</h3>
+    <p>
+      Com um ROAS de <strong>7,06</strong>, cada <strong>R$ 1 investido</strong> retorna <strong>R$ 7 em vendas rastreadas</strong>.
+      Mas o impacto real vai muito além: o faturamento total no sistema foi de <strong>R$ 16.923</strong> — isso significa um retorno real de <strong>R$ 14,86 para cada R$ 1 investido</strong>.
+    </p>
+    <p>
+      O gap entre receita rastreada (R$ 8.042) e faturamento real (R$ 16.923) existe porque muitos clientes voltam a comprar por conta própria —
+      fruto direto do trabalho de aquisição. São <strong>99 clientes recorrentes</strong> que compraram em março, muitos deles adquiridos nos meses anteriores
+      e que agora <strong>geram receita sem custo adicional de mídia</strong>.
+    </p>
+    <p>
+      Março/2026 foi o <strong>maior mês de faturamento da história da operação</strong>, superando o recorde anterior de Jun/2025 (R$ 16.218).
+      A operação está em trajetória de crescimento acelerado e consistente.
+    </p>
+  </div>
+
+  <!-- YoY comparison -->
+  <div class="insight-box" style="background: linear-gradient(135deg, #1a1528 0%, #18181b 100%); border-color: #a855f733;">
+    <h3 style="color: #a855f7;">Março 2026 vs Março 2025 — Mesmo Mês, Outro Patamar</h3>
+    <p>
+      <strong>Mar/2025:</strong> R$ 11.979,74 · 132 pedidos · 33 novos clientes · 71 recorrentes<br>
+      <strong>Mar/2026:</strong> R$ 16.923,98 · 187 pedidos · 64 novos clientes · 99 recorrentes
+    </p>
+    <p>
+      Crescimento ano contra ano: <strong style="color: #a855f7;">+41,3% em faturamento</strong>, <strong style="color: #a855f7;">+41,7% em pedidos</strong>,
+      <strong style="color: #a855f7;">+93,9% em novos clientes</strong> e <strong style="color: #a855f7;">+39,4% em recorrentes</strong>.
+    </p>
+  </div>
+
+  <div class="footer">
+    Inteligência de Tráfego · Gastronomia · Gerado em Abril/2026
+  </div>
+
+</div>
+
+<script>
+  const chartDefaults = {
+    color: '#a1a1aa',
+    borderColor: '#27272a',
+  };
+
+  Chart.defaults.color = '#a1a1aa';
+  Chart.defaults.borderColor = '#27272a22';
+
+  // Revenue Chart
+  const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+  new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Mar/25', 'Jun/25', 'Nov/25', 'Dez/25', 'Jan/26', 'Fev/26', 'Mar/26'],
+      datasets: [{
+        label: 'Faturamento (R$)',
+        data: [11979.74, 16218, 16073.53, 15372.47, 7561.65, 12583.79, 16923.98],
+        backgroundColor: [
+          '#3f3f4688', '#3f3f4688', '#3f3f4688', '#3f3f4688', '#f59e0b44', '#f59e0b88', '#f59e0b'
+        ],
+        borderColor: [
+          '#3f3f46', '#3f3f46', '#3f3f46', '#3f3f46', '#f59e0b66', '#f59e0baa', '#f59e0b'
+        ],
+        borderWidth: 1,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => 'R$ ' + ctx.raw.toLocaleString('pt-BR', {minimumFractionDigits: 2})
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: (v) => 'R$ ' + (v/1000).toFixed(0) + 'k'
+          },
+          grid: { color: '#27272a44' }
+        },
+        x: {
+          grid: { display: false }
+        }
+      }
+    }
+  });
+
+  // Customers Chart
+  const custCtx = document.getElementById('customersChart').getContext('2d');
+  new Chart(custCtx, {
+    type: 'bar',
+    data: {
+      labels: ['Mar/25', 'Jan/26', 'Fev/26', 'Mar/26'],
+      datasets: [
+        {
+          label: 'Novos Clientes',
+          data: [33, 39, 73, 64],
+          backgroundColor: '#f59e0b',
+          borderRadius: 6,
+        },
+        {
+          label: 'Recorrentes',
+          data: [71, 79, 78, 99],
+          backgroundColor: '#22c55e',
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'top',
+          labels: { padding: 16, usePointStyle: true, pointStyle: 'circle' }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          grid: { color: '#27272a44' }
+        },
+        x: {
+          grid: { display: false }
+        }
+      }
+    }
+  });
+</script>
+</body>
+</html>
