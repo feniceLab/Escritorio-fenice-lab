@@ -70,3 +70,47 @@ tests/
 *.test.tsx
 deploy/
 deploy/pre-deploy-checklist.md
+
+# Credenciais e ambiente
+.env
+.env.local
+.env*.local
+*.env
+
+# Dados e banco
+/data/
+*.db
+*.sqlite
+*.sqlite3
+
+# Arquivos de trabalho e docs internos
+ASSESSORIA/
+*.zip
+*.tar.gz
+Exportacao*/
+*.json.bak
+*.bak
+.continue-here.md
+._*
+
+# Scripts SQL avulsos
+SQL_*.sql
+PRD*.md
+STITCH*.md
+PHASE*.md
+PROMPT*.md
+TRELLO*.md
+README_*.md
+Visao_Macro_*.html
+arquivar_*.py
+migrate-*.js
+*.backup
+scripts/migrate-*.ts
+
+# Workers temporários
+create_user.js
+/tmp/
+
+# Logs
+logs/
+*.log

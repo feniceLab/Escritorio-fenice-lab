@@ -1,6 +1,14 @@
 module.exports = {
   apps: [
     {
+      name: 'fenix-webhook',
+      script: '/var/www/fenix-lab/webhook-server.js',
+      exec_mode: 'fork',
+      env: { WEBHOOK_SECRET: 'fenix-deploy-2030', NODE_ENV: 'production' },
+      error_file: '/var/www/fenix-lab/logs/webhook-err.log',
+      out_file: '/var/www/fenix-lab/logs/webhook-out.log',
+    },
+    {
       name: 'fenix-lab',
       script: 'node_modules/.bin/next',
       args: 'start',

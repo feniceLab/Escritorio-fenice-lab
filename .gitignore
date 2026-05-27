@@ -1,64 +1,13 @@
-# Env (NUNCA commitar tokens)
-.env
-.env.local
-.env.production
+# === ONLY track the escritorio/ Next.js app ===
+# Ignore everything at root level by default
+/*
 
-# Mac
-.DS_Store
-__MACOSX/
-*.DS_Store
+# But keep these top-level items
+!escritorio/
+!.gitignore
+!README.md
+!deploy.sh
+!webhook-server.js
+!setup-local.sh
 
-# Python
-__pycache__/
-*.pyc
-*.pdf
-*.xlsx
-
-# Pastas de clientes (PDFs ficam locais)
-ASSESSORIA/CLIENTES/
-
-# Env JSON (credenciais Asana/Trello/Supabase)
-env*.json
-.env.example
-!integrations/agent-telegram/.env.example
-
-# Node
-node_modules/
-.next/
-escritorio/.next/
-escritorio/node_modules/
-escritorio/logs/
-
-# Docker
-.dockerignore
-
-# Docs sensíveis
-*.docx
-setup_infra.js
-
-# VPS live-source hygiene
-.env
-.env.*
-!.env.example
-*.bak
-*.bak-*
-*.tmp
-*.log
-logs/
-.codex-backups/
-.runtime/
-workspace-data/
-agent-memory/
-.deskrpg-cli-agents/
-.claude/
-node_modules/
-escritorio/node_modules/
-escritorio/.next/
-escritorio/logs/
-escritorio/.env.local
-storybook/storybook-static/
-.gitignore.pre-*
-
-# Local MCP configs with credentials
-.mcp.json
-.mcp.local.json
+# Ignore inside escritorio (from child .gitignore)
